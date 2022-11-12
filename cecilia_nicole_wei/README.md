@@ -8,6 +8,10 @@ By: Yihan (Cecilia) Guo, Keer (Nicole) Ni and Wei Wu Lu
 
 Khovanov Homology is a powerful invariant for knots and links that are expensive to compute. We want to train a machine learning model to predict patterns in Khovanov Homology. 
 
+Khovanov homology can be undestood as a bigraded abelian group associated to a particular knot. As such, each can be decomposed into a *free* group: isomorphic to a direct sum of $\mathbb{Z}$; and a *torsion* group: isomorphic to a direct sum of $\mathbb{Z}_{n_k}$, where each $n_k$ is a distinct prime to some power. 
+
+The bigrading can be represented as plotting the correspoinding subgroup of the homology in Cartesian coordinates.
+
 ## Data Sampling
 
 1. Using functions from SageMath, (e.g. Link(), khovanov_homology(), additive_order(), ...) to randomly generate braids.

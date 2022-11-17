@@ -34,3 +34,10 @@ def torsion_part(kh):
             if len(list(val.keys()))>0:
                 res[(key1, key2)] = val
     return res
+
+def count_FP(a_FP):
+    return sum(a_FP[key] for key in a_FP.keys())
+
+def count_TP(a_TP):
+    #return sum([a_TP[key]][2] for key in a_TP.keys())
+    return sum(a_TP[key][2] for key in a_TP.keys())

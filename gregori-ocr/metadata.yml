@@ -1,0 +1,12 @@
+---
+:id: 148417407
+:submitters:
+- :name: Cenny Rangel
+  :email: idrangel@ucdavis.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-11-13 00:58:33.111494000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-11-12 16:58:33.111494000 Z
+:status: processed
+:score: 20.0

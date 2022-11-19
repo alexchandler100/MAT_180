@@ -1,0 +1,12 @@
+---
+:id: 148292823
+:submitters:
+- :name: Timothy Blanton
+  :email: trblanton@ucdavis.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-11-12 03:19:53.681266000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-11-11 19:19:53.681266000 Z
+:status: processed
+:score: 16.0

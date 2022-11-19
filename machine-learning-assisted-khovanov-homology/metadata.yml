@@ -1,0 +1,12 @@
+---
+:id: 148324456
+:submitters:
+- :name: Wei Wu Lu
+  :email: wjwulu@ucdavis.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-11-12 05:28:52.763953000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-11-11 21:28:52.763953000 Z
+:status: processed
+:score: 16.0

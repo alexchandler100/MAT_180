@@ -1,0 +1,12 @@
+---
+:id: 148268697
+:submitters:
+- :name: Raye Yi Chiang
+  :email: rychiang@ucdavis.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-11-12 01:44:55.960013000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-11-11 17:44:55.960013000 Z
+:status: processed
+:score: 14.0

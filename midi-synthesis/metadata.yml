@@ -1,0 +1,12 @@
+---
+:id: 148246207
+:submitters:
+- :name: Harkins Loh
+  :email: hkloh@ucdavis.edu
+:created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2022-11-12 00:06:01.521366000 Z
+  zone: !ruby/object:ActiveSupport::TimeZone
+    name: America/Los_Angeles
+  time: 2022-11-11 16:06:01.521366000 Z
+:status: processed
+:score: 16.0

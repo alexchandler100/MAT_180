@@ -14,20 +14,20 @@ The bigrading can be represented as plotting the correspoinding subgroup of the 
 
 ## Data Sampling
 
-1. Using functions from SageMath, (e.g. Link(), khovanov_homology(), additive_order(), ...) to randomly generate braids.
+1. Using functions from SageMath, (e.g. Link(), khovanov_homology(), additive_order(), ...) to randomly generate braids. **(done)**
     1. Filter out repeated khovanov homology.
 2. Using Khoca to try to get larger dataset (which has much faster performance than SageMath).
 
 ## Procedure
 
-1. Import the generated datasets into pandas dataframe.
-    1. Split the data in training-validation set and test set.
+1. Import the generated datasets into pandas dataframe. **(done)**
+    1. Split the data in training-validation set and test set. **(done)**
 2. Implement a gradient descent model.
     1. Linear regression
     2. Polynomial regression
     3. Neural network (?)
 3. Experiment with various representation of the information which the homology has:
-    1. Using total number of free groups of a knot to predict its torsion.
+    1. Using total number of free groups of a knot to predict its torsion. **(done)**
         - PROBLEM: This might be obscuring the information too much.
     2. Using number of free groups in columns/rows of a knot to predict its torsion.
     3. Using every bigrading of free groups as an individual feature to predict its torsion.

@@ -56,8 +56,15 @@ The following notation will be adopted for the next parts:
 
 Let's sample an image from a real data distribution $x_0 \sim q(x)$. We define a forward diffusion process, in which a small amount of gaussian noise is iteratively added to the image $x_0$, in $T$ steps, leading to the sequence of noisy images $x_1,\dots,x_T$. The step size is controlled by a variance schedule $\beta_t$ going from 0 to 1, in $T$ steps, starting at $t=1$. The noise added is sampled from a gaussian distribution. Thus we can define:
 $$q(x_t|x_{t-1}) = \mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I})$$
-Where the variance schedule scales the mean and the variance of the noise sampled from the normal distribution.  We can also write:
-$$q(x_{1:T}|x_0) = \prod^T_{t=1}q(x_t|x_{t-1})$$
+Where the variance schedule scales the mean and the variance of the noise sampled from the normal distribution. Since our forward process is a Markov Chain (satisfying Markov property), we can also write:
+
+$$\begin{align}
+q(x_{1:T}|x_0) &= q(x_1, \dots, x_T | x_0) \\
+               &= \frac{q(x_0, x_1, \dots, x_T)}{q(x_0)} &&\text{(Bayes' Theorem)}\\
+               &= \frac{q(x_0)q(x_1|x_0)\dots q(x_T|x_{T-1})}{q(x_0)} &&\text{(Markov property)}\\
+               &= q(x_1|x_0)\dots q(x_T|x_{T-1})\\
+               &= \prod^T_{t=1}q(x_t|x_{t-1})
+\end{align}$$
 
 ### The reverse process
 

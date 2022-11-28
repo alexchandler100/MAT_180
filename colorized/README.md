@@ -46,26 +46,33 @@ In the case of image colorization, we use a conditional diffusion model which ta
 The following notation will be adopted for the next parts:
 
 - $\mathcal{N}(x;\mu,\sigma^2)$ : sampling x from a normal distribution of mean $\mu$ and variance $\sigma^2$
-- $x_t$ is the image after applying $t$ iterations of noise through the forward process
-- $x_0$ is the original image
-- $x_T$ is the final image of the forward process which follows an isotropic gaussian distribution ($T$ is constant)
-- $q(x_t|x_{t-1})$ corresponds to the forward process, taking an image $x_{t-1}$ as input, and output $x_t$ which contains more noise
-- $p_\theta(x_{t-1}|x_t)$ corresponds to the reverse process, taking an image $x_t$ as input, and output $x_{t-1}$ which contains less noise
+- $\mathbf{x_t}$ is the image after applying $t$ iterations of noise through the forward process
+- $\mathbf{x_0}$ is the original image
+- $\mathbf{x_T}$ is the final image of the forward process which follows an isotropic gaussian distribution ($T$ is constant)
+- $q(\mathbf{x_t}|\mathbf{x_{t-1}})$ corresponds to the forward process, taking an image $\mathbf{x_{t-1}}$ as input, and output $\mathbf{x_t}$ which contains more noise
+- $p_\theta(\mathbf{x_{t-1}}|\mathbf{x_t})$ corresponds to the reverse process, taking an image $\mathbf{x_t}$ as input, and output $\mathbf{x_{t-1}}$ which contains less noise
 
 ### The forward process
 
-Let's sample an image from a real data distribution $x_0 \sim q(x)$. We define a forward diffusion process, in which a small amount of gaussian noise is iteratively added to the image $x_0$, in $T$ steps, leading to the sequence of noisy images $x_1,\dots,x_T$. The step size is controlled by a variance schedule $\beta_t$ going from 0 to 1, in $T$ steps, starting at $t=1$. The noise added is sampled from a gaussian distribution. Thus we can define:
-$$q(x_t|x_{t-1}) = \mathcal{N}(x_t;\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I})$$
+Let's sample an image from a real data distribution $\mathbf{x_0} \sim q(\mathbf{x})$. We define a forward diffusion process, in which a small amount of gaussian noise is iteratively added to the image $\mathbf{x_0}$, in $T$ steps, leading to the sequence of noisy images $\mathbf{x_1},\dots,\mathbf{x_T}$. The step size is controlled by a variance schedule $\beta_t$ going from 0 to 1, in $T$ steps, starting at $t=1$. The noise added is sampled from a gaussian distribution. Thus we can define:
+$$q(\mathbf{x_t}|\mathbf{x_{t-1}}) = \mathcal{N}(\mathbf{x_t};\sqrt{1-\beta_t}\mathbf{x_{t-1}},\beta_t\mathbf{I})$$
 Where the variance schedule scales the mean and the variance of the noise sampled from the normal distribution. Since our forward process is a Markov Chain (satisfying Markov property), we can also write:
 
 $$\begin{align}
-q(x_{1:T}|x_0) &= q(x_1, \dots, x_T | x_0) \\
-               &= \frac{q(x_0, x_1, \dots, x_T)}{q(x_0)} &&\text{(Bayes' Theorem)}\\
-               &= \frac{q(x_0)q(x_1|x_0)\dots q(x_T|x_{T-1})}{q(x_0)} &&\text{(Markov property)}\\
+q(\mathbf{x_{1:T}}|\mathbf{x_0}) &= q(\mathbf{x_1}, \dots, \mathbf{x_T} | \mathbf{x_0}) \\
+               &= \frac{q(\mathbf{x_0}, \mathbf{x_1}, \dots, \mathbf{x_T})}{q(\mathbf{x_0})} &&\text{(Bayes' Theorem)}\\
+               &= \frac{q(\mathbf{x_0})q(\mathbf{x_1}|\mathbf{x_0})\dots q(\mathbf{x_T}|\mathbf{x_{T-1}})}{q(\mathbf{x_0})} &&\text{(Markov property)}\\
                &= q(x_1|x_0)\dots q(x_T|x_{T-1})\\
                &= \prod^T_{t=1}q(x_t|x_{t-1})
 \end{align}$$
 
+<!-- Reference the reparameterization trick from lilianweng? -->
+Additionally, we can improve the forward process further by using a reparameterization trick, allowing us to sample a noisy image $x_t$ at any particular time $t$. **(What are the implications of being able to sample noisy images at random timesteps?)** First, we let $\alpha_{t} = 1 - \beta_t$, and we also define $\bar{\alpha_t} = \prod\nolimits_{i=1}^t \alpha_i$. Now, we rewrite 
+
+$$q(x_t|x_{t-1}) = \mathcal{N}(x_t;\sqrt{\alpha_t}x_{t-1},(1 - \alpha_t)\mathbf{I})$$
+
+<!-- Should we use element wise product here for matrices? -->
+Using the reparameterization trick for Gaussian distribution $\mathcal{N}(x; \mu, \sigma^2)$, $x = \mu + \sigma\epsilon $, where $\epsilon \sim \mathcal{N}(\boldsymbol{0}, \mathbf{I})$
 ### The reverse process
 
 ## Implementation

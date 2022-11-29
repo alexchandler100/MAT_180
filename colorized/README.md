@@ -124,8 +124,31 @@ It is clear that we can quickly sample a noisy image $\mathbf{x_t}$ at any times
 
 ### The Reverse Process
 
-To reverse the above noising process (i.e. $q(\mathbf{x_{t-1}}|\mathbf{x_t})$ ), we would need to know the entire dataset of possible noised images, which is essentially impossible. Thus, we seek to learn an _approximation_ of this reverse process. We will call this approximation $p_\theta$ . **make note here about the beta size and why that allows us to treat this as a gaussian distribution**
+To reverse the above noising process (i.e. $q(\mathbf{x_{t-1}}|\mathbf{x_t})$ ), we would need to know the entire dataset of possible noised images, which is essentially impossible. Thus, we seek to learn an _approximation_ of this reverse process. We will call this approximation $p_\theta$ . **(make note here about the beta size and why that allows us to treat this as a gaussian distribution [4])**
 
+As we are describing the same distribution in the forward process, but in the opposite direction, we can use the same Markovian property to write:
+
+<!-- Also, note that we can consider x_T to be "x_0" and traverse the process normally, just subbing back in our renamings -->
+
+$$\begin{align}
+p_{\theta}(\mathbf{x_{0:T}}) &= p_{\theta}(\mathbf{x_{T}}, \dots, \mathbf{x_{0}}) && \text{(\*)}\\
+                             &= p(\mathbf{x_{T}}) p_{\theta}(\mathbf{x_{T-1}} | \mathbf{x_{T}}) \dots p_{\theta}(\mathbf{x_0} | \mathbf{x_1}) && \text{(Markov Property)} \\
+                             &= p(\mathbf{x_T})\prod_{t=1}^{T} p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_T}) \\
+\end{align}$$
+
+(\*) Note that we do not condition $\mathbf{x_T}$ on anything here. **(explanation necessary [2])**
+
+Also, we make mention here that conditioning our $\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)$ on $\mathbf{x_0}$ in:
+
+$$p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t}, t), \beta_t \mathbf{I})$$
+
+,allows us to work with the reverse probabilities far more easily. **(Maybe include a more mathematical reasoning here [2])** We will rewrite this as:
+
+$$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$$
+
+**(Leave this alone for now, but I believe we can switch to q since we are essentially now dealing with the forward process, as anything we are predicting comes from $\mathbf{x_0}$ and thus is always in the forward direction)**
+
+To illustrate ...
 ## Implementation
 
 How we implemented it
@@ -193,4 +216,8 @@ feedback, improvements,...
 
 ## References
 
+1. https://lilianweng.github.io/posts/2021-07-11-diffusion-models/
+2. https://arxiv.org/abs/1503.03585
+3. http://www.stat.yale.edu/~pollard/Courses/251.spring2013/Handouts/Chang-MarkovChains.pdf
+4. On the theory of stochastic processes (Feller Cornell Article )
 <!-- #endregion -->

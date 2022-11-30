@@ -152,22 +152,64 @@ $$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}
 
 ## Loss Function
 
-Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta()}$. Conviently, we employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently **([7], [8])**. We will refer to Variational Lower Bounds as VLB for the remainder of this paper.
+Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta}(\mathbf{x_0})$. Conviently, we can employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently **([7], [8])**. We will refer to Variational Lower Bounds as VLB for the remainder of this paper.
 
 To derive VLB, we expand the above KL divergence:
 
-$$\begin{aligned}
-D_{\text{KL}}(q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) || p(\mathbf{x_{t-1}} | \mathbf{x_{t}})) &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{t-1}} | \mathbf{x_{t}})} \\
-    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}})}{p(\mathbf{x_{t-1}} | \mathbf{x_{t}})}\Big )} d\mathbf{x_{1:T}} \\
-    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) p_{\theta}(\mathbf{x_{0}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big )} d\mathbf{x_{1:T}} && \text{(Bayes' Rule)}\\
-    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \Big \[ \log{p_{\theta}(\mathbf{x_{0}})} + \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big )} \Big \] d\mathbf{x_{1:T}} \\
-\end{aligned}$$
-
+$$\begin{align*}
+D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \\
+    &= \int q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) \log{\Big ( \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{1:T}} | \mathbf{x_{0}})}\Big )} d\mathbf{x_{1:T}} \\
+    &= \int q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) \log{\Big ( \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) p_{\theta}(\mathbf{x_{0}})}{p(\mathbf{x_{1:T}}, \mathbf{x_{0}})}\Big )} d\mathbf{x_{1:T}} && \text{(Bayes' Rule)}\\
+    &= \int q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) \Big \[ \log{p_{\theta}(\mathbf{x_{0}})} + \log{\Big ( \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{1:T}}, \mathbf{x_{0}})}\Big )} \Big \] d\mathbf{x_{1:T}} \\
+\end{align*}$$
+<!-- This is super annoying, and will not let me combine these two align environments without generating an issue -->
 $$\begin{align}
-    &= \log{p_{\theta}(\mathbf{x_{0}})} \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) d\mathbf{x_{1:T}} + \int q(\mathbf{x_{t-1}} \vert \mathbf{x_{t}}) \log \Big( \frac{q(\mathbf{x_{t-1}} \vert \mathbf{x_{t}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big)
+    &= \log{p_{\theta}(\mathbf{x_{0}})} \int q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) d\mathbf{x_{1:T}} + \int q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}}) \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p(\mathbf{x_{1:T}}, \mathbf{x_{0}})}\Big) d\mathbf{x_{1:T}}\\
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \int q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}}) \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p(\mathbf{x_{1:T}}, \mathbf{x_{0}})}\Big) d\mathbf{x_{1:T}} && \text{$\Big( \int f(x)dx = 1\Big)$}\\
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \int q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}}) \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p(\mathbf{x_{0}} | \mathbf{x_{1:T}}) p_{\theta}(\mathbf{x_{1:T}})}\Big) d\mathbf{x_{1:T}} && \text{(Bayes' Rule)}\\
+\end{align}$$
+<!-- Same problem again -->
+$$\begin{align}
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \int q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}}) \Big \[ \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p_{\theta}(\mathbf{x_{1:T}})}\Big) - \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \] d\mathbf{x_{1:T}} \\
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \int q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}}) \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p_{\theta}(\mathbf{x_{1:T}})}\Big) - q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})\log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) d\mathbf{x_{1:T}} \\
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p_{\theta}(\mathbf{x_{1:T}})}\Big) - \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \] \\
 \end{align}$$
 
+$$\begin{align}
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log \Big( \frac{q(\mathbf{x_{1:T}} \vert \mathbf{x_{0}})}{p_{\theta}(\mathbf{x_{1:T}})}\Big) \Big \] - \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \] \\
+    &= \log{p_{\theta}(\mathbf{x_{0}})}  + D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}})) - \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \] \\
+\end{align}$$
 
+Now, we have:
+
+$$D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) = \log{p_{\theta}(\mathbf{x_{0}})}  + D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}})) - \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \]$$
+
+If we rearrange this, we get:
+
+$$ \log{p_{\theta}(\mathbf{x_{0}})} - D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) = \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \log p_{\theta}(\mathbf{x_{0}} | \mathbf{x_{1:T}}) \Big \] - D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}}))$$
+
+The left hand side of this expression yields the desirable relationship with $\log p_{\theta}(\mathbf{x_{0}})$, and thus is our VLB, which we will call $-L_{\text{VLB}}$. Noting that KL divergence is always non-negative:
+
+$$\log{p_{\theta}(\mathbf{x_{0}})} - D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) \leq \log p_{\theta}(\mathbf{x_{0}})$$
+
+As we seek to maximize the log-likelihood, and acknowledging that all maximizations can be expressed in terms of minimization, we once more rewrite the above expression in terms of said minimization:
+
+$$-\log p_{\theta}(\mathbf{x_{0}}) \leq D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) - \log{p_{\theta}(\mathbf{x_{0}})} $$
+
+We may further simplify this VLB:
+
+$$\begin{align}
+L_{\text{VLB}} &= D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p(\mathbf{x_{1:T}} | \mathbf{x_{0}})) - \log{p_{\theta}(\mathbf{x_{0}})} \\
+               &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \] - \log{p_{\theta}(\mathbf{x_{0}})} \\
+               &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})p_{\theta}(\mathbf{x_{0}})}{p(\mathbf{x_{1:T}}, \mathbf{x_{0}})} \Big \] - \log{p_{\theta}(\mathbf{x_{0}})} \\
+               &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{0}}, \mathbf{x_1}, \dots, \mathbf{x_{T}})} + \log p_{\theta}(\mathbf{x_{0}}) \Big \] - \log{p_{\theta}(\mathbf{x_{0}})} && \text{(Bayes' Rule)}\\
+\end{align}$$ 
+
+$$\begin{align}
+              &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{0:T}})} \Big \] +  \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \[ \log p_{\theta}(\mathbf{x_{0}}) \] - \log{p_{\theta}(\mathbf{x_{0}})} \\
+              &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{0:T}})} \Big \] + \log p_{\theta}(\mathbf{x_{0}}) - \log{p_{\theta}(\mathbf{x_{0}})} \\
+              &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{1:T}} | \mathbf{x_{0}})} \Big \[ \frac{q(\mathbf{x_{1:T}} | \mathbf{x_{0}})}{p(\mathbf{x_{0:T}})} \Big \]\\
+\end{align}$$
 ## Implementation
 
 How we implemented it

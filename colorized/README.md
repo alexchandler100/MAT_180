@@ -144,11 +144,16 @@ $$p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) = \mathcal{N}(\mathbf{x_{t-1}}; \m
 
 ,allows us to work with the reverse probabilities far more easily. **(Maybe include a more mathematical reasoning here [2])** We will rewrite this as:
 
-$$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$$
+$$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$$
 
 **(Leave this alone for now, but I believe we can switch to q since we are essentially now dealing with the forward process, as anything we are predicting comes from $\mathbf{x_0}$ and thus is always in the forward direction)**
 
-To illustrate ...
+**(Reorganize this)**
+
+## Loss Function
+
+Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. Now, we 
+
 ## Implementation
 
 How we implemented it
@@ -220,4 +225,6 @@ feedback, improvements,...
 2. https://arxiv.org/abs/1503.03585
 3. http://www.stat.yale.edu/~pollard/Courses/251.spring2013/Handouts/Chang-MarkovChains.pdf
 4. On the theory of stochastic processes (Feller Cornell Article )
+5. [https://deeplearningbook.org](https://www.deeplearningbook.org/)
+6. https://lilianweng.github.io/posts/2018-08-12-vae/#vae-variational-autoencoder
 <!-- #endregion -->

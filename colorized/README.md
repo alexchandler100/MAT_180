@@ -152,7 +152,7 @@ $$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}
 
 ## Loss Function
 
-Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. Now, we 
+Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta()}$. Conviently, we employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently **([7], [8])**. We will refer to Variational Lower Bounds as VLB for the remainder of this paper.
 
 ## Implementation
 
@@ -227,4 +227,6 @@ feedback, improvements,...
 4. On the theory of stochastic processes (Feller Cornell Article )
 5. [https://deeplearningbook.org](https://www.deeplearningbook.org/)
 6. https://lilianweng.github.io/posts/2018-08-12-vae/#vae-variational-autoencoder
+7. https://www.alexejgossmann.com/conditional_distributions/#FellerVol2
+8. https://en.wikipedia.org/wiki/Evidence_lower_bound
 <!-- #endregion -->

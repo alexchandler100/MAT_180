@@ -154,6 +154,20 @@ $$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}
 
 Next, we seek to optimize the negative log-likelihood. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence **(maybe make reference of this)** to achieve this comparison. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta()}$. Conviently, we employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently **([7], [8])**. We will refer to Variational Lower Bounds as VLB for the remainder of this paper.
 
+To derive VLB, we expand the above KL divergence:
+
+$$\begin{aligned}
+D_{\text{KL}}(q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) || p(\mathbf{x_{t-1}} | \mathbf{x_{t}})) &= \mathbb{E}_ {\mathbf{x_{1:T}} \sim q(\mathbf{x_{t-1}} | \mathbf{x_{t}})} \\
+    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}})}{p(\mathbf{x_{t-1}} | \mathbf{x_{t}})}\Big )} d\mathbf{x_{1:T}} \\
+    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) p_{\theta}(\mathbf{x_{0}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big )} d\mathbf{x_{1:T}} && \text{(Bayes' Rule)}\\
+    &= \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) \Big \[ \log{p_{\theta}(\mathbf{x_{0}})} + \log{\Big ( \frac{q(\mathbf{x_{t-1}} | \mathbf{x_{t}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big )} \Big \] d\mathbf{x_{1:T}} \\
+\end{aligned}$$
+
+$$\begin{align}
+    &= \log{p_{\theta}(\mathbf{x_{0}})} \int q(\mathbf{x_{t-1}} | \mathbf{x_{t}}) d\mathbf{x_{1:T}} + \int q(\mathbf{x_{t-1}} \vert \mathbf{x_{t}}) \log \Big( \frac{q(\mathbf{x_{t-1}} \vert \mathbf{x_{t}})}{p(\mathbf{x_{t-1}}, \mathbf{x_{t}})}\Big)
+\end{align}$$
+
+
 ## Implementation
 
 How we implemented it

@@ -313,7 +313,23 @@ $$f(x) = \frac{1}{\sqrt{2\pi \sigma^2}}\exp\Big({-\frac{1}{2}\Big({\frac{x-\mu}{
 Again, we manipulate $L_{t-1}$
 
 $$\begin{align}
-L_{t-1} &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big( \frac{1}{\sqrt{2\pi \beta_t}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \]
+L_{t-1} &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big( \frac{1}{\sqrt{2\pi \beta_t}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] \\
+        &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}} \Big ) + \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \Big( \log \Big( \frac{1}{\sqrt{2\pi \beta_t}} \Big) +  \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big) \Big) \Big \] \\
+        &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
+\end{align}$$
+
+$$\begin{align}
+&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big) \log (\exp) - \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big) \log (\exp)  \Big \]\\
+&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)- \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_t}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big \]\\
+&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}{\tilde{\beta_t}}}\Big)}\Big)- \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\mu_t})^2}{\beta_t}}}\Big)\Big)\Big \]\\
+&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ {-\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}}- (x_{t-1}-\mathbf{\mu_t})^2\Big)\Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
+&= (\*\*\*\*)
+\end{align}$$
+
+Using aforementioned reparameterization of $\mathbf{x_{t-1}}$, we expand:
+
+$$\begin{align}
+(x_{t-1}-\mathbf{\tilde{\mu_t}})^2- (x_{t-1}-\mathbf{\mu_t})^2 &= (x_{t-1}^2 -2x_{t-1}\mathbf{\tilde{\mu_t}}+\mathbf{\tilde{\mu_t}}^2) - (x_{t-1}^2-2x_{t-1}\mathbf{\mu_t}+\mathbf{\mu_t}^2) \\
 \end{align}$$
 ## Implementation
 

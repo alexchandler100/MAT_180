@@ -284,15 +284,8 @@ However, as we seek to optimize our VLB, we will manipulate $L_{t}$ in order to 
 
 $$\begin{align}
 L_{t-1} &=  D_\text{KL} ( q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})||p_{\theta}(\mathbf{x_{t}} | \mathbf{x_{t+1}})) \\
-        &= \mathbb{E}_ {\mathbf{x_{t-1}} \sim q} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \]
-        &= (\*\*\*)
-\end{align}$$
-
-Now, we again use the clever reparameterization of $\mathbf{x_{t-1}}$, knowing that $\mathbf{x_{t-1}} \sim \mathcal{N}(\mathbf{x_{t-1}};\sqrt{\bar{\alpha_t}}\mathbf{x_0}, (1 - \bar{\alpha_t})\mathbf{I})$, writing it now as $\mathbf{x_{t-1}}(\mathbf{x_0}, \mathbf{\epsilon}) = \sqrt{\bar{\alpha_t}}\mathbf{x_0} + \sqrt{1 - \bar{\alpha_t}}\mathbf{\epsilon}$ (where $\mathbf{\epsilon} \sim \mathcal{N}\text{(}\mathbf{0}, \mathbf{I}\text{)}$). Using this:
-
-$$\begin{align}
-(\*\*\*) &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
-         &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
+        &= \mathbb{E}_ {\mathbf{x_{t-1}} \sim q} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
+         &= \mathbb{E}_ {q} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
 \end{align}$$
 
 Recall from above that:
@@ -304,7 +297,7 @@ p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) &= \mathcal{N}(\mathbf{x_{t-1}}; \ma
 
 This allows us to rewrite the expression as:
 
-$$L_{t-1} = \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log (\mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})) - \log ( \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t}, t), \beta_t \mathbf{I}))  \Big \]$$
+$$L_{t-1} = \mathbb{E}_ {q} \Big \[ \log (\mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})) - \log ( \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t}, t), \beta_t \mathbf{I}))  \Big \]$$
 
 Moving forward, we make use of the assumption that we have a pre-defined noise scheduler (i.e. $\tilde{\beta_t} = \beta_t$ at any timestep t). Additionally, recall that the probability density function of a Gaussian distribution $\mathcal{N}(x;\mu,\sigma^2)$ is:
 
@@ -313,24 +306,42 @@ $$f(x) = \frac{1}{\sqrt{2\pi \sigma^2}}\exp\Big({-\frac{1}{2}\Big({\frac{x-\mu}{
 Again, we manipulate $L_{t-1}$
 
 $$\begin{align}
-L_{t-1} &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big( \frac{1}{\sqrt{2\pi \beta_t}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] \\
-        &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}} \Big ) + \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \Big( \log \Big( \frac{1}{\sqrt{2\pi \beta_t}} \Big) +  \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big) \Big) \Big \] \\
-        &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
+L_{t-1} &= \mathbb{E}_ {q} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big( \frac{1}{\sqrt{2\pi \beta_t}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] \\
+        &= \mathbb{E}_ {q} \Big \[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}} \Big ) + \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \Big( \log \Big( \frac{1}{\sqrt{2\pi \beta_t}} \Big) +  \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big) \Big) \Big \] \\
+        &= \mathbb{E}_ {q} \Big \[ \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
 \end{align}$$
 
 $$\begin{align}
-&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big) \log (\exp) - \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big) \log (\exp)  \Big \]\\
-&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)- \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big \]\\
-&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}{\tilde{\beta_t}}}\Big)}\Big)- \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\mu_\theta})^2}{\beta_t}}}\Big)\Big)\Big \]\\
-&= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ {-\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
-&= (\*\*\*\*)
+&= \mathbb{E}_ {q} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big) \log (\exp) - \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big) \log (\exp)  \Big \]\\
+&= \mathbb{E}_ {q} \Big \[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)- \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big \]\\
+&= \mathbb{E}_ {q} \Big \[ \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}{\tilde{\beta_t}}}\Big)}\Big)- \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\mu_\theta})^2}{\beta_t}}}\Big)\Big)\Big \]\\
+&= \mathbb{E}_ {q} \Big \[ {-\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big \] && \text{($\tilde{\beta_t} = \beta_t$)} \\
+&= (\*\*\*)
 \end{align}$$
 
-Using aforementioned reparameterization of $\mathbf{x_{t-1}}$, we expand:
+Using aforementioned reparameterization of $\mathbf{x_{t-1}} \sim q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$ where $\mathbf{x_{t-1}} = \mathbf{\tilde{\mu_t}} + \sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\$ and $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, we expand with difference of squares:
 
 $$\begin{align}
-(x_{t-1}-\mathbf{\tilde{\mu_t}})^2- (x_{t-1}-\mathbf{\mu_\theta})^2 &= (x_{t-1}^2 -2x_{t-1}\mathbf{\tilde{\mu_t}}+\mathbf{\tilde{\mu_t}}^2) - (x_{t-1}^2-2x_{t-1}\mathbf{\mu_\theta}+\mathbf{\mu_\theta}^2) \\
+(x_{t-1}-\mathbf{\tilde{\mu_t}})^2- (x_{t-1}-\mathbf{\mu_\theta})^2 &= ((x_{t-1}-\mathbf{\tilde{\mu_t}})+(x_{t-1}-\mathbf{\mu_\theta}))((x_{t-1}-\mathbf{\tilde{\mu_t}})-(x_{t-1}-\mathbf{\mu_\theta}))\\
+                                                                    &= (2x_{t-1}-\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})(\mathbf{\mu_\theta}-\mathbf{\tilde{\mu_t}})\\
+                                                                    &= (2(\mathbf{\tilde{\mu_t}} + \sqrt{\tilde{\beta_t}}\mathbf{\epsilon})-\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})(\mathbf{\mu_\theta}-\mathbf{\tilde{\mu_t}})\\
+                                                                    &= (2\mathbf{\tilde{\mu_t}} + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}-\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})(\mathbf{\mu_\theta}-\mathbf{\tilde{\mu_t}})\\
+                                                                    &= (2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}+\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})(\mathbf{\mu_\theta}-\mathbf{\tilde{\mu_t}})\\
+                                                                    &= 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta}-2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}}+\mathbf{\tilde{\mu_t}}\mathbf{\mu_\theta}-\mathbf{\tilde{\mu_t}}\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta}\mathbf{\mu_\theta}+\mathbf{\mu_\theta}\mathbf{\tilde{\mu_t}}\\
+                                                                    &= 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta}-2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}}-(\mathbf{\tilde{\mu_t}}^2-2\mathbf{\tilde{\mu_t}}\mathbf{\mu_\theta}+\mathbf{\mu_\theta}^2)\\
 \end{align}$$
+
+$$\begin{align}
+&= 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta}-2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}}-(\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2\\
+&= -\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big)\\
+\end{align}$$
+
+Returning to (\*\*\*):
+
+$$(\*\*\*) = \mathbb{E}_ {q} \Big \[ -\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big \]$$
+
+$$test = \Big \[ \frac{1}{2\beta_t}\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big \]$$
+
 ## Implementation
 
 How we implemented it

@@ -288,11 +288,18 @@ L_{t-1} &=  D_\text{KL} ( q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})||p_{
         &= (\*\*\*)
 \end{align}$$
 
-Now, we again use the clever reparameterization of $\mathbf{x_{t-1}}$, knowing that $\mathbf{x_{t-1}} \sim \mathcal{N}(\mathbf{x_{t-1}};\sqrt{\bar{\alpha_t}}\mathbf{x_0}, (1 - \bar{\alpha_t})\mathbf{I})$, writing it now as $\mathbf{x_{t-1}}(\mathbf{x_0}, \mathbf{\epsilon}) = \sqrt{\bar{\alpha_t}}\mathbf{x_0} + \sqrt{1 - \bar{\alpha_t}}\mathbf{\epsilon}$ (where $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$). Using this:
+Now, we again use the clever reparameterization of $\mathbf{x_{t-1}}$, knowing that $\mathbf{x_{t-1}} \sim \mathcal{N}(\mathbf{x_{t-1}};\sqrt{\bar{\alpha_t}}\mathbf{x_0}, (1 - \bar{\alpha_t})\mathbf{I})$, writing it now as $\mathbf{x_{t-1}}(\mathbf{x_0}, \mathbf{\epsilon}) = \sqrt{\bar{\alpha_t}}\mathbf{x_0} + \sqrt{1 - \bar{\alpha_t}}\mathbf{\epsilon}$ (where $\mathbf{\epsilon} \sim \mathcal{N}\text{(}\mathbf{0}, \mathbf{I}\text{)}$). Using this:
 
 $$\begin{align}
-(\*\*\*) &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t}} | \mathbf{x_{t+1}}))} \Big) \Big \] \\
-         &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t}} | \mathbf{x_{t+1}}))} \Big) \Big \] \\
+(\*\*\*) &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
+         &= \mathbb{E}_ {\mathbf{x_0}, \mathbf{\epsilon}} \Big \[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big \] \\
+\end{align}$$
+
+Recall from above that:
+
+$$\begin{align}
+q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) &= \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I}) \\
+p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) &= \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t}, t), \beta_t \mathbf{I}) \\
 \end{align}$$
 ## Implementation
 

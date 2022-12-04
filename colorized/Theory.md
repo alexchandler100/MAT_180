@@ -412,3 +412,16 @@ We simplify our entire Loss of $L = L_{0} + L_t + C_t$ down to:
 $$L' = L_t + C $$
 
 where $C = L_0 + C_t$ is a constant which do not depends on $\theta$. 
+
+
+## References
+
+1. https://lilianweng.github.io/posts/2021-07-11-diffusion-models/
+2. https://arxiv.org/abs/1503.03585
+3. http://www.stat.yale.edu/~pollard/Courses/251.spring2013/Handouts/Chang-MarkovChains.pdf
+4. On the theory of stochastic processes (Feller Cornell Article )
+5. [https://deeplearningbook.org](https://www.deeplearningbook.org/)
+6. https://lilianweng.github.io/posts/2018-08-12-vae/#vae-variational-autoencoder
+7. https://www.alexejgossmann.com/conditional_distributions/#FellerVol2
+8. https://en.wikipedia.org/wiki/Evidence_lower_bound
+9. https://arxiv.org/pdf/2006.11239.pdf

@@ -41,3 +41,25 @@ def count_FP(a_FP):
 def count_TP(a_TP):
     #return sum([a_TP[key]][2] for key in a_TP.keys())
     return sum(a_TP[key][2] for key in a_TP.keys())
+
+def count_FP_per_row(a_free_part):
+    a_total_num_FP_per_row = {}
+    for a_key in a_free_part:
+        #print(a_key)
+        #print(eval(a_free_part)[a_key])
+        try:
+            a_total_num_FP_per_row[a_key[0]] += a_free_part[a_key]
+        except:
+            a_total_num_FP_per_row[a_key[0]] = a_free_part[a_key]
+    return a_total_num_FP_per_row
+
+def count_FP_per_col(a_free_part):
+    a_total_num_FP_per_col = {}
+    for a_key in a_free_part:
+        #print(a_key)
+        #print(eval(a_free_part)[a_key])
+        try:
+            a_total_num_FP_per_col[a_key[1]] += a_free_part[a_key]
+        except:
+            a_total_num_FP_per_col[a_key[1]] = a_free_part[a_key]
+    return a_total_num_FP_per_col

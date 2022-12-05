@@ -28,8 +28,8 @@ def GD_linreg_improved(X,y,epsilon,lambda_,max_iters = 10000):
         v = v-DJ(X,y,v,lambda_)*alpha
         costs.append(J(X,y,v,lambda_))
         if i % 1000 == 0:
-            print(f'after {i} steps the cost is {costs[i]}')
+            print(f'After {i} steps the cost is {costs[i]}')
         if abs(costs[i] - costs[i-1])<epsilon:
             break
-    print(f'after {i} steps the cost is {costs[i]}')
+    print(f'After {i} steps the cost is {costs[i]}')
     return v,costs

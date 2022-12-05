@@ -8,7 +8,7 @@ import math
 class CoreBlock(nn.Module):
     # groups number for group normalization
     def __init__(self,dim_in,dim_out,num_groups=8):
-        super.__init__()
+        super().__init__()
         self.conv = nn.Conv2d(dim_in,dim_out,3,padding=1)
         self.norm = nn.GroupNorm(num_groups,dim_out)
         self.activ = nn.SiLU() # Sigmoid Linear Unit (SiLU) function
@@ -33,7 +33,7 @@ class TimestepEmbeddingMLP(nn.Module):
     
 
 # Resnet block with timestep embedding
-class ResNet(nn.Module):
+class ResNetBlock(nn.Module):
     def __init__(self,dim_in,dim_out,time_embedd_dim,num_groups=8):
         super().__init__()
 
@@ -134,7 +134,16 @@ class LinearAttentionHeads(nn.Module):
 
 # Should be applied before Attention layers if implemented:
 class PreGroupNorm(nn.Module):
-    pass
+    def __init__(self,dim,f):
+        super().__init__()
+        self.f = f
+        self.norm = nn.GroupNorm(1,dim)
+
+    def forward(self,x):
+        x = self.norm()
+        x = self.f(x)
+        return x
+
 
 # upsample block (can also be defined inside customUnet)
 def upSample(dim):
@@ -145,9 +154,111 @@ def downSample(dim):
     return nn.Conv2d(in_channels=dim, out_channels=dim, kernel_size=4, stride=2, padding=1)
 
 # the custom unet model that uses the blocks defined above
-class CustomUNet(nn.Module):
-    pass
+class CustomConditionalUNet(nn.Module):
+    def __init__(self,  image_channels=3,
+                        conditional_image_channels=1,
+                        up_channels=(1024,512,256,128,64),
+                        down_channels=(64,128,256,512,1024),
+                        time_emb_dim=32):            
+        super().__init__()
+
+        pos_emb = SinusoidalPositionEmbeddings(time_emb_dim)
+        self.timestep_MLP = nn.Sequential(
+                            pos_emb,
+                            nn.Linear(time_emb_dim,time_emb_dim),
+                            nn.GELU()
+                        )
+        
+        # The condional image is concatenated with the noised image
+        # so we add the number of channels
+        input_channel = image_channels + conditional_image_channels
+
+        # Initial convolution
+        self.init_conv = nn.Conv2d(input_channel,down_channels[0],kernel_size=3,padding=1)
+
+        # Fill downsample blocks
+        self.downs = nn.ModuleList([])
+        
+        for i in range(len(down_channels)-1):
+            self.downs.append(
+                nn.ModuleList([
+                    ResNetBlock(down_channels[i],down_channels[i+1],time_emb_dim),
+                    ResNetBlock(down_channels[i+1],down_channels[i+1],time_emb_dim),
+                    # TODO Add Residual -> prenorm -> linear attention
+                    # Don't downsample if it is the last down block
+                    downSample(down_channels[i+1]) if i!=(len(down_channels)-2) else nn.Identity()
+                ])
+            )
+        
+        # Bottleneck layers
+        mid_dim = down_channels[-1]
+        self.bottleneck_block1 = ResNetBlock(mid_dim,mid_dim,time_emb_dim)
+        # TODO Add Residual -> prenorm -> attention
+        self.bottleneck_block2 = ResNetBlock(mid_dim,mid_dim,time_emb_dim)
+
+        # Fill upsample blocks
+        self.ups = nn.ModuleList([])
+
+        for i in range(len(up_channels)-1):            
+            self.ups.append(
+                nn.ModuleList([
+                    ResNetBlock(up_channels[i],up_channels[i+1],time_emb_dim),
+                    ResNetBlock(up_channels[i+1],up_channels[i+1],time_emb_dim),
+                    # TODO Add Residual -> prenorm -> linear attention
+                    # Don't upsample if it is the last up block
+                    upSample(up_channels[i+1]) if i!=(len(up_channels)-2) else nn.Identity()
+                ])
+            )
+
+        # output layer
+        self.lastblock = ResNetBlock(up_channels[-1],up_channels[-1],time_emb_dim)
+        self.lastconv = nn.Conv2d(up_channels[-1],image_channels,1)
+
+    def forward(self,x,cond_x,timestep):
+
+        # Concat x and cond_x on the channel axis
+        x = torch.cat((x,cond_x),dim=1)
+
+        x = self.init_conv(x)
+
+        t = self.timestep_MLP(timestep)
+
+        # downsample
+        skip_connections=[]
+
+        for block1,block2,downsample in self.downs:
+            x = block1(x,t)
+            x = block2(x,t)
+            skip_connections.append(x)
+            x = downsample(x)
+            
+        # Bottleneck
+        x = self.bottleneck_block1(x,t)
+        x = self.bottleneck_block2(x,t)
+        
+        # upsample
+        for block1,block2,upsample in self.ups:
+            residual = skip_connections.pop()
+            # Add the residual x as an additional channels
+            x = torch.cat((x,residual),dim=1)
+            x = block1(x,t)
+            x = block2(x,t)
+            x = upsample(x)
+
+        # final block 
+        x = self.lastblock(x,t)
+
+        # output layer
+        x = self.lastconv(x)
+
+        return x
+        
+
 
 # the loss function
 def p_loss(model,x0,t):
     pass
+
+model = CustomConditionalUNet()
+print("Num params: ", sum(p.numel() for p in model.parameters()))
+print(model)

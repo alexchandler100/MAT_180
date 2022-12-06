@@ -1,5 +1,9 @@
 ### NOT SURE IT WILL BE USEFUL YET
-
+import numpy as np
+import torch
+import PIL
+from PIL import Image
+from skimage.color import rgb2lab, lab2rgb
 
 # Transform a PIL (base format of an image loaded with PIL) image to a pytorch tensor:
 # using torchvision
@@ -12,4 +16,13 @@ def transform_to_tensor(image):
 def transform_to_pil(tensor):
     pass
 
-
+## Convert image from LAB to RGB
+def LABtoRGB(L, ab):
+    L = (L + 1.) * 50
+    ab = ab * 128
+    Lab = torch.cat([L, ab], dim=1).permute(0, 2, 3, 1).cpu().numpy()
+    rgb = []
+    for img_Lab in Lab:
+        img_rgb = lab2rgb(img_Lab)
+        rgb.append(img_rgb)
+    return np.stack(rgb, axis=0)

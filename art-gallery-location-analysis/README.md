@@ -5,7 +5,7 @@ Proposal
 
 Data Source:
 We have downloaded a file of photos of car logo emblems from Kaggle. 
-Included with the file is are labels fo the brand of each car in the photos.
+Included with the file are labels for the brand of each car in the photos.
 
 Task:
 We will aim to identify the brand of the vehicles from the images containging logos. 

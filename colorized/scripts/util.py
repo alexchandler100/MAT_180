@@ -1,6 +1,5 @@
 import torch
 import torch.nn.functional as F
-from forward_process import cosine_beta_schedule
 
 ### NOT SURE IT WILL BE USEFUL YET
 import numpy as np
@@ -21,8 +20,10 @@ def transform_to_pil(tensor):
     pass
 
 
+# Contains all the constant terms that we use often during sampling
 class ConstantDiffusionTerms:
-    def __init__(self,T,schedule_method=cosine_beta_schedule):
+    # schedule method can be cosine or linear in our implementation
+    def __init__(self,T,schedule_method):
 
         self.betas = schedule_method(T)
 

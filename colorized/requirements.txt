@@ -22,3 +22,4 @@ torchvision==0.14.0
 tqdm==4.64.1
 typing-extensions==4.4.0
 urllib3==1.26.13
+opendatasets==0.0.105

@@ -22,6 +22,28 @@ def p_sample(model, x, cond_x, t, t_index, sqrt_alphas_inverse, sqrt_one_minus_a
     
 
 # same but start from pure noise x_T and loop until getting a new x_0
-def p_sample_loop(model,x):
-    pass
+def p_sample_loop(model, shape, device, timesteps, cond_x, sqrt_alphas_inverse, sqrt_one_minus_alphas_cumulative_prods, betas, sqrt_betas): # device parameter for now QUESTION
+    batch_size = shape[0]
+    
+    # sample pure noise in the correct output shape (once for each in batch)
+    noisy_image = torch.randn(shape, device=device)
+    noisy_images = []
+
+    # for each timestep until 0, remove some noise
+    for i in reversed(range(0, timesteps)): # talk about the tdqm thing
+        batch_sized_timestep = torch.full((batch_size,), i, device=device) # note that I did not specify the data type, hope that's fine
+        noisy_image = p_sample(model, 
+                                noisy_image, cond_x,
+                                batch_sized_timestep, i,
+                                sqrt_alphas_inverse, 
+                                sqrt_one_minus_alphas_cumulative_prods, 
+                                betas, sqrt_betas)
+        noisy_images.append(noisy_image.cpu().numpy())
+    
+    # return all noisy images at every timestep
+    return  noisy_images
+
+def sample(model, image_width, image_height, batch_size, channels=3):
+    return p_sample_loop(model, shape=(batch_size, channels, image_width, image_height))
+    # Q: Do we need to be saving each of the images? Maybe to show progress?
 

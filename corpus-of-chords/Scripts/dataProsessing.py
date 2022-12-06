@@ -66,10 +66,12 @@ def generateVocab(dataset):
     vocab,inv_vocab, i = {},[],0
     for sequence in dataset:
         for chord in sequence:
-            if chord not in vocab:
+            if chord not in inv_vocab:
                 vocab[str(chord)] = i
                 inv_vocab.append(chord)
                 i += 1
+    print(i)
+    print(len(inv_vocab))
     return vocab, inv_vocab
 
 

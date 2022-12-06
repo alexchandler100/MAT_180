@@ -28,8 +28,15 @@ def linear_beta_schedule(timesteps,start=0.0001,end=0.02):
     # Take the same values as the DDPM paper of 2020
     return torch.linspace(start,end,timesteps)
 
-# Define forward_diffusion_sample or q_sample or another coherent name:
 # takes x0 as input, a timestep t and output x_t
-def q_sample(x0,t):
+def q_sample(x0,t,):
+    # gaussian noise of size x0 (the first image)
+    epsilon = torch.rand_like(x0)
+
+    
+
+
+
     pass
+
 

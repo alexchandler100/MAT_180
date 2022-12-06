@@ -3,14 +3,9 @@ import MidiWriting as mw
 import os
 import json as json
 print(os.getcwd())
-corpus = dp.loadDataset("Jsb16thSeparated.json")
-newcorpus = {}
-newcorpus["train"] = dp.standardizeKey(corpus["train"],60)
-newcorpus["test"] = dp.standardizeKey(corpus["test"],60)
-newcorpus["valid"] = dp.standardizeKey(corpus["valid"],60)
+corpus = dp.loadDataset("data\\Corpi\\Jsb16thSeparated(t_60_rr_re)\\Jsb16thSeparated(t_60_rr_re).json")
 
-newcorpus["train"] = list(map(dp.removeRepeatedChords,newcorpus["train"]))
-newcorpus["test"] = list(map(dp.removeRepeatedChords,newcorpus["test"]))
-newcorpus["valid"] = list(map(dp.removeRepeatedChords,newcorpus["valid"]))
-with open("Data\Jsb16thSeparated(t_60_rr).json", "w") as outfile:
-    json.dump(newcorpus, outfile)
+vocab = dp.generateVocab(corpus)
+vocab = {"vocab" : vocab[0], "inv_vocab":vocab[1] }
+
+dp.saveDataset(data = vocab, name = "Jsb16thSeparated(t_60_rr_re)_vocab.json")

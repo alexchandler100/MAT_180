@@ -2,6 +2,12 @@ import torch
 import torch.nn.functional as F
 from forward_process import cosine_beta_schedule
 
+### NOT SURE IT WILL BE USEFUL YET
+import numpy as np
+import torch
+import PIL
+from PIL import Image
+from skimage.color import rgb2lab, lab2rgb
 
 # Transform a PIL (base format of an image loaded with PIL) image to a pytorch tensor:
 # using torchvision
@@ -55,3 +61,13 @@ def extract_t_th_value_of_list(values,t,x_shape):
     res = res.reshape(batch_size,*additional_dims).to(t.device())
     return res
 
+## Convert image from LAB to RGB
+def LABtoRGB(L, ab):
+    L = (L + 1.) * 50
+    ab = ab * 128
+    Lab = torch.cat([L, ab], dim=1).permute(0, 2, 3, 1).cpu().numpy()
+    rgb = []
+    for img_Lab in Lab:
+        img_rgb = lab2rgb(img_Lab)
+        rgb.append(img_rgb)
+    return np.stack(rgb, axis=0)

@@ -97,26 +97,21 @@ As we are describing the same distribution in the forward process, but in the op
 <!-- Also, note that we can consider x_T to be "x_0" and traverse the process normally, just subbing back in our renamings -->
 
 \begin{align*}
-p_{\theta}(\mathbf{x_{0:T}}) &= p_{\theta}(\mathbf{x_{T}}, \dots, \mathbf{x_{0}}) && \text{(*)}\\
+p_{\theta}(\mathbf{x_{0:T}}) &= p_{\theta}(\mathbf{x_{T}}, \dots, \mathbf{x_{0}})\\
                              &= p(\mathbf{x_{T}}) p_{\theta}(\mathbf{x_{T-1}} | \mathbf{x_{T}}) \dots p_{\theta}(\mathbf{x_0} | \mathbf{x_1}) && \text{(Markov Property)} \\
                              &= p_{\theta}(\mathbf{x_T})\prod_{t=1}^{T} p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) \\
 \end{align*}
 
-(\*) Note that we do not condition $\mathbf{x_T}$ on anything here. **(explanation necessary [2])**
 
 Also, we make mention here that conditioning our $\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)$ on $\mathbf{x_0}$ in:
 
 $$p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t}, t), \beta_t \mathbf{I})$$
 
-,allows us to work with the reverse probabilities far more easily. **(Maybe include a more mathematical reasoning here [2])** We will rewrite this as:
+,allows us to work with the reverse probabilities far more easily, as conditioning on $\mathbf{x_0}$ provides us the ability to treat this distribution as the forward process ($\mathbf{x_0}$ comes before any $\mathbf{x_t}$, and we have already discussed that $\mathbf{x_t}$ is a noised $\mathbf{x_0}$) **(Maybe include a more mathematical reasoning here [2])** We will rewrite this as:
 
 $$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$$
 
 With $\mathbf{\tilde{\mu_t}}$ and $\tilde{\beta_t}$ the real values of mean and variance?
-
-**(Leave this alone for now, but I believe we can switch to q since we are essentially now dealing with the forward process, as anything we are predicting comes from $\mathbf{x_0}$ and thus is always in the forward direction)**
-
-**(Reorganize this)**
 
 ## Loss Function
 
@@ -223,7 +218,7 @@ $$L_{t} = D_\text{KL} ( q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})||p_{\t
 However, as we seek to optimize our VLB, we will manipulate $L_{t}$ in order to find an optimal/viable cost function. To do this, we want some way to measure the 'loss' between our predicted noisy images, and the original noisy images themselves. Thus, we manipulate the above loss component to find a usable comparison between the respective distributions. Starting with $L_{t-1}$:
 
 \begin{align*}
-L_{t-1} &=  D_\text{KL} ( q(\mathbf{x_{t}}| \mathbf{x_{t+1}}, \mathbf{x_0})||p_{\theta}(\mathbf{x_{t}} | \mathbf{x_{t+1}})) \\
+L_{t-1} &=  D_\text{KL} ( q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})||p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t})) \\
         &= \mathbb{E}_ {\mathbf{x_{t-1}} \sim q} \Big[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big ] \\
          &= \mathbb{E}_ {q} \Big[ \log \Big( \frac{q(\mathbf{x_{t-1}}| \mathbf{x_{t}}, \mathbf{x_0})}{p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}}))} \Big) \Big ] \\
 \end{align*}
@@ -251,7 +246,7 @@ Again, we manipulate $L_{t-1}$
 L_{t-1} &= \mathbb{E}_ {q} \Big[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big( \frac{1}{\sqrt{2\pi \beta_t}}\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big ] \\
         &= \mathbb{E}_ {q} \Big[ \log \Big( \frac{1}{\sqrt{2\pi \tilde{\beta_t}}} \Big ) + \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \Big( \log \Big( \frac{1}{\sqrt{2\pi \beta_t}} \Big) +  \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big) \Big) \Big ] \\
         &= \mathbb{E}_ {q} \Big[ \log \Big( \exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)\Big) - \log \Big(\exp\Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big)  \Big ] && \text{($\tilde{\beta_t} = \beta_t$)} \\
-&= \mathbb{E}_ {q} \Big[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big) \log (\exp) - \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big) \log (\exp)  \Big ]\\
+&= \mathbb{E}_ {q} \Big[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)- \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big) \Big ]\\
 &= \mathbb{E}_ {q} \Big[ \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\tilde{\mu_t}}}{\sqrt{\tilde{\beta_t}}}}\Big)^2}\Big)- \Big({-\frac{1}{2}\Big({\frac{x_{t-1}-\mathbf{\mu_\theta}}{\sqrt{\beta_t}}}\Big)^2}\Big)\Big ]\\
 &= \mathbb{E}_ {q} \Big[ \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}{\tilde{\beta_t}}}\Big)}\Big)- \Big({-\frac{1}{2}\Big({\frac{(x_{t-1}-\mathbf{\mu_\theta})^2}{\beta_t}}}\Big)\Big)\Big ]\\
 &= \mathbb{E}_ {q} \Big[ {-\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big ] && \text{($\tilde{\beta_t} = \beta_t$)} \\
@@ -275,13 +270,27 @@ Using aforementioned reparameterization of $\mathbf{x_{t-1}} \sim q(\mathbf{x_{t
 
 Returning to (***):
 
-$$(***) = \mathbb{E}_ {q} \Big[ -\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big ]$$
+\begin{align*}
+(***) &= \mathbb{E}_ {q} \Big[ -\frac{1}{2\beta_t}\Big({(x_{t-1}-\mathbf{\tilde{\mu_t}})^2}- (x_{t-1}-\mathbf{\mu_\theta})^2\Big)\Big ]\\
+&= \mathbb E_q \Big[ \frac{1}{2\beta_t}\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big ] \\
+\end{align*}
 
-$$= \mathbb E_q \Big[ \frac{1}{2\beta_t}\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big ]$$
+We notice that the clever reparameterization of $\mathbf{x_t}$ as $\mathbf{x_t}(\mathbf{x_0}, \mathbf{\epsilon}) = \sqrt{\bar{\alpha_t}}\mathbf{x_0} + \sqrt{1 - \bar{\alpha_t}}\mathbf{\epsilon}$, lends us:
 
+\begin{align*}
+&\mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t}\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 + 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - 2\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big ] \\
+&= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t} (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 \Big] + \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{\beta_t}\Big(\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - \sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big ] \\
+\end{align*}
 
-Here, we note that the above expression is proportional to:
- 
+Here, recall that $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, and so $\mathbb{E}_{\mathbf{x_0}, \mathbf{\epsilon}} [\epsilon] = \mathbf{0}$. On top of this, for independent continuous random variables, $\mathbb{E} [XY] = \mathbb{E}[X]\mathbb{E}[Y]$. So, since $\mathbf{x_0}$ and $\mathbf{\epsilon}$ are independent:
+
+\begin{align}
+&\mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t} (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 \Big] + \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{\beta_t}\Big(\sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\tilde{\mu_t}} - \sqrt{\tilde{\beta_t}}\mathbf{\epsilon}\mathbf{\mu_\theta} \Big) \Big ] \\
+&= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t} (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 \Big] + \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}}[\mathbf{\epsilon}] E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{\beta_t}\Big( \sqrt{\tilde{\beta_t}}\mathbf{\tilde{\mu_t}} - \sqrt{\tilde{\beta_t}}\mathbf{\mu_\theta} \Big) \Big ] \\
+&= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t} (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 \Big]\\
+L_{t-1} &= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t}\Big( \|\mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0})-\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)\|^2 \Big) \Big]
+\end{align}
+
 $$\mathbb E_q \Big[ \frac{1}{2\beta_t}\Big( (\mathbf{\tilde{\mu_t}}-\mathbf{\mu_\theta})^2 \Big) \Big] = \mathbb E_q \Big[ \frac{1}{2\beta_t}\Big( \|\mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0})-\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)\|^2 \Big) \Big]$$
 
 Where $\| \cdot \|$ denotes the one-norm.
@@ -383,12 +392,8 @@ Via a different manipulation of $\mathbf{x_t} = \sqrt{\bar{\alpha_t}}\mathbf{x_0
 From here, we can return to:
 
 \begin{align*}
-L_{t-1} &= \mathbb E_q \Big[ \frac{1}{2\beta_t}\Big( \|\mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0})-\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)\|^2 \Big) \Big]
+L_{t-1} &= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t}\Big( \|\mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0})-\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)\|^2 \Big) \Big]
 \end{align*}
-
-First, we notice that the clever reparameterization of $\mathbf{x_t}$ as $\mathbf{x_t}(\mathbf{x_0}, \mathbf{\epsilon}) = \sqrt{\bar{\alpha_t}}\mathbf{x_0} + \sqrt{1 - \bar{\alpha_t}}\mathbf{\epsilon}$, lending us:
-
-$$L_{t-1} = \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{1}{2\beta_t}\Big( \|\mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0})-\mathbf{\mu_{\theta}}(\mathbf{x_t}, t)\|^2 \Big) \Big]$$
 
 Now, we may rewrite this using our new reparameterizations of $\tilde{\mu}_{t}$ and $\mathbf{\mu_{\theta}}$:
 

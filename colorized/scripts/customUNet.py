@@ -214,7 +214,7 @@ class CustomConditionalUNet(nn.Module):
         self.lastblock = ResNetBlock(up_channels[-1],up_channels[-1],time_emb_dim)
         self.lastconv = nn.Conv2d(up_channels[-1],image_channels,1)
 
-    def forward(self,x,cond_x,timestep):
+    def forward(self, x, cond_x, timestep):
 
         # Concat x and cond_x on the channel axis
         x = torch.cat((x,cond_x),dim=1)

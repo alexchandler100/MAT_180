@@ -1,6 +1,8 @@
 ### NOT SURE IT WILL BE USEFUL YET
 import numpy as np
 import torch
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torchvision.utils import make_grid
 import PIL
 from PIL import Image
 from skimage.color import rgb2lab, lab2rgb
@@ -26,3 +28,8 @@ def LABtoRGB(L, ab):
         img_rgb = lab2rgb(img_Lab)
         rgb.append(img_rgb)
     return np.stack(rgb, axis=0)
+
+# Choose CPU/GPU for training
+def set_device():
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return device

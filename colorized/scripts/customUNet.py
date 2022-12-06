@@ -255,10 +255,6 @@ class CustomConditionalUNet(nn.Module):
         
 
 
-# the loss function
-def p_loss(model,x0,t):
-    pass
-
 model = CustomConditionalUNet()
 print("Num params: ", sum(p.numel() for p in model.parameters()))
 print(model)

@@ -13,7 +13,7 @@ neighbors = json.load(open("Data\\Corpi\\Jsb16thSeparated(t_60_rr_re)\\weights\\
  
 
 
-sequence = generator.generate(neighbors, 0, 50)
+sequence = generator.generate(neighbors, 0, 10)
 print(sequence)
 translatedsequence = []
 for chord in sequence:

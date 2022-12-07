@@ -16,7 +16,7 @@ The following notation will be adopted for the next parts:
 -   $\mathbf{x_t}$ is the image after applying $t$ iterations of noise through the forward process
 -   $\mathbf{x_0}$ is the original (color) image
 -   $\mathbf{z}$ is the greyscale source image we seek to colorize
--   $\mathbf{x_T}$ is the final image of the forward process which follows an isotropic gaussian distribution ($T$ is constant)
+-   $\mathbf{x_T}$ is the final image of the forward process which follows an isotropic Gaussian distribution ($T$ is constant)
 -   $q(\mathbf{x_t}|\mathbf{x_{t-1}})$ corresponds to the forward process, taking an image $\mathbf{x_{t-1}}$ as input, and output $\mathbf{x_t}$ which contains more noise
 -   $p_\theta(\mathbf{x_{t-1}}|\mathbf{x_t})$ corresponds to the reverse process, taking an image $\mathbf{x_t}$ as input, and output $\mathbf{x_{t-1}}$ which contains less noise
 
@@ -26,7 +26,7 @@ The following notation will be adopted for the next parts:
 
 ### The Forward Diffusion Process
 
-Let's sample an image from a real conditional data distribution $\mathbf{x_0} \sim q(\mathbf{x}|\mathbf{z})$. We define a forward diffusion process, in which a small amount of gaussian noise is iteratively added to the image $\mathbf{x_0}$, in $T$ steps, leading to the sequence of noisy images $\mathbf{x_1},\dots,\mathbf{x_T}$. The step size is controlled by a variance schedule $\beta_t$ going from a start value to an end value defined accordingly to the scale of the pixel's values, in $T$ steps, starting at $t=1$. The noise added is sampled from a gaussian distribution. Thus we can define:
+Let's sample an image from a real conditional data distribution $\mathbf{x_0} \sim q(\mathbf{x}|\mathbf{z})$. We define a forward diffusion process, in which a small amount of Gaussian noise is iteratively added to the image $\mathbf{x_0}$, in $T$ steps, leading to the sequence of noisy images $\mathbf{x_1},\dots,\mathbf{x_T}$. The step size is controlled by a variance schedule $\beta_t$ going from a start value to an end value defined accordingly to the scale of the pixel's values, in $T$ steps, starting at $t=1$. The noise added is sampled from a Gaussian distribution. Thus we can define:
 $$q(\mathbf{x_t}|\mathbf{x_{t-1}}) = \mathcal{N}(\mathbf{x_t};\sqrt{1-\beta_t}\mathbf{x_{t-1}},\beta_t\mathbf{I})$$
 Where the variance schedule scales the mean and the variance of the noise sampled from the normal distribution. Since our forward process is a Markov Chain (satisfying Markov property), we can also write:
 
@@ -214,7 +214,7 @@ L_0 &= -\log{p_{\theta}(\mathbf{x_{0}} | \mathbf{x_1})}
 \end{align*}
 
 
-In the case of $L_T$, we are using a pre-defined 'noise schedule' and $q$ has no learning parameters.Thus $L_T$ should be considered constant (Recalling that $p_{\theta}(\mathbf{x_T})$ is generated gaussian noise as well). For $L_{0}$, we might use an additional decoder to model it, and, for lack of time, we will leave this as a constant $C_0$.
+In the case of $L_T$, we are using a pre-defined 'noise schedule' and $q$ has no learning parameters.Thus $L_T$ should be considered constant (Recalling that $p_{\theta}(\mathbf{x_T})$ is generated Gaussian noise as well). For $L_{0}$, we might use an additional decoder to model it, and, for lack of time, we will leave this as a constant $C_0$.
 
 As for $L_{t-1}$, we can easily rearrange the above form to achieve an equivalent result for $L_{t}$, where $1 \leq t \leq T-1$:
 
@@ -320,7 +320,7 @@ q(\mathbf{x_{t-1}}| \mathbf{x_0}) &= \mathcal{N}(\mathbf{x_{t-1}};\sqrt{\bar{\al
 q(\mathbf{x_t}| \mathbf{x_0}) &= \mathcal{N}(\mathbf{x_t};\sqrt{\bar{\alpha_t}}\mathbf{x_0}, (1 - \bar{\alpha_t})\mathbf{I})\\
 \end{align*}
 
-Again using the probability density function of a gaussian distribution:
+Again using the probability density function of a Gaussian distribution:
 
 \begin{align*}
 (\text{****}) &= \frac{\frac{1}{\sqrt{2\pi (1 - \alpha_t)}}\exp\Big({-\frac{1}{2}\Big({\frac{\mathbf{x_{t}}-\sqrt{\alpha_t}\mathbf{x_{t-1}}}{\sqrt{(1 - \alpha_t)}}}\Big)^2}\Big)\frac{1}{\sqrt{2\pi (1 - \bar{\alpha}_t})}\exp\Big({-\frac{1}{2}\Big({\frac{\mathbf{x_{t-1}}-\sqrt{\bar{\alpha}_{t-1}}\mathbf{x_0}}{\sqrt{(1 - \bar{\alpha}_{t-1})}}}\Big)^2}\Big)}{\frac{1}{\sqrt{2\pi (1 - \bar{\alpha}_t})}\exp\Big({-\frac{1}{2}\Big({\frac{\mathbf{x_{t}}-\sqrt{\bar{\alpha_t}}\mathbf{x_0}}{\sqrt{(1 - \bar{\alpha_t})}}}\Big)^2}\Big)}\\
@@ -415,13 +415,15 @@ $$L_{t-1} := \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \| \mathbf{\epsil
 
 , yields better performance during training.
 
-**Explain here why this last result is super intuitive (difference in noise and turning our model into a noise predictor)**
+Intuitively, we have turned our model $\mathbf{\epsilon}_{\theta}$ into a noise predictor. Essentially, we are training said model (employing a neural network) to closely approximate/reproduce the level of noise present in an image. For our purposes, the noise is "subtracted" as to reveal a colorized version of the input greyscale image. See the Implementation section for more details.
 
 We simplify our entire Loss of $L = L_{0} + L_t + C_t$ down to:
 
 $$L' = L_t + C $$
 
-where $C = L_0 + C_t$ is a constant which do not depends on $\theta$. 
+where $C = L_0 + C_t$ is a constant which do not depends on $\theta$.
+
+Thus, our loss function is complete.
 
 ## Algorithmic Changes in Conditional Diffusion Model
 
@@ -439,13 +441,26 @@ In both algorithms, note that $\mathbf{\epsilon}_\theta$ has an additional param
 
 ## References
 
-1. https://lilianweng.github.io/posts/2021-07-11-diffusion-models/
-2. https://arxiv.org/abs/1503.03585
-3. http://www.stat.yale.edu/~pollard/Courses/251.spring2013/Handouts/Chang-MarkovChains.pdf
-4. On the theory of stochastic processes (Feller Cornell Article )
-5. [https://deeplearningbook.org](https://www.deeplearningbook.org/)
-6. https://lilianweng.github.io/posts/2018-08-12-vae/#vae-variational-autoencoder
-7. https://www.alexejgossmann.com/conditional_distributions/#FellerVol2
-8. https://en.wikipedia.org/wiki/Evidence_lower_bound
-9. https://arxiv.org/pdf/2006.11239.pdf
-10. https://arxiv.org/pdf/2104.07636.pdf
+[1] Weng, Lilian. (Jul 2021). What are diffusion models? Lil’Log. https://lilianweng.github.io/posts/2021-07-11-diffusion-models/.
+
+[2] Jascha Sohl-Dickstein et al. “Deep Unsupervised Learning using Nonequilibrium Thermodynamics.” ICML 2015. https://arxiv.org/abs/1503.03585
+
+[3] J. Chang, February 2, 2007. "Markov chains
+" http://www.stat.yale.edu/~pollard/Courses/251.spring2013/Handouts/Chang-MarkovChains.pdf
+
+[4] Feller, W. On the theory of stochastic processes, with particular reference to applications. In Proceedings of the
+[First] Berkeley Symposium on Mathematical Statistics
+and Probability. The Regents of the University of California, 1949.
+
+[5] Deep Learning (Ian J. Goodfellow, Yoshua Bengio and Aaron Courville), MIT Press, 2016. https://www.deeplearningbook.org/
+
+[6] Weng, Lilian. 2018. From Autoencoder to Beta-VAE. "https://lilianweng.github.io/posts/2018-08-12-vae/"
+
+
+[7] Feller, W. (1966). An introduction to probability theory and its applications (Vol. 2). John Wiley & Sons.
+
+[8] Kingma, Diederik P.; Welling, Max (2014-05-01). "Auto-Encoding Variational Bayes". https://arxiv.org/abs/1312.6114.
+
+[9] Ho, Jonathan, et al. "Denoising Diffusion Probabilistic Models" https://arxiv.org/pdf/2006.11239.pdf
+
+[10] https://arxiv.org/pdf/2104.07636.pdf

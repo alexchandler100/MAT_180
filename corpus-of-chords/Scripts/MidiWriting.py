@@ -16,5 +16,5 @@ def toMidi(sequence, duration):
     midiFile = mido.MidiFile()
     splitSequences = np.array(sequence).T.tolist()
     for sequence in splitSequences:
-        midiFile.tracks.append(seqeunceToMidiTrack(sequence,duration))
+        midiFile.tracks.append(seqeunceToMidiTrack(sequence))
     return midiFile

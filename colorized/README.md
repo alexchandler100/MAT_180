@@ -136,7 +136,7 @@ We can express the convolution operation as a matrix multiplication between a sp
 
 #### Architecture of our custom U-Net
 
-Now that we defined the main building blocks of our custom U-Net, let's expand its architecture. The following table does not include the MLP of the sinusoidal position embedding as it is done at first only for the timestep $t$. As mentioned previously, our U-net is much smaller than the other u-net employed for state of the art diffusion models. 
+Now that we defined the main building blocks of our custom U-Net, let's expand its architecture. The following table does not include the MLP of the sinusoidal position embedding as it is done at first only for the timestep $t$. As mentioned previously, our U-net is much smaller than the other u-net employed for state of the art diffusion models. In the end, we get a network having only ~6.9 Millions of parameters.
 
 ##### Encoder
 
@@ -152,6 +152,7 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 | ResNet block       	| 128                   	| 256                    	|
 | ResNet block       	| 256                   	| 256                    	|
 
+The encoder downscale the image while adding more and more feature maps.
 
 ##### Bottleneck
 
@@ -160,6 +161,7 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 | ResNet block       	| 256                    	| 256                    	|
 | ResNet block       	| 256                   	| 256                    	|
 
+The bottleneck is the part of the network with the lowest image dimension, which compress all the important information of the image.
 
 ##### Decoder
 
@@ -175,6 +177,8 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 | ResNet block       	| 32                    	| 32                    	|
 | ResNet block       	| 32                    	| 32                    	|
 | Conv2d            	| 32                    	| img_channels             	|
+
+The decoder upsample the input features from the bottlenck, in order to output an image of the same size as the input in terms of spatial dimenions, and number of channels.
 
 
 ### Reverse process

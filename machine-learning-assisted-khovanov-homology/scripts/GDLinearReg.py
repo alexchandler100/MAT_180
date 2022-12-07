@@ -25,7 +25,6 @@ def GD_linreg_improved(X,y,epsilon,lambda_,max_iters = 10000):
     costs = [J(X,y,v,lambda_)]
     for i in range(max_iters):
         alpha = (DJ(X,y,v,lambda_).T@DJ(X,y,v,lambda_))/(DJ(X,y,v,lambda_).T@H@DJ(X,y,v,lambda_))
-        print(DJ(X,y,v,lambda_)*alpha.shape)
         v = v-DJ(X,y,v,lambda_)*alpha
         costs.append(J(X,y,v,lambda_))
         if i % 1000 == 0:

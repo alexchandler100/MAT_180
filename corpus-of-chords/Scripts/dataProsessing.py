@@ -35,7 +35,7 @@ def transpose(sequence, semitones):
 
 def identifyChord(chord):
     chord = [note for note in chord if note != -1]
-    return music21.chord.Chord(chord).pitchedCommonName()
+    return music21.chord.Chord(chord).pitchedCommonName
     
 def standardizeKey(sequences, key):
     retsequences = []
@@ -78,7 +78,8 @@ def generateVocab(dataset):
 def vectorizeDataset(dataset,vocab):
     vectorizedDataset = []
     for sequence in dataset:
-        vectorizedDataset.append([vocab[chord] for chord in sequence])
+        
+        vectorizedDataset.append([vocab[str(chord)] for chord in sequence])
     return vectorizedDataset
 
 #-----------------------------TENSORBOARD_OUTPUT---------------------------
@@ -86,7 +87,8 @@ def vectorizeDataset(dataset,vocab):
 def generateMetadata(dir, inv_vocab):
     out_m = io.open(os.path.join(dir, 'metadata.tsv'), 'w', encoding='utf-8')
 
-    for i in range(len(inv_vocab.items())):
-        out_m.write(str(inv_vocab[i]) + identifyChord(i) + "\n")
+    for i in inv_vocab:
+    
+        out_m.write(str(i) + identifyChord(i) + "\n")
 
     out_m.close()

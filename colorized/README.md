@@ -55,7 +55,7 @@ implementation, you may also, in a separate notebook, use a built-in implementat
 and compare performance.
 ```
 
-As our project is quite ambitious, the most complex part was to understand how diffusion models work. This is why, most of our work and of our research is explained in the theory section. Concerning the implementation, most of the papers we are reffering to, published their code in github ([1],[2]). As exploring and understanding the theory behind diffusion models took us 3 to 4 weeks in total, we have chosen to draw inspiration from these github repository, as well as articles going through these implementations like [the one from Hugging Face](https://huggingface.co/blog/annotated-diffusion). Even tho we got inspired from these codes, we can note that some algorithms had to be modified to adapt to conditional diffusion.
+As our project is quite ambitious, the most complex part was to understand how diffusion models work. This is why, most of our work and of our research is explained in the theory section. Concerning the implementation, most of the papers we are reffering to, published their code in github ([1],[2]). As exploring and understanding the theory behind diffusion models took us 3 to 4 weeks in total, we have chosen to draw inspiration from these github repository, as well as articles going through these implementations like [the one from Hugging Face](https://huggingface.co/blog/annotated-diffusion). Even though we got inspired from these codes, we can note that some algorithms had to be modified to adapt to conditional diffusion.
 
 As our project requires to use a neural network with an encoder-decoder architecture with complex types of layers, we are using the python library PyTorch. Thus, most of the objects that we are manipulating are not numpy arrays, but PyTorch tensors. These tensors behaves like numpy arrays, but are more convenient to track the operations and therefore compute the gradients required by the backpropagation step. To do so, PyTorch uses automatic differenciation, which consists of building an implicit computational graph when performing mathematical operations. By knowing the derivative of elementary mathematical operations, it is then possible to compute efficiently the gradient of every functions. 
 
@@ -94,6 +94,8 @@ The most complex part of the implementation, is designing the neural network. Th
 
 This architecture first downsamples the input in term of spatial resolution, but with more and channels because of the convolutions (64 -> 128 -> 256 -> 512 -> 1024). It also has a bottleneck in the middle that allow the network to learn the most important information to perform the task. Then, an upsampling is performed in order to output an image of the same shape as the input. Between the layers of identical size of the encoder and decoder, there is also residual connections (or skip connections), which improves the gradient flow.
 
+In recent work on Diffusion models ([1],[2],[3],[4]), it has been shown that the self-attention layers greatly improves the results of diffusion models. In this first implementation, we made the choice of not implementing attention layers. As we don't have the computing power to train a model with hundreds of millions of parameters, we also reduced the size of the network in terms of depth and number of convolution kernels.
+
 In this section, each main blocks are described, in order to present the architecture of our custom U-Net.
 
 #### Timestep embedding
@@ -127,11 +129,53 @@ The last step consists in adding the residual connection, which corresponds to a
 
 #### Up-sample and Down-sample blocks
 
-As we can see in Figure 1, a downsample and an upsample operation is applied after 2 main blocks of convolutions (which are resnet blocks in our case). For the downsample operation, we are using a convolution layer with a kernel of size 4x4, a stride of 2 and a padding of 1. For the upsample operation, we use a transposed convolution layer with a kernel of size 4x4, a stride of 2 and a padding of 1. A transposed convolution is TODO HERE
+As we can see in Figure 1, a downsample and an upsample operation is applied after 2 main blocks of convolutions (which are resnet blocks in our case). For the downsample operation, we are using a convolution layer with a kernel of size 4x4, a stride of 2 and a padding of 1. For the upsample operation, we use a transposed convolution layer with a kernel of size 4x4, a stride of 2 and a padding of 1. A transposed convolution generate an output feature map, with has a greater spatial dimension than the input feature map. The transposed convolution broadcasts each input elements via the kernel, which leads to an output that is larger than the input. 
+
+We can express the convolution operation as a matrix multiplication between a sparse matrix containing the information of the kernel $W_{sparse}$, and a column vector which is the flattened (by row) version of the input matrix $X_{flattened}$. This result of this operation gives a column vector $Z_{flattened}$ which can then be reshaped to produce the same result as a classic convolution operation $Z$. Now, if we take an input matrix that has the same shape of $Z$, and perform a matrix multiplication with the transposed sparse kernel matrix $W_{sparse}^T$, we obtain a result that has the same shape as $X_{flattened}$. Then, we just have to reshape it to produce a result of the same shape as $X$. Thus, we performed an upsampling of $Z$. By increasing the stride and the kernel size, we can generate outputs of greater sizes.
+
 
 #### Architecture of our custom U-Net
 
-Now that we defined
+Now that we defined the main building blocks of our custom U-Net, let's expand its architecture. The following table does not include the MLP of the sinusoidal position embedding as it is done at first only for the timestep $t$. As mentioned previously, our U-net is much smaller than the other u-net employed for state of the art diffusion models. 
+
+##### Encoder
+
+| **Layer**          	| **No Input channels** 	| **No Output channels** 	|
+|--------------------	|:---------------------:	|------------------------	|
+| Conv2d            	| img_channels          	| 32                     	|
+| ResNet block       	| 32                    	| 64                    	|
+| ResNet block       	| 64                    	| 64                    	|
+| Conv2d (downsample)  	| 64                    	| 64                    	|
+| ResNet block       	| 64                    	| 128                    	|
+| ResNet block       	| 128                   	| 128                    	|
+| Conv2d (downsample) 	| 128                   	| 128                    	|
+| ResNet block       	| 128                   	| 256                    	|
+| ResNet block       	| 256                   	| 256                    	|
+
+
+##### Bottleneck
+
+| **Layer**          	| **No Input channels** 	| **No Output channels** 	|
+|--------------------	|:---------------------:	|------------------------	|
+| ResNet block       	| 256                    	| 256                    	|
+| ResNet block       	| 256                   	| 256                    	|
+
+
+##### Decoder
+
+| **Layer**          	| **No Input channels** 	| **No Output channels** 	|
+|--------------------	|:---------------------:	|------------------------	|
+| ResNet block       	| 256                    	| 128                    	|
+| ResNet block       	| 128                    	| 128                    	|
+| ConvTranspose2D (up) 	| 128                    	| 128                    	|
+| ResNet block       	| 128                    	| 64                    	|
+| ResNet block       	| 64                    	| 64                    	|
+| ConvTranspose2D (up) 	| 64                    	| 64                    	|
+| ResNet block       	| 64                    	| 32                    	|
+| ResNet block       	| 32                    	| 32                    	|
+| ResNet block       	| 32                    	| 32                    	|
+| Conv2d            	| 32                    	| img_channels             	|
+
 
 ### Reverse process
 

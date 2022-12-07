@@ -1,14 +1,8 @@
 import torch
-import torch.nn.functional as F
-
-### NOT SURE IT WILL BE USEFUL YET
 import numpy as np
-import torch
+import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torchvision.utils import make_grid
-import PIL
-from PIL import Image
-from skimage.color import rgb2lab, lab2rgb
 
 # Transform a PIL (base format of an image loaded with PIL) image to a pytorch tensor:
 # using torchvision
@@ -63,19 +57,8 @@ def extract_t_th_value_of_list(values,t,x_shape):
     # output the values in the same shape as the image x
     additional_dims = (1,) * (len(x_shape)-1)
     # Reshape the result with the empty dimensions to match the image
-    res = res.reshape(batch_size,*additional_dims).to(t.device())
+    res = res.reshape(batch_size,*additional_dims)
     return res
-
-## Convert image from LAB to RGB
-def LABtoRGB(L, ab):
-    L = (L + 1.) * 50
-    ab = ab * 128
-    Lab = torch.cat([L, ab], dim=1).permute(0, 2, 3, 1).cpu().numpy()
-    rgb = []
-    for img_Lab in Lab:
-        img_rgb = lab2rgb(img_Lab)
-        rgb.append(img_rgb)
-    return np.stack(rgb, axis=0)
 
 
 # Choose CPU/GPU for training

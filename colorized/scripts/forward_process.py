@@ -1,5 +1,7 @@
 import torch
-from util import extract_t_th_value_of_list, ConstantDiffusionTerms
+import sys
+sys.path.append('../')
+from scripts import util
 
 # Define cosine beta schedule
 # As proposed by https://arxiv.org/pdf/2102.09672.pdf
@@ -29,15 +31,15 @@ def linear_beta_schedule(timesteps,start=0.0001,end=0.02):
     return torch.linspace(start,end,timesteps)
 
 # takes x0 as input, a timestep t and output x_t
-def q_sample(x0,t,constantDiffusionTerms:ConstantDiffusionTerms):
+def q_sample(x0,t,constantDiffusionTerms):
     # gaussian noise of size x0 (the first image)
-    epsilon = torch.rand_like(x0)
+    epsilon = torch.rand_like(x0, dtype=torch.float32)
 
     # extract the t^th index of sqrt(alphas_cumulative_prods) for each batch
-    sqrt_alphas_cumuluative_prods_t = extract_t_th_value_of_list(constantDiffusionTerms.sqrt_alphas_cumuluative_prods,t,x0.shape)
+    sqrt_alphas_cumuluative_prods_t = util.extract_t_th_value_of_list(constantDiffusionTerms.sqrt_alphas_cumuluative_prods,t,x0.shape)
 
     # extract the t^th index of sqrt(1 - alphas cumulative products) for each batch
-    sqrt_one_minus_alphas_cumulative_prods_t = extract_t_th_value_of_list(constantDiffusionTerms.sqrt_one_minus_alphas_cumulative_prods,t,x0.shape)
+    sqrt_one_minus_alphas_cumulative_prods_t = util.extract_t_th_value_of_list(constantDiffusionTerms.sqrt_one_minus_alphas_cumulative_prods,t,x0.shape)
 
     # formula obtained using the reparametrization trick
     q_sample_t = sqrt_alphas_cumuluative_prods_t * x0 + sqrt_one_minus_alphas_cumulative_prods_t * epsilon

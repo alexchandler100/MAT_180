@@ -1,2 +1,4 @@
 .ipynb_checkpoints/**
 scripts/__pycache__/**
+**/*.ipynb_checkpoints/
+data/image-colorization/**

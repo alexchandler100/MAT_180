@@ -1,10 +1,11 @@
 import torch
 import torch.nn.functional as F
-from forward_process import cosine_beta_schedule
 
 ### NOT SURE IT WILL BE USEFUL YET
 import numpy as np
 import torch
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torchvision.utils import make_grid
 import PIL
 from PIL import Image
 from skimage.color import rgb2lab, lab2rgb
@@ -21,8 +22,10 @@ def transform_to_pil(tensor):
     pass
 
 
+# Contains all the constant terms that we use often during sampling
 class ConstantDiffusionTerms:
-    def __init__(self,T,schedule_method=cosine_beta_schedule):
+    # schedule method can be cosine or linear in our implementation
+    def __init__(self,T,schedule_method):
 
         self.betas = schedule_method(T)
 
@@ -48,6 +51,8 @@ class ConstantDiffusionTerms:
         # see the theory file for more information
         self.betas_tilde = self.betas * (1 - self.alphas_cumulative_prods_minus_1) / (1 - self.alphas_cumulative_prods)
 
+        self.sqrt_betas_tilde = torch.sqrt(self.betas_tilde)
+
 
 # Extract the appropriate t indexes in a list of values, for a batch of indices 
 def extract_t_th_value_of_list(values,t,x_shape):
@@ -71,3 +76,9 @@ def LABtoRGB(L, ab):
         img_rgb = lab2rgb(img_Lab)
         rgb.append(img_rgb)
     return np.stack(rgb, axis=0)
+
+
+# Choose CPU/GPU for training
+def set_device():
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return device

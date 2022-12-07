@@ -98,7 +98,8 @@ class SinusoidalPositionEmbeddings(nn.Module):
         arange = torch.arange(half_dim,device=device)
         # Multiply the embeddings negative value element-wise to this tensor
         embeddings = arange * -embeddings
-        # Take the exponential of it
+        # Take the exponential of it to get rid of the log we applied and come back
+        # to the original expression
         embeddings = torch.exp(embeddings)
 
         # Add an empty last dimension to the timestep tensor so it has 

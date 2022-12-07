@@ -6,7 +6,7 @@ Brennan Whitfield - Clément Weinreich - Vivek Shome
 
 The idea of diffusion models is to slowly destroy structure in a data distribution through an iterative forward process. Then, we learn a reverse diffusion process using an neural network, that restores structure in data. This model yield to a highly flexible generative model of the data. This can be seen as a Markov chain of diffusion steps, which slowly add random noise to the data, and then learn to reverse the diffusion process in order to construct new desired data samples from the noise. 
 
-In the case of image colorization, we use a conditional diffusion model which, on top of requiring a noisy image and timestep, takes a grayscale image with the intent of recoloring said image.
+In the case of image colorization, we use a conditional diffusion model which, on top of requiring a noisy image and timestep, takes a grayscale image with the intent of recoloring said image. 
 
 ### Notation
 
@@ -15,13 +15,12 @@ The following notation will be adopted for the next parts:
 -   $\mathcal{N}(x;\mu,\sigma^2)$ : sampling x from a normal distribution of mean $\mu$ and variance $\sigma^2$
 -   $\mathbf{x_t}$ is the image after applying $t$ iterations of noise through the forward process
 -   $\mathbf{x_0}$ is the original (color) image
--   $\mathbf{z}$ is the greyscale source image we seek to colorize
+-   $\mathbf{z}$ is the grayscale source image we seek to colorize
 -   $\mathbf{x_T}$ is the final image of the forward process which follows an isotropic Gaussian distribution ($T$ is constant)
 -   $q(\mathbf{x_t}|\mathbf{x_{t-1}})$ corresponds to the forward process, taking an image $\mathbf{x_{t-1}}$ as input, and output $\mathbf{x_t}$ which contains more noise
 -   $p_\theta(\mathbf{x_{t-1}}|\mathbf{x_t})$ corresponds to the reverse process, taking an image $\mathbf{x_t}$ as input, and output $\mathbf{x_{t-1}}$ which contains less noise
 
 ### Common Functions
-
 
 
 ### The Forward Diffusion Process

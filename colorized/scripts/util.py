@@ -49,6 +49,8 @@ class ConstantDiffusionTerms:
         # see the theory file for more information
         self.betas_tilde = self.betas * (1 - self.alphas_cumulative_prods_minus_1) / (1 - self.alphas_cumulative_prods)
 
+        self.sqrt_betas_tilde = torch.sqrt(self.betas_tilde)
+
 
 # Extract the appropriate t indexes in a list of values, for a batch of indices 
 def extract_t_th_value_of_list(values,t,x_shape):

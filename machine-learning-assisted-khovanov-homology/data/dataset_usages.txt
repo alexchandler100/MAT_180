@@ -1,7 +1,7 @@
 dataset_A(.csv): no repeated homololy, only knots, no zero torsions (dataset_no_repeats.csv)
 dataset_A_1(.csv): no repeated homololy, only knots, with zero torsions (50000_9_dataset_new.csv)
-dataset_B(.csv): no repeated homology, links with 1&2&3 components. (test.csv)
-dataset_C.csv: no prepeated homology, links with 1,2 or 3 components
+dataset_B(.csv): no repeated homology, links with 1&2&3 components (test.csv)
+dataset_C(.csv): no prepeated homology, links with 1&2&3 components
 
 Comments:
 - only knots: link with 1 component only

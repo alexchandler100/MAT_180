@@ -14,18 +14,38 @@ Vivek Shome
         <li> <a href="#Introduction">Introduction</a></li>
         <li> <a href="#Instructions"> Instructions </a></li>
         <li> <a href="#Theory">Theory <a> </li>
-        <li> <a href="#Implementation"> Implementation </a>
+        <details> 
+            <summary> <a href="#Implementation"> Implementation </a> </summary>
             <ul> 
                 <li> <a href="#Diffusion_Basics"> Diffusion Basics </a></li>
                 <li> <a href="#Forward_Process">Forward Process</a></li>
-                <li> <a href="#Neural_Network">Neural Network</a>
+                <details> <summary> <a href="#Neural_Network">Neural Network</a> </summary>
                     <ul>
-                        <li><a href="#UNet_Overview">Overview of the U-Net architecture</a>
+                        <li><a href="#UNet_Overview">Overview of the U-Net architecture</a> </li>
+                        <li><a href="#Timestep_Embedding">Timestep Embedding</a></li>
+                        <li><a href="#Conditional_input">Conditional Image Input</a></li>
+                        <li><a href="#Core_Convolution_Block">Core Convolution Block</a></li>
+                        <li><a href="#Resnet_Block">Resnet Block</a></li>
+                        <li><a href="#Sample_Blocks">Up/Down Sampling Blocks</a></li>
+                        <details> <summary> <a href="#Custom_Architecture">Our Custom UNet Architecture</a> </summary>
+                            <ul>
+                                <li><a href="Encoder">Encoder</a></li>
+                                <li><a href="Bottleneck">Bottleneck</a></li>
+                                <li><a href="Decoder">Decoder</a></li>
+                            </ul>
+                        </details>
                     </ul>
-                </li>
-                
+                </details>
+                <li><a href="Reverse_Process">Reverse Process</a></li>
+                <li><a href="Training">Training</a></li>
             </ul>
-        </li>
+        <details
+        <li><a href="Results">Results</a></li>
+        <li><a href="Discussions">Discussions</a></li>
+        <li><a href="Installation">Installation</a></li>
+        <li><a href="Mode_How_To">How to Use Our Model</a></li>
+        <li><a href="Conclusion">Conclusion</a></li>
+        <li><a href="References">References</a></li>
     </ul>
 </details>
 
@@ -177,6 +197,8 @@ We can express the convolution operation as a matrix multiplication between a sp
 
 Now that we defined the main building blocks of our custom U-Net, let's expand its architecture. The following table does not include the MLP of the sinusoidal position embedding as it is done at first only for the timestep $t$. As mentioned previously, our U-net is much smaller than the other u-net employed for state of the art diffusion models. 
 
+<div id="Encoder"></div>
+
 ##### Encoder
 
 | **Layer**          	| **No Input channels** 	| **No Output channels** 	|
@@ -191,6 +213,7 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 | ResNet block       	| 128                   	| 256                    	|
 | ResNet block       	| 256                   	| 256                    	|
 
+   
 
 ##### Bottleneck
 
@@ -199,7 +222,8 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 | ResNet block       	| 256                    	| 256                    	|
 | ResNet block       	| 256                   	| 256                    	|
 
-
+<div id="Decoder"></div>
+    
 ##### Decoder
 
 | **Layer**          	| **No Input channels** 	| **No Output channels** 	|

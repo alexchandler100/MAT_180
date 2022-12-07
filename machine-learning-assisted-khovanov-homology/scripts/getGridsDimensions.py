@@ -27,3 +27,16 @@ def find_max_min_col(df):
             if a_key[1] > find_max_column:
                 find_max_column = a_key[1]
     return find_max_column, find_min_column
+
+def find_max_min_jones(df):
+    find_max_column = float('-inf')
+    find_min_column = float('inf')
+    for index, a_row in df.iterrows():
+        #print(a_row.free_part)
+        for a_key in eval(a_row.polynomial).keys():
+           #print(a_key[0])
+            if a_key < find_min_column:
+                find_min_column = a_key
+            if a_key > find_max_column:
+                find_max_column = a_key
+    return find_max_column, find_min_column

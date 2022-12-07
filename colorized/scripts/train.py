@@ -11,8 +11,7 @@ import torch
 def p_loss(model,x0,cond_x,t,constantDiffusionTerms):
     noise = torch.randn_like(x0)
 
-    x_t = fp.q_sample(x0,t,constantDiffusionTerms.sqrt_alphas_cumuluative_prods,
-                        constantDiffusionTerms.sqrt_one_minus_alphas_cumulative_prods)
+    x_t = fp.q_sample(x0,t,constantDiffusionTerms)
     epsilon_theta = model(x_t,cond_x,t)
 
     loss = F.l1_loss(noise,epsilon_theta)
@@ -34,7 +33,7 @@ def train(epochs,device,optimizer,train_loader,batch_size,timesteps,
 
             loss = p_loss(model,batch_imgs,batch_cond_imgs,t,constantDiffusionTerms)
             
-            if(step%100==0):
+            if(step%10==0):
                 costs.append(loss)
                 print(f"Step {step} of epoch {epoch}: Loss={loss}")
             

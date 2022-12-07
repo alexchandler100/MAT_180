@@ -58,7 +58,7 @@ class ResNetBlock(nn.Module):
 
         # pass the embedded time step into an MLP that output a tensor of shape dim_out
         # which is compatible with h1
-        time_embedd = self.mlp(time_embedd)
+        time_embedd = self.mlp_timestep(time_embedd)
 
         # Rearrange the shape of the tensor time_embedd which has shape (b,c) 
         # to (b,c,1,1) so we can add the output of h1 to it
@@ -73,6 +73,7 @@ class ResNetBlock(nn.Module):
         
         # add the skip connection (residual) to the output
         out = h2 + self.residual_conv(x)
+        return out
 
 
 
@@ -157,7 +158,7 @@ def downSample(dim):
 # the custom unet model that uses the blocks defined above
 class CustomConditionalUNet(nn.Module):
     def __init__(self,  image_channels=3,
-                        conditional_image_channels=1,
+                        conditional_image_channels=3,
                         up_channels=(256,128,64,32),
                         down_channels=(32,64,128,256),
                         time_emb_dim=32):            
@@ -203,7 +204,7 @@ class CustomConditionalUNet(nn.Module):
         for i in range(len(up_channels)-1):            
             self.ups.append(
                 nn.ModuleList([
-                    ResNetBlock(up_channels[i],up_channels[i+1],time_emb_dim),
+                    ResNetBlock(up_channels[i]*2,up_channels[i+1],time_emb_dim),
                     ResNetBlock(up_channels[i+1],up_channels[i+1],time_emb_dim),
                     # TODO Add Residual -> prenorm -> linear attention
                     # Don't upsample if it is the last up block
@@ -256,6 +257,6 @@ class CustomConditionalUNet(nn.Module):
         
 
 
-model = CustomConditionalUNet()
-print("Num params: ", sum(p.numel() for p in model.parameters()))
-print(model)
+#model = CustomConditionalUNet()
+#print("Num params: ", sum(p.numel() for p in model.parameters()))
+#print(model)

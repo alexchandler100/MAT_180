@@ -1,14 +1,17 @@
 # takes many input parameters
-from forward_process import q_sample
-from util import ConstantDiffusionTerms
+import sys
+sys.path.append('../')
+from scripts import forward_process as fp
+# from forward_process import q_sample
+# from util import ConstantDiffusionTerms
 import torch.nn.functional as F
 import torch
 
 # the loss function
-def p_loss(model,x0,cond_x,t,constantDiffusionTerms:ConstantDiffusionTerms):
+def p_loss(model,x0,cond_x,t,constantDiffusionTerms):
     noise = torch.randn_like(x0)
 
-    x_t = q_sample(x0,t,constantDiffusionTerms.sqrt_alphas_cumuluative_prods,
+    x_t = fp.q_sample(x0,t,constantDiffusionTerms.sqrt_alphas_cumuluative_prods,
                         constantDiffusionTerms.sqrt_one_minus_alphas_cumulative_prods)
     epsilon_theta = model(x_t,cond_x,t)
 
@@ -16,7 +19,7 @@ def p_loss(model,x0,cond_x,t,constantDiffusionTerms:ConstantDiffusionTerms):
     return loss
 
 def train(epochs,device,optimizer,train_loader,batch_size,timesteps,
-                constantDiffusionTerms:ConstantDiffusionTerms,model):
+                constantDiffusionTerms,model):
     
     costs = []
     for epoch in range(epochs):

@@ -53,6 +53,9 @@ In this experiment, we run the experiment for noisy test set using knn retrieval
 
 In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
 
+Pre-trained model: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing
+
+
 ## Results
 
 From the results, we can infer that, at minimum, retrieval augmented learners show greater sample efficiency than without. In case of the Perceiver, we see that retrieval augmentation not only implies sample efficient learning but also this solves the problem of the data-hungry nature of attention based models. Furthermore, on further stress-testing the model (adding randomly sampled gaussian noise to the test images) we still see robustness from the Retrieval-Augmented Perceiver. 
@@ -73,6 +76,7 @@ Figure 3: Cifar10 experiments.
 
 
 
+Note: The authors would like to apologize for the unkempt codebase. There may be portions that are redundant or not necessarily useful. Further, we were a bit sloppy with our experimentation.
 
 
 

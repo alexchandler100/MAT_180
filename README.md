@@ -18,10 +18,11 @@ In a general Transformer, our first input data goes through a multi-headed atten
 The perceiver architecture generally tries to reduce this space complexity to a limit such that it should not be quadratic. To solve this issue, they have added a cross attention layer between the input sequence and multi-headed attention. In attention where we perform matrix multiplication between Query and Key where both were of size MxM where m is input sequence, in cross attention, our Query would be of size N where N< M. Using this our space complexity reduces to MxN this query of size N is called a latent array.
 
 
+### Retrieval
 
 
 
-Todo: Writeup about Perciever and Resnet
+Todo: Writeup about Perceiver and Resnet
 Baseline: on wandb
 Retrieval: Write about Sample Retrieval: 
 

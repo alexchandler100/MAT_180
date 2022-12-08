@@ -109,7 +109,7 @@ Also, we make mention here that conditioning our $\mathbf{\mu_{\theta}}(\mathbf{
 
 $$p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{z}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\mu_{\theta}}(\mathbf{x_t},\mathbf{z}, t), \beta_t \mathbf{I})$$
 
-,allows us to work with the reverse probabilities far more easily, as conditioning on $\mathbf{x_0}$ provides us the ability to treat this distribution as the forward process ($\mathbf{x_0}$ preceeds any $\mathbf{x_t}$, and we have already discussed that $\mathbf{x_t}$ is a noised $\mathbf{x_0}$) **([2])**. We will rewrite this as:
+,allows us to work with the reverse probabilities far more easily, as conditioning on $\mathbf{x_0}$ provides us the ability to treat this distribution as the forward process ($\mathbf{x_0}$ preceeds any $\mathbf{x_t}$, and we have already discussed that $\mathbf{x_t}$ is a noised $\mathbf{x_0}$) ([2]). We will rewrite this as:
 
 $$q(\mathbf{x_{t-1}} | \mathbf{x_t}, \mathbf{x_0}) = \mathcal{N}(\mathbf{x_{t-1}}; \mathbf{\tilde{\mu_t}}(\mathbf{x_t}, \mathbf{x_0}), \tilde{\beta_t}\mathbf{I})$$
 
@@ -119,7 +119,7 @@ Before proceeding into our discussion on the loss function, we would like to mak
 
 ## Loss Function
 
-Next, we seek to optimize the negative log-likelihood of $p_{\theta}(\mathbf{x_{0}})$, which is the probability of generating images coming from the original data distribution $\mathbf{x_0} \sim q(\mathbf{x} | \mathbf{z})$. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence to achieve this comparison. The more the distributions are equivalent, the closer the KL divergence is to 0. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta}(\mathbf{x_0})$. Conviently, we can employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently **([7], [8])**. We will refer to Variational Lower Bounds as VLB for the remainder of this paper. Since we want to minimize the dissimilarities between the distributions when traversing consecutive steps, we similarly want to minimize the difference between all of the steps ($\mathbf{x_{1:T}}$) which are noised samples, given the initial sample $\mathbf{x_0}$. Thus, we can write this KL divergence as $D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p_{\theta}(\mathbf{x_{1:T}} | \mathbf{x_{0}}))$.
+Next, we seek to optimize the negative log-likelihood of $p_{\theta}(\mathbf{x_{0}})$, which is the probability of generating images coming from the original data distribution $\mathbf{x_0} \sim q(\mathbf{x} | \mathbf{z})$. We are, in essence, using a Variational Auto Encoder, wherein we want our 'probabilistic decoder' $p_{\theta}(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ to closely approximate our 'probabilistic encoder' $q(\mathbf{x_{t-1}} | \mathbf{x_{t}})$ ([6]). To accomplish this, we need the ability to compare these two distributions. Thus, we use Kullback-Leibler (KL) divergence to achieve this comparison. The more the distributions are equivalent, the closer the KL divergence is to 0. It follows then that we want to minimize our KL divergence. However, we also should maximize the likelihood that we generate real samples, or $p_{\theta}(\mathbf{x_0})$. Conviently, we can employ Variational Lower Bounds (VLB)/Evidence Lower Bounds (ELBO) to achieve this concurrently ([7], [8]). We will refer to Variational Lower Bounds as VLB for the remainder of this paper. Since we want to minimize the dissimilarities between the distributions when traversing consecutive steps, we similarly want to minimize the difference between all of the steps ($\mathbf{x_{1:T}}$) which are noised samples, given the initial sample $\mathbf{x_0}$. Thus, we can write this KL divergence as $D_{\text{KL}}(q(\mathbf{x_{1:T}} | \mathbf{x_{0}}) || p_{\theta}(\mathbf{x_{1:T}} | \mathbf{x_{0}}))$.
 
 To derive the VLB, we expand the above KL divergence:
 
@@ -204,7 +204,7 @@ Returning to our previous system of equivalences:
 \end{align*}
 
 
-Now, to make sense of this VLB, we label the components of the above expression as 'loss terms' $L_{i}$ where $i = 1, \dots, T$. We have three distinguishable cases **[9]**:
+Now, to make sense of this VLB, we label the components of the above expression as 'loss terms' $L_{i}$ where $i = 1, \dots, T$. We have three distinguishable cases ([9]):
 
 \begin{align*}
 L_T &= D_\text{KL} (q(\mathbf{x_{T}}| \mathbf{x_0}) || p_{\theta}(\mathbf{x_T}))\\
@@ -408,7 +408,7 @@ Now, we may rewrite this using our new reparameterizations of $\tilde{\mu}_{t}$ 
  &= \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \frac{(1 - \alpha_t)^2}{2\beta_t\alpha_{t}(1 - \bar{\alpha_t})}\| \mathbf{\epsilon_t} -(\mathbf{\epsilon_{\theta}}(\mathbf{x_t}, t))\|^2 \Big] \\
 \end{align*}
 
-As mentioned in other works on this topic, **([9])**, finds that removing the leading weight term and redefining $L_{t-1}$ as:
+As mentioned in other works on this topic, ([9]), finds that removing the leading weight term and redefining $L_{t-1}$ as:
 
 $$L_{t-1} := \mathbb E_{\mathbf{x_0}, \mathbf{\epsilon}} \Big[ \| \mathbf{\epsilon_t} -(\mathbf{\epsilon_{\theta}}(\mathbf{x_t}, t))\|^2 \Big]$$
 
@@ -430,7 +430,7 @@ As mentioned prior to the Loss Function section, we have not conditioned our $p_
 
 <img src="assets/Algorithm_1.png" align="center"/>
 
-For line 2, we have no conditioned variables. As our dataset is in the form of pairs (input-output images **[10]**), we sample this pair to eventually have a point of reference for our model ($\mathbf{x_0}$ is the starting colored image, while $\mathbf{z}$ is the same image greyscaled).
+For line 2, we have no conditioned variables. As our dataset is in the form of pairs (input-output images [10]), we sample this pair to eventually have a point of reference for our model ($\mathbf{x_0}$ is the starting colored image, while $\mathbf{z}$ is the same image greyscaled).
 
 <img src="assets/Algorithm_2.png" align="center"/>
 
@@ -462,4 +462,5 @@ and Probability. The Regents of the University of California, 1949.
 
 [9] Ho, Jonathan, et al. "Denoising Diffusion Probabilistic Models" https://arxiv.org/pdf/2006.11239.pdf
 
-[10] https://arxiv.org/pdf/2104.07636.pdf
+[10] Saharia, Chitwan, et al. "Image Super-Resolution via Iterative Refinement
+". https://arxiv.org/pdf/2104.07636.pdf.

@@ -4,6 +4,9 @@ from compo_r.utils_refactor import argparse_utils, util
 import torch
 from torch import nn
 import wandb
+from utils_refactor import argparse_utils, util
+from models.models_perceiver import PerceiverRetriever
+from utils_refactor import argparse_utils, util
 
 logger = logging.getLogger(__name__)
 

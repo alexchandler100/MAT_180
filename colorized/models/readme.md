@@ -1,1 +1,1 @@
-this folder will contains the model as .pt file
+This folder contains the trained models.

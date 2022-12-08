@@ -124,33 +124,33 @@ def generateMetadata(dir, inv_vocab):
 def getFreqs(indices, data):
     datacount = coll.Counter([data[i] for i in indices])
     total = sum(datacount.values())
-    freq = [[data[i],round(datacount[data[i]]/total,4)] for i in indices]
+    freq = [[datapoint[0],round(datapoint[1]/total,4)] for datapoint in list(datacount.items())]
     return freq
 
 def mostcommon(n,freq):
-    order = np.argsort(np.array(freq)[:,1])
-    this = [freq[o] for o in order[len(order)-n:len(order)]]
+    order = np.flip(np.argsort(np.array(freq)[:,1]))
+    this = [freq[o] for o in order[0:n]]
     return this
 
-def partitionFreqs(partition,labels):
+def partitionFreqs(partition,labels,weights,k):
     namefreqs = []
     rootfreqs = []
     qualfreqs = []
     partsizes = []
     for p in range(k):
         p_indices = [i for i in range(len(partition)) if partition[i]==p]
-        namefreqs += [getFreqs(p_indices,labels_km[:,0])]
-        rootfreqs += [getFreqs(p_indices,labels_km[:,1])]
-        qualfreqs += [getFreqs(p_indices,labels_km[:,2])]
+        namefreqs += [getFreqs(p_indices,labels[:,0])]
+        rootfreqs += [getFreqs(p_indices,labels[:,1])]
+        qualfreqs += [getFreqs(p_indices,labels[:,2])]
         partsizes += [round(len(p_indices)/len(weights),4)]
     return (namefreqs,rootfreqs,qualfreqs,partsizes)
 
-def tabulate_partitions(feature,freqs,n,k):
+def tabulate_partitions(feature,freqs,partsizes,n,k):
     title = f'Partitions, {feature}'
     tabledata = []
     for p in range(k):
         tabledata += [[p] + [partsizes[p]] + mostcommon(n,freqs[p])]
     headers = ['Partition','part. size']
     for i in range(n): #TODO: format
-        headers += [f'{i+1} most common']
+        headers += [f'#{i+1} most common']
     return (title,tabledata,headers)

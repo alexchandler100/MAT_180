@@ -45,9 +45,16 @@ The perceiver architecture generally tries to reduce this space complexity to a 
 
 ## Approach
 
+
+
 ## Experiments
 
+Pre-trained model: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing
+
+
 ## Results
+
+
 
 Todo: Writeup about Perceiver and Resnet
 Baseline: on wandb

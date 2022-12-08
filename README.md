@@ -41,7 +41,10 @@ We use simple Cross Attention using these 'retrieved' representations to augment
 
 ## Experiments
 
-
+-- Perceiver noisy figure --
+In this experiment, we run the experiment for noisy test set using knn retrieval augmented Perceiver against a baseline Perciever with No Retrieval.
+-- ResNet Results --
+In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
 
 ## Results
 

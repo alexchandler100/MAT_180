@@ -4,8 +4,12 @@ This repository contains group projects for students enrolled in MAT 180: The Ma
 
 ## Config file
 
+1. Create a new conda environment
+2. Install latest version of Pytorch
+
 ```python
 
+$ pip install -r requirements.txt 
 $ chmod +x run_perceiver_baseline.sh 
 $ ./run_perceiver_baseline.sh 
 
@@ -42,8 +46,11 @@ We use simple Cross Attention using these 'retrieved' representations to augment
 ## Experiments
 
 -- Perceiver noisy figure --
+
 In this experiment, we run the experiment for noisy test set using knn retrieval augmented Perceiver against a baseline Perciever with No Retrieval.
+
 -- ResNet Results --
+
 In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
 
 ## Results

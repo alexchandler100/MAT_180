@@ -14,7 +14,9 @@
 ## 3. Outline goals of the project i.e. indicate the following:
       
     (a) How will the data be collected?
-        from https://github.com/detectRecog/CCPD
+        from https://github.com/detectRecog/CCPD 
+        you can download the dataset from here https://drive.google.com/file/d/1GKdNG3fRLu247fMKsSF6ul3qxFblQJpP/view?usp=share_link
+        because the dataset is too large, we can't upload to the GitHub.
         
     (b) What task do you want to accomplish with the data?
         recongnize the numbers and characters on the image of car license
@@ -38,6 +40,8 @@ In order to increase the speed, we will use gpu to run
 ## Datast
 
 The **Chinese City Parking Dataset** (**CCPD**) is a dataset for license plate detection and recognition. It contains  over 250k unique car images, with license plate location annotations.
+
+
 
 
 ## Model

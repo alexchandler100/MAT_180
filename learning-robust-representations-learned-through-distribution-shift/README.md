@@ -31,6 +31,8 @@ $ chmod +x run_perceiver_baseline.sh
 $ ./run_perceiver_baseline.sh 
 
 ```
+Download pretrained models from this link: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing and place them in a folder named 'pretrained_models' in the local clone.
+
  
  
 ## Background
@@ -64,18 +66,14 @@ We use simple Cross Attention using these 'retrieved' representations to augment
 
 -- Perceiver noisy figure --
 
-In this experiment, we run the experiment for noisy test set using knn retrieval augmented Perceiver against a baseline Perciever with No Retrieval.
 
 -- ResNet Results --
 
-In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
-
-Pre-trained model: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing
-Download pretrained models from this link and place them in a folder named 'pretrained_models' in the local clone.
 
 
 
-## Results
+
+## Experiments
 
 From the results, we can infer that, at minimum, retrieval augmented learners show greater sample efficiency than without. In case of the Perceiver, we see that retrieval augmentation not only implies sample efficient learning but also this solves the problem of the data-hungry nature of attention based models. Furthermore, on further stress-testing the model (adding randomly sampled gaussian noise to the test images) we still see robustness from the Retrieval-Augmented Perceiver. 
 
@@ -86,11 +84,17 @@ Finally, we are able to conclude that retrieval is indeed quite a understudied a
 ![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
 Figure 1: Results show method accuracy over epoch. 
 
+In this experiment, we run the experiment for noisy test set using knn retrieval augmented Perceiver against a baseline Perciever with No Retrieval.
+
+
 ![Alt text](/Screenshot_2022-12-07_at_8.13.32_PM.png)
 Figure 2: Performance impact by of k.
 
 ![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
 Figure 3: Cifar10 experiments.
+
+In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
+
 
 
 Note: The authors would like to apologize for the unkempt codebase. There may be portions that are redundant or not necessarily useful. Further, we were a bit sloppy with our experimentation.

@@ -77,12 +77,6 @@ Below, is a visualization of this project's sequencing/progress. The image displ
 
 <img src="assets/Project_Management_Vis.png" >
 
-<div id="Instructions"></div>
-
-## Instructions
-
-**COMEBACK TO ME**
-
 <div id="Theory"></div>
 
 ## Theory
@@ -355,18 +349,35 @@ deactivate
 
 <div id="Model_How_To"></div>
 
-## How to use our model
+## Using This Model
 
-Walk through how a new user can use your model on their own data after cloning the repository
+To use our model, navigate to the ```data``` folder. Then, select ```init.ipynb```, executing all cells sequentially. From here, the user may open both ```forward_process.ipynb``` and ```reverse_process.ipynb```. To perform either process, enter the respective notebook and execute each cell sequentially. This will result in a demonstration of our model.
 
-suggestion: create a notebook where the user can give an image, and the code to preprocess the image, run the model and everything is already included in it?
+Alternatively, if the user seeks to test our model on their own image, put the grayscale image to colorize in the demo/img folder. Our demo will then use our trained diffusion model to generate the colorized version of your grayscale image.
+Additionally, the command ```python3 colorize.py imgfile``` can be used to generate and show the colorized version of ```imgfile```.
 
 <div id="Conclusion"></div>
 
 ## Conclusion
 
-feedback, improvements,...
+Through the course of this project, we found ourselves enjoying every step. Although extremely ambitiuous for the time/experience between us, the difficulty was worth it. Both in regards to mathematics, and to deep learning, we learned far more than any of expected to. At the end of the process, we find ourselves ecstatic to declare a working pipeline, which we individually seek to optimize. 
 
+To conclude, we would like to bring attention back to the proposal of this work:
+
+"We seek to recolor grayscale photographs..."
+
+_Technically_ we are completely inline with our objective. We 
+
+
+eenjoyed project
+
+HUGELY ambitious
+
+learned a LOT
+
+happy to have an entire working pipeline, seek improvements
+
+TECHNICALLY we did _colorize_ the image. We never claimed to do this _properly_.
 <div id="References"></div>
 
 ## References

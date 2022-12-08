@@ -462,4 +462,5 @@ and Probability. The Regents of the University of California, 1949.
 
 [9] Ho, Jonathan, et al. "Denoising Diffusion Probabilistic Models" https://arxiv.org/pdf/2006.11239.pdf
 
-[10] https://arxiv.org/pdf/2104.07636.pdf
+[10] Saharia, Chitwan, et al. "Image Super-Resolution via Iterative Refinement
+". https://arxiv.org/pdf/2104.07636.pdf.

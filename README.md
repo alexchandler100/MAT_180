@@ -28,6 +28,14 @@ The perceiver architecture generally tries to reduce this space complexity to a 
 
 ## Approach
 
+We integrate various forms of retrieval into the pre-discussed architectures. The motivation behind this idea is from the notion of Episodic Memory in Cognitive Science and Psychology. Imagine a scenario where a student first learned to solve probability problems in MAT135A. Now, after a year they take MAT135B, where they encounter the same types of problems but with a Markov Chain flavor. In this scenario, their brain is able to actively retrieve encoded information from the previous experience of MAT135A, while solving MAT135B problems.
+This exactly is the notion we are trying to integrate into our models. We use two styles of retrieval: 1. sampled 2. k-nearest neighbor.
+In the sampled strategy, we randomly sample tensors from a database of previous 'experiences'. Note that these tensors are the representations outputted by the second to last layer of a pre-trained ResNet backbone trained using BYOL self-supervision signal.
+However, in the k-nearest neighbor retrieval strategy we do something 'smarter'. We get the k-nearest tensors from the database of 'experiences'. This way, we can find the most similar 'experiences' from the store of experiences.
+
+We use simple Cross Attention using these 'retrieved' representations to augment the learning process.
+
+
 ## Experiments
 
 ## Results

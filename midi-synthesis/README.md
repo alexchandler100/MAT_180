@@ -46,7 +46,8 @@ Our dataset consists of around 11,000 MIDI files from the
 [ADL Piano Midi](https://github.com/lucasnfe/adl-piano-midi). Every
 MIDI file in this dataset has to be processed in order to be used by our
 neural network. The sections below will give a brief overview of how our
-data is organized, and how you can train and generate your own samples.
+data is organized, and how you can train and generate your own samples. More in-depth
+instructions can be found in the Music Prediction and Synthesis itself.
 
 ### MIDI File Preprocessing
 #### Overview on .mid file formatting
@@ -124,9 +125,11 @@ velocity as the mood, and time deltas as the rhythm.
 This is the *raison-d'etre* of the project, and the algorithm can be found at the bottom of the notebook along with useful information on how it works.
 After training the neural network to obtain high-performing models, the `generate` method will return a .mid file
 to the length of `CAPACITY`. You can specify what genre it should generate, and
-even give an incomplete .mid file for it to finish (as long as it is within `CAPACITY`).
+even give an incomplete .mid file for it to finish (as long as it is within `CAPACITY`). Futhermore, you can specify the note, velocity and time delta ranges for the generator.
 
-Futhermore, you can specify the note, velocity and time delta ranges for the generator.
+**Note:** you must have `W_pNN, B_pNN, G_pNN, W_vNN, B_vNN, G_vNN, W_tNN, B_tNN, G_tNN` loaded before using the `generate` method. There are instructions on how to
+load our default values in the notebook.
+
 The algorithm considers the entire output holistically; on every new note to be added, it re-reads the
 entire file for accuracy changes and selects the note with the best accuracy given these conditions. It considers
 pitch accuracy, velocity accuracy and time delta accuracy based on the model given by the neural networks.
@@ -148,7 +151,7 @@ accuracies on validation sets were less than 10% for both after days of tweaking
 further study and refinement on the compatibility of MIDI data to be used in feedforward neural networks.
 
 Notwithstanding the latter two results, we can proceed with generating melodic lines alone with 
-the generation algorithm. An example output with our current model can be found in the Output folder.
+the generation algorithm. An example output (named "example_output_song.mid") with our current model can be found in the Output folder.
 
 ## Methods
 This section documents all of the custom methods we defined in the project. Many of these

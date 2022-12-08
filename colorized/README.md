@@ -8,6 +8,7 @@ Brennan Whitfield
 
 Vivek Shome
 
+
 <details>
 <summary>Table of Contents</summary>
     <ul>
@@ -50,9 +51,8 @@ Vivek Shome
     </ul>
 </details>
 
-## Instructions (delete this once finished)
-    
-Your README.md file (located at the root of your project directory) should completely describe the project, what it accomplishes, how well it performs, and walk through how a new user can use your model on their own data after cloning the repository. This means, by following instructions in your README.md file, I should easily be able to run your algorithm on a new example not in your dataset and see that the model accomplishes what it promised to accomplish (at least up to your claimed performance measure).
+
+**Note:** Due to an issue of github markdown, we are not able to display large math equation. Thus, we published an html version of this readme which is accessible here: https://clement-w.github.io/colorization-report/. This online version contains the exact same content, but including the theory part with all the hyperlinks working. Thus, it is much more pleasant to read it on that online version.
 
 <div id="Introduction"></div>
 
@@ -63,11 +63,6 @@ The real world problem we sought to solve was the colorization of greyscale imag
 As the information on this direct concept is fairly sparse, we took it upon ourselves to seek an understanding of the model at every level. Moreover, we recognized the value of comprehending all mathematical theory involved (as this is a math course), and have thus detailed below the theory, as well as the steps we took to grasp each idea. We would like to emphasize the amount of time which went into both the writing, as well as the thought, behind each step in the process. This project was quite ambitious, so we additionally acknowledge the tradeoff made between performance of the model, and the depth in which we understood it.
 
 In the following sections, we dissect why a conditional diffusion model works, the mathematics behind it, and the implementation of said model.
-
-**LEAVE FOR NOW (until we talk about FID)**
-###### How will you measure your performance of the task?
-
-To measure the performance of the task, we will use the [Fréchet Inception Distance](<[https://en.wikipedia.org/wiki/Fr%C3%A9chet_inception_distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_inception_distance)>) (FID). The FID metric compares the distribution of generated images with the distribution of a set of real images (ground truth). The FID metric was introduced in 2017 and is the current standard metric for assessing the quality of generative models.
 
 <div id="Project_Management"></div>
 
@@ -81,7 +76,8 @@ Below, is a visualization of this project's sequencing/progress. The image displ
 
 ## Theory
 
-Because of an issue regarding big equations in github markdown, all the theory part is written in Theory.md, and exported in html as Theory.html. This section is an important part of the project as we spent many days to understand and derive all the expressions, in order to have our loss function.
+Because of an issue regarding big equations in github markdown, all the theory part is written in Theory.md, and exported in html as Theory.html (that you can open with your browser). We also published the complete version of this report (all sections including theory) online https://clement-w.github.io/colorization-report/. 
+This section is an important part of the project as we spent many days to understand and derive all the expressions, in order to have our loss function.
 <!-- #endregion -->
 
 <!-- #region -->
@@ -89,13 +85,6 @@ Because of an issue regarding big equations in github markdown, all the theory p
 <div id="Implementation"></div>
 
 ## Implementation
-
-```
-you may argue to use a build-in implementation if the algorithm involved is
-overly complicated but necessary to the task. After solving the task with your own
-implementation, you may also, in a separate notebook, use a built-in implementation
-and compare performance.
-```
 
 As our project is quite ambitious, the most complex part was to understand how diffusion models work. This is why, most of our work and of our research is explained in the theory section. Concerning the implementation, most of the papers we are reffering to, published their code in github ([11],[12]). As exploring and understanding the theory behind diffusion models took us 3 to 4 weeks in total, we have chosen to draw inspiration from these github repository, as well as articles going through these implementations like [the one from Hugging Face](https://huggingface.co/blog/annotated-diffusion). Even though we got inspired from these codes, we can note that some algorithms had to be modified to adapt to conditional diffusion.
 
@@ -251,13 +240,13 @@ The decoder upsample the input features from the bottlenck, in order to output a
 
 ### Reverse process
 
-The reverse process (or 'inference' for our purposes) follows exactly from Algorithm 2 **LINK TO ABOVE ALGORITHM** of the Theory section above. We begin by sampling a completely noisy image $\mathbf{x_T}$ from a Gaussian distribution $\mathcal{N}(\mathbf{0},\mathbf{I})$. As our goal is to subtract noise from this image until we have the desired $\mathbf{x_0}$, at each timestep $0 \leq t \leq T$, we begin by sampling random noise $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$. Next, since each step can be seen as calculating $\mathbf{x_{t-1}}$ from $\mathbf{x_t}$ **LINK THIS TO COMMON TERMS SECTION**, we perform the reparameterization trick to achieve:
+The reverse process (or 'inference' for our purposes) follows exactly from Algorithm 2 of the Theory section above. We begin by sampling a completely noisy image $\mathbf{x_T}$ from a Gaussian distribution $\mathcal{N}(\mathbf{0},\mathbf{I})$. As our goal is to subtract noise from this image until we have the desired $\mathbf{x_0}$, at each timestep $0 \leq t \leq T$, we begin by sampling random noise $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$. Next, since each step can be seen as calculating $\mathbf{x_{t-1}}$ from $\mathbf{x_t}$, we perform the reparameterization trick to achieve:
 
 $$\mathbf{x_{t-1}} = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x_t} - \frac{1 - \alpha_t}{\sqrt{1-\bar{\alpha}_t}} \mathbf{\epsilon}_\theta (\mathbf{x_t}, \mathbf{z},t) \Big) + \sqrt{\beta_t}\mathbf{\epsilon}$$
 
 Thanks to our ```ConstantDiffusionTerms``` class, many of these closed forms are already computed.
 
-Thus, we use our model $\mathbf{\epsilon}_{\theta}$ to predict the noise between steps, and feed this predicted noise into the reparameterization of the predicted mean **THIS CAN ALSO BE FOUND IN THEORY ABOVE**:
+Thus, we use our model $\mathbf{\epsilon}_{\theta}$ to predict the noise between steps, and feed this predicted noise into the reparameterization of the predicted mean:
 
 $$\mu_{\theta}(\mathbf{x_t}, t) = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x_t} - \frac{1 - \alpha_t}{\sqrt{1-\bar{\alpha}_t}} \mathbf{\epsilon}_\theta (\mathbf{x_t}, \mathbf{z},t) \Big)$$
 
@@ -267,7 +256,7 @@ This gives us $\mathbf{x_{t-1}}$. Repeating this process T times yields us $\mat
 
 ### Training
 
-To train this model, we look to Algorithm 1 **LINK TO ABOVE**. As diffusion models seek to produce images closely correlated with the data they are trained on, we sample a color-greyscale image pair $(\mathbf{x_0}, \mathbf{z})$ from our data distribution $p(\mathbf{x}, \mathbf{z})$. Then, we sample a random timestep t from a uniform distribution of timesteps $\{ 1, \dots, T \}$, and as discussed in the theory section above, we can use the Markov Property to produce a noisy image $\mathbf{x_{t}}$ at said timestep:
+To train this model, we look to Algorithm 1. As diffusion models seek to produce images closely correlated with the data they are trained on, we sample a color-greyscale image pair $(\mathbf{x_0}, \mathbf{z})$ from our data distribution $p(\mathbf{x}, \mathbf{z})$. Then, we sample a random timestep t from a uniform distribution of timesteps $\{ 1, \dots, T \}$, and as discussed in the theory section above, we can use the Markov Property to produce a noisy image $\mathbf{x_{t}}$ at said timestep:
 
 $$\mathbf{x_t} = \sqrt{\bar{\alpha}_t}\mathbf{x_0}+\sqrt{1 - \bar{\alpha}_t}\epsilon$$
 
@@ -310,8 +299,6 @@ We notice that the noisy image is changing across the timesteps. We also notice 
 As stated previously, we spent most of the time doing research and working on the theory side of conditional diffusion models. Thus, the time left for the implementation part was shorter as expected. It was still important for us to have the whole pipeline working, so the project can be improved by adding features. This is why we trained a small model on a small amount of data. A first limit of this training is that only 2000 images was used. This is mostly due to a lack of RAM from our computers, but we also wanted to use a subset of the dataset to make the training faster. We also did not created a test and validation set, as we knew that results won't be interpretable. At first, we planned to evaluate the model using the FID (Fréchet inception distance) score, which is a metrics used to evaluate generative models. For lack of time, we decided to not implement the `eval` method present in `scripts/eval.py`, and focus on this readme file. Finally, the results we obtained are far from being the colorized input image. As the entire pipeline is already written, the model needs to be improved, and the dataset needs to be better handled. Thereafter, we could expect better results.
 
 We can also note that, diffusion models are a very recent research topic, we are working on research papers from 2 years ago or even from 2022. This makes the project really challenging when it comes to research.
-
-....
 
 <div id="Installation"></div>
 
@@ -378,21 +365,11 @@ Additionally, the command ```python3 colorize.py imgfile``` can be used to gener
 Through the course of this project, we found ourselves enjoying every step. Although extremely ambitiuous for the time/experience between us, the difficulty was worth it. Both in regards to mathematics, and to deep learning, we learned far more than any of expected to. At the end of the process, we find ourselves ecstatic to declare a working pipeline, which we individually seek to optimize. 
 
 To conclude, we would like to bring attention back to the proposal of this work:
-
+```
 "We seek to recolor grayscale photographs..."
+```
 
-_Technically_ we are completely inline with our objective. We 
-
-
-eenjoyed project
-
-HUGELY ambitious
-
-learned a LOT
-
-happy to have an entire working pipeline, seek improvements
-
-TECHNICALLY we did _colorize_ the image. We never claimed to do this _properly_.
+_Technically_ we are completely inline with our objective, the colors are just not the right ones, or in the right place.
 <div id="References"></div>
 
 ## References

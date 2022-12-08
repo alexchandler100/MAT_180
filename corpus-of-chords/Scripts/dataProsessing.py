@@ -3,7 +3,8 @@ import music21
 import numpy as np
 import json
 import os
-
+from tabulate import tabulate
+import collections as coll
 
 #--------------------PREPROCESSING---------------------------
 
@@ -151,6 +152,6 @@ def tabulate_partitions(feature,freqs,partsizes,n,k):
     for p in range(k):
         tabledata += [[p] + [partsizes[p]] + mostcommon(n,freqs[p])]
     headers = ['Partition','part. size']
-    for i in range(n): #TODO: format
+    for i in range(n):
         headers += [f'#{i+1} most common']
     return (title,tabledata,headers)

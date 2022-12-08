@@ -71,27 +71,24 @@ def removeRepeatedChords(sequence):
 def remove_empty_chords(sequence):
     retseq = []
     for chord in sequence:
-        if list(chord) != [-1,-1,-1,-1]:
+        if chord != [-1,-1,-1,-1]:
             retseq.append(chord)
     return retseq
 
 #----------------------------------------------------------------------    
 
 #-----------------PROCESSING-------------------------------------------
-def generateVocab(dataset,verbose = False):
+def generateVocab(dataset):
     vocab,inv_vocab, i = {},[],0
     for sequence in dataset:
         for chord in sequence:
-            
             if chord not in inv_vocab:
-                if i % 100 == 0:
-                    print(i)
                 vocab[str(chord)] = i
                 inv_vocab.append(chord)
                 i += 1
     print(i)
     print(len(inv_vocab))
-    return {"vocab":vocab,"inv_vocab": inv_vocab}
+    return vocab, inv_vocab
 
 
 def vectorizeDataset(dataset,vocab):
@@ -100,15 +97,6 @@ def vectorizeDataset(dataset,vocab):
         
         vectorizedDataset.append([vocab[str(chord)] for chord in sequence])
     return vectorizedDataset
-
-def devectorizeSequence(sequence, inv_vocab):
-    translatedsequence = []
-    for chord in sequence:
-        translatedsequence.append(inv_vocab[chord])
-    print(translatedsequence)
-
-    return translatedsequence
-
 
 #-----------------------------TENSORBOARD_OUTPUT---------------------------
 

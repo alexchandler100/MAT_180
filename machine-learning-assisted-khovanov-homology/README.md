@@ -60,15 +60,25 @@ This is the report for our final project. We first review to see our achievement
     - Improvement (2): Automate the hyper-parameter tuning pipeline until the best weights for the parameters are selected.
 
 ## Reults
+1. For predicting total number of torsion groups using total number of free parts:
+2. For predicting total number of torsion groups using total number of free parts per column:
+3. For predicting total number of torsion groups using total number of free parts per row:
+4. For predicting total number of torsion groups using coefficients of Jones Polynomials:
+5. For predicting total number of torsion groups using bigrading of freeparts:
 
 ## Discussion
 
 # Part 3. Documents usages
 This part is to explain the work flow of the project. Users can use this as instruction for how to utlize the code and replicate similar results we have reported in Part 2.
 
-- **/data**: This folder contains all the unused and actively being used datasets. See **_dataset_usages.txt** for detail descriptions about the datasets.
+- **/data**: This folder contains all the unused and actively being used datasets. See **_dataset_usages.txt_** for detail descriptions about the datasets.
 - **/notebooks**: This folder contains all jupyter notebooks for data generation, data preprocessing, data visualization, model training, and model evaluation processes. 
-    - 111
-- **/scripts**: This folder contains all scripts for repetitively used functions in jupyter notebooks.
-    - 111
-
+    - NOTICE: In each of the notebook, change _df = pd.read_csv('data/DATASETNAME.DATASETTYPE')_ to read in and use different datasets.
+    - **dataset_generator.ipynb**: In this notebook, we utilize methods to generate dataset wtih different sizes and properties.
+    - **data_preprocessing.ipynb**: This notebook provides ways and functions to extract total number of freegroups, total number of torsiongroups, total number of freegroups per row, and total number of freegroups per column.
+    - **totalFreePart_Regression.ipynb**: In this notebook, we train Linear regression and Polynomial regression models to predict total number of torsion groups using total number of freeparts for links with different components (1. 1&2&3-components 2. 1-component 3. 2-components 4. 3-components). We also train the regression models from sklearn to compare the result of accuracy.
+    - **totalRow&Column_Regression.ipynb**: In this notebook, we train Linear regression and Polynomial regression models to predict total number of torsion groups using total number of freeparts per row and per column for links with different components (1. 1&2&3-components 2. 1-component 3. 2-components 4. 3-components).
+    - **jonesPolynomial_Regression.ipynb**: In this notebook, we train Linear regression and Polynomial regression models to predict total number of torsion groups using coefficients of Jones Polynomial for links with different components (1. 1&2&3-components 2. 1-component 3. 2-components 4. 3-components). We also train the regression models from sklearn to compare the result of accuracy.
+    - **bigrading_Regression.ipynb**: In this notebook, we train Linear regression and Polynomial regression models to predict total number of torsion groups using bigrading of freeparts for links with different components (1. 1&2&3-components 2. 1-component 3. 2-components 4. 3-components).
+    - **Predict_location_torsion.ipynb**: Intended to predcit bigrading of torsion groups using bigrading of free groups. (Future approach: apply CNN and NN models from Pytorch and Keras.)
+- **/scripts**: This folder contains all scripts for repetitively used functions in jupyter notebooks. Look at each script for specific usage of each function. Also refer to jupyter notebooks for function usages.

@@ -46,4 +46,4 @@ def generateSequence(databaseName,modelName,len,duration = 480,start = 0, name =
     sequence = dp.devectorizeSequence(sequence, inv_vocab)
     mw.toMidi(sequence ,duration=duration).save(name)
 
-generateSequence("Jsb16thSeparated(t_60+-fifth_rr_re)", "d_128 n_15", 1000)
+generateSequence("Jsb16thSeparated(t_60_rr_re)", "d_128 n_15", 1000)

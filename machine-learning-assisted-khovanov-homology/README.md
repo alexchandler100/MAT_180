@@ -66,4 +66,9 @@ This is the report for our final project. We first review to see our achievement
 # Part 3. Documents usages
 This part is to explain the work flow of the project. Users can use this as instruction for how to utlize the code and replicate similar results we have reported in Part 2.
 
+- **/data**: This folder contains all the unused and actively being used datasets. See **_dataset_usages.txt** for detail descriptions about the datasets.
+- **/notebooks**: This folder contains all jupyter notebooks for data generation, data preprocessing, data visualization, model training, and model evaluation processes. 
+    - 111
+- **/scripts**: This folder contains all scripts for repetitively used functions in jupyter notebooks.
+    - 111
 

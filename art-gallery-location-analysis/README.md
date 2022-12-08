@@ -22,9 +22,16 @@ Evaluation:
 We will separate data into training, validation, and test set to determine accuracy. Since data set is labeled,
 accuracy will be apparent from output.
 
-#### Using this project
+### Using this project
 ##### Data
 In order to use alternate datasets, the user will need to provide two folders. These folders correspond to the training set and the test set. Both folders will contain identically labeled folders that contain images. For this project, the labels correspond to car brands, and the images are car brand logos. The images should be .jpg file type.
 
 ##### Required Input
-In order for the project to read and process the images, the user will need to edit the 'train_dir' and 'test_dir' strings in the Initializing_Images notebook. 'train_dir' will be the directory of the training data folder, and 'test_dir' will be the directory of the test data folder. Once the directories have been specified, running the notebook will rename every image for the sake of iterability. The files in each folder will now be named 'i.jpg' with 0 <= i <= (number of images in the folder).
+In order for the project to read and process the images, the user will need to edit the 'train_dir' and 'test_dir' strings in the Initializing_Images.ipynb notebook. 'train_dir' will be the directory of the training data folder, and 'test_dir' will be the directory of the test data folder. Once the directories have been specified, running the notebook will rename every image for the sake of iterability. The files in each folder will now be named 'i.jpg' with 0 <= i <= (number of images in the folder).
+
+Next, the image_upload.ipynb notebook will be run in order to process each image.
+
+Following this, the predictor.ipynb notebook will be run to predict the car brand based on the logos in the images.
+
+##### Performance
+We were unable to accurately predict the car brands by their logos.

@@ -1,5 +1,5 @@
 # Email classification based on Bayesian analysis
-Group Members: Yuhuan Ma, Yifei He and Ziqing Tang
+Group Members: Yuhuan Ma, Yifei He and Ziqing Tang. All group members contribute equally to this project.
 
 ### 1. Introduction
 Emails have become part of our lives. No matter in school, work place. Most of people will communicate through emails. If you have an email account, we are sure that you have seen emails being categorised into spam and ham. Various email providers employ algorithms to filter emails based on spam and ham. It's wonderful to see machines help us handle the tasks so that we can focus on more important stuff. In this project, we will understand briefly about the Naive Bayes Algorithm and try to label spam email by algorithm. Besides Naive Bayes, other classifier algorithms like Support Vector Machine, or Neural Network also get the job done!

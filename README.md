@@ -32,6 +32,16 @@ The perceiver architecture generally tries to reduce this space complexity to a 
 
 ## Results
 
+
+![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
+
+![Alt text](/Screenshot_2022-12-07_at_8.13.32_PM.png)
+
+![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
+
+
+
+
 Todo: Writeup about Perceiver and Resnet
 Baseline: on wandb
 Retrieval: Write about Sample Retrieval: 

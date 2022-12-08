@@ -6,7 +6,8 @@ This repository contains group projects for students enrolled in MAT 180: The Ma
 
 ```python
 
-$ run_perceiver_baseline.sh 
+$ chmod +x run_perceiver_baseline.sh 
+$ ./run_perceiver_baseline.sh 
 
 ```
  

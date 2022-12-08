@@ -286,20 +286,35 @@ We repeat this until converged. Note, again, that our loss function is essential
 
 ## Results
 
-what it accomplishes, how well it performs
+We trained the network for 5 epochs with 2000 images (see `notebook/train.ipynb`) in order to be able to produce results. The results of our project can be found in the notebook in the folder `demo`. First, the forward process is working well. Here is the forward process using the linear schedule on 300 timesteps ($T = 300$):
+<img src="assets/linearschedule.png" alt="Linear schedule" style="width: 800px" align="center"/>
+<br>
+<div style='text-align:center'> <b>Figure 2</b>: Forward process with linear schedule </div>
 
-```
-Provide a statistical argument that your model performs well not just on your dataset,
-but it generalizes as well to new data (this should be explained in the README.md
-file in your project folder, referencing the notebook files which show evidence of this).
-This means you should compute an explicit approximation of the generalization error
-as measured by the performance measure in your proposal (by correctly using training
-data, validation data, and test data).
-```
+Now the results of the reverse process are not satisfying. This not suprising as the network has only be trained for 5 epochs. Here, we try to colorize this image:
+
+<img src="assets/grayscale.png" alt="Grayscale image" style="width: 100" align="center"/>
+<br>
+<div style='text-align:center'> <b>Figure 3</b>: Grayscale image that we seek to colorize </div>
+
+
+Then, here is 10 evenly separated noisy images from $\mathbf{x_T}$ to $\mathbf{x_0}$, using $T=300$:
+
+<img src="assets/reverse.png" alt=" image" style="width: 800" align="center"/>
+<br>
+<div style='text-align:center'> <b>Figure 4</b>: Reverse process</div>
+
+We notice that the noisy image is changing across the timesteps. We also notice some sort of structure in the noisy image, which slightly resembles the branch on the right of the image. Finally, this model output a (non accurate) colorized version of the grayscale image.
 
 <div id="Discussions"></div>
 
 ## Discussions
+
+As stated previously, we spent most of the time doing research and working on the theory side of conditional diffusion models. Thus, the time left for the implementation part was shorter as expected. It was still important for us to have the whole pipeline working, so the project can be improved by adding features. This is why we trained a small model on a small amount of data. A first limit of this training is that only 2000 images was used. This is mostly due to a lack of RAM from our computers, but we also wanted to use a subset of the dataset to make the training faster. We also did not created a test and validation set, as we knew that results won't be interpretable. At first, we planned to evaluate the model using the FID (Fréchet inception distance) score, which is a metrics used to evaluate generative models. For lack of time, we decided to not implement the `eval` method present in `scripts/eval.py`, and focus on this readme file. Finally, the results we obtained are far from being the colorized input image. As the entire pipeline is already written, the model needs to be improved, and the dataset needs to be better handled. Thereafter, we could expect better results.
+
+We can also note that, diffusion models are a very recent research topic, we are working on research papers from 2 years ago or even from 2022. This makes the project really challenging when it comes to research.
+
+....
 
 <div id="Installation"></div>
 

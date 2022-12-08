@@ -2,7 +2,7 @@
 
 import numpy as np
 from numpy import linalg as LA
-from polynomial import add_poly_terms 
+from scripts.polynomial import add_poly_terms 
 
 def J(X,y,v,lambda_):
     ######################### your code goes here ########################

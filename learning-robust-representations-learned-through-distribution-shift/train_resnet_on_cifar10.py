@@ -6,7 +6,8 @@ import torch.backends.cudnn as cudnn
 import wandb
 
 from torch import nn
-
+from models.models_resnet import ResNet18, ResNet34, ResNetRetrieval18
+from utils_refactor import argparse_utils, util
 
 logger = logging.getLogger(__name__)
 

@@ -40,8 +40,6 @@ def p_sample_loop(model, shape, device, timesteps, cond_x, constantDiffusionTerm
 
     # for each timestep until 0, remove some noise
     for t in reversed(range(0, timesteps)):
-        print(t)
-
         # copy the timestep t into a vector of size batch_size
         batch_sized_timestep = torch.full((batch_size,), t, device=device) 
         # sample noisi image at timestep t
@@ -49,8 +47,8 @@ def p_sample_loop(model, shape, device, timesteps, cond_x, constantDiffusionTerm
                                 noisy_image, cond_x,
                                 batch_sized_timestep, t,
                                 constantDiffusionTerms)
-        if(t%30==0):
-            print("saving!")
+        if(t%round((timesteps/10))==0):
+            print(f"Saving image at timestep {t}")
             noisy_images.append(noisy_image.detach().cpu().numpy())
     
     # return all noisy images at every timestep

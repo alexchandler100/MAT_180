@@ -19,13 +19,6 @@ In a general Transformer, our first input data goes through a multi-headed atten
 The perceiver architecture generally tries to reduce this space complexity to a limit such that it should not be quadratic. To solve this issue, they have added a cross attention layer between the input sequence and multi-headed attention. In attention where we perform matrix multiplication between Query and Key where both were of size MxM where m is input sequence, in cross attention, our Query would be of size N where N< M. Using this our space complexity reduces to MxN this query of size N is called a latent array.
 
 
-### Retrieval
-
-### KNN
-
-
-####Regular Retrieval (I forgot the name Ayush add)
-
 ## Approach
 
 We integrate various forms of retrieval into the pre-discussed architectures. The motivation behind this idea is from the notion of Episodic Memory in Cognitive Science and Psychology. Imagine a scenario where a student first learned to solve probability problems in MAT135A. Now, after a year they take MAT135B, where they encounter the same types of problems but with a Markov Chain flavor. In this scenario, their brain is able to actively retrieve encoded information from the previous experience of MAT135A, while solving MAT135B problems.
@@ -42,10 +35,14 @@ We use simple Cross Attention using these 'retrieved' representations to augment
 
 
 ![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
+Figure 1: Results show method accuracy over epoch. 
+
 
 ![Alt text](/Screenshot_2022-12-07_at_8.13.32_PM.png)
+Figure 2: Performance impact by of k.
 
 ![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
+Figure 3: Cifar10 experiments.
 
 
 

@@ -2,6 +2,7 @@
 
 This repository contains group projects for students enrolled in MAT 180: The Mathematics of Machine Learning, in the Fall 2022 quarter at UC Davis. 
  
+## Background
 ### ResNet
 
 A Convolutional Neural Net (CNN) is a clas of neural networks that specializes in processing data that has a grid-like topology, such as an image. A CNN typically has three layers: a convolutional layer, a pooling layer, and a fully connected layer. The convolution layer is the core building block of the CNN. This layer performs a dot product between two matrices, where one matrix is the set of learnable parameters otherwise known as a kernel, and the other matrix is the restricted portion of the receptive field. This means that, if the image is composed of three (RGB) channels, the kernel height and width will be spatially small, but the depth extends up to all three channels. During the forward pass, the kernel slides across the height and width of the image-producing the image representation of that receptive region. This produces a two-dimensional representation of the image known as an activation map that gives the response of the kernel at each spatial position of the image.
@@ -20,7 +21,11 @@ The perceiver architecture generally tries to reduce this space complexity to a 
 
 ### Retrieval
 
+## Approach
 
+## Experiments
+
+## Results
 
 Todo: Writeup about Perceiver and Resnet
 Baseline: on wandb

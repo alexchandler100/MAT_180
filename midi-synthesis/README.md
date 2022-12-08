@@ -2,7 +2,22 @@
 # MIDI Synthesis with Feedforward Neural Network
 
 ## Group Members
-Yada Kip, Larkins Hoh, Nimothy Tg
+Jada Yip, Harkins Loh, Timothy Ng
+
+## Table of Contents
+ 
+- [Preface](#preface)
+- [Our Project](#our-project)
+	- [MIDI File Preprocessing](#midi-file-preprocessing)
+		- [Overview on .mid file formatting](#overview-on-mid-file-formatting)
+		- [Preprocessing the things](#preprocessing-the-things)
+		- [Creating the datasets for the neural network](#creating-the-datasets-for-the-neural-network)
+	- [Training the Neural Network](#training-the-neural-network)
+  - [Generating Music](#generating-music)
+  - [Results](#results)
+ - [Methods](#methods)
+
+
 
 ## Preface
 
@@ -34,7 +49,7 @@ neural network. The sections below will give a brief overview of how our
 data is organized, and how you can train and generate your own samples.
 
 ### MIDI File Preprocessing
-#### Short exegesis on .mid file formatting
+#### Overview on .mid file formatting
 Every .mid file contains several `tracks`. In each of these `tracks`, there are
 `messages`. The first track contains `messages`
 of the .mid file in terms of musical structure, such as key signature, tempo and
@@ -106,10 +121,19 @@ will be paramount to our music generation algorithm. We view pitch as the most r
 velocity as the mood, and time deltas as the rhythm.
 
 ## Generating Music
-This is the *raison-d'etre* of the project; after training the neural network to
-obtain high-performing models, the `generate` algorithm will return a .mid file
+This is the *raison-d'etre* of the project, and the algorithm can be found at the bottom of the notebook along with useful information on how it works.
+After training the neural network to obtain high-performing models, the `generate` method will return a .mid file
 to the length of `CAPACITY`. You can specify what genre it should generate, and
 even give an incomplete .mid file for it to finish (as long as it is within `CAPACITY`).
+
+Futhermore, you can specify the note, velocity and time delta ranges for the generator.
+The algorithm considers the entire output holistically; on every new note to be added, it re-reads the
+entire file for accuracy changes and selects the note with the best accuracy given these conditions. It considers
+pitch accuracy, velocity accuracy and time delta accuracy based on the model given by the neural networks.
+
+Hence, the algorithm performs best when the Pitch Neural Network, Velocity Neural Network and Time Deltas Neural Network returns
+a model that has high accuracy on the test set. Our pitch model has some merit, although the other models require further parameter tuning
+and architecture reconsideration.
 
 ## Results
 Our model consists of three neural networks, each one responsible for fitting pitch, velocity and
@@ -124,61 +148,61 @@ accuracies on validation sets were less than 10% for both after days of tweaking
 further study and refinement on the compatibility of MIDI data to be used in feedforward neural networks.
 
 Notwithstanding the latter two results, we can proceed with generating melodic lines alone with 
-the generation algorithm. Output
+the generation algorithm. An example output with our current model can be found in the Output folder.
 
 ## Methods
 This section documents all of the custom methods we defined in the project. Many of these
 will be highly useful for preprocessing.
 
-`getNotes(mid,trackNo)`  
+**getNotes(mid,trackNo)**  
 given a MidiFile `mid`,
 returns a list of Messages in `trackNo` of `mid` that have the `note_on` attribute.
 
-`getNotesTrack(track)`  
+**getNotesTrack(track)**  
 given a MidiTrack `track`, returns a list of Message in `track` that have the `note_on` attribute.
 
-`quantize16(notes)`  
+**quantize16(notes)**  
 given list of `Messages` with the `note_on` attribute, returns a list of notes such that
 the fastest notes are quantized to a semiquaver (16th note).
 
-`absolutize(notes)`  
+**absolutize(notes)**  
 given list of `Messages` with the `note_on` attribute, returns a list of notes
 such that every `time` attribute is the exact time when it is played. That is, all `time` attributes
 are no longer deltas; they now refer to time distances from the beginning of the music.
 
-`trim(notes,capacity, pad = True, removeZeroVelocities = True)`  
+**trim(notes,capacity, pad = True, removeZeroVelocities = True)**  
 given a list `notes`, integer `capacity`, boolean values for `pad` and `removeZeroVelocities`,
 returns a list of notes such that its length is within `capacity`, and if the original
 list was under `capacity` already, loop the original list of notes until it reaches `capacity`.
 If `removeZeroVelocities` is true, this method only returns notes with nonzero velocity attributes.
 
-`getMidiFile(name)`  
+**getMidiFile(name)**  
 given string `name`, ending with .mid, this method will search and return a MidiFile
 of that `name` in `\Data`.
 
-`compress(mid, pad = True, removeZeroVelocities = True)`  
+**compress(mid, pad = True, removeZeroVelocities = True)**  
 this is the main method used to turn .mid files into the correct form to be used by the
 neural networks. In many MIDI, there are usually more than one instrument track being played at
 the same time. This method compresses all of them into a single track. Given MidiFile `mid`, `pad` and `removeZeroVelocities` options,
 returns a compressed MidiFile.
 
-`decoder(array)`  
+**decoder(array)**  
 given a one-hot encoding of genres stored as a numpy array `array`, returns the name of that
 genre corresponding to those in `genres_dict`.
 
-`encoder(genre)`  
+**encoder(genre)**  
 given a string `genre`, returns a one-hot encoding of that genre corresponding to those in `genres_dict`.
 
-`genADLData(size)`  
+**genADLData(size)**  
 given integer `size`, returns two outputs: the first output is a list of
 genres, randomly sampled, of size `size`, and the second output is a list of string names of .mid files
 associated with the genres list in the first output.
 
-`compressListofNames(genre,music)`  
+**compressListofNames(genre,music)**  
 given list of strings `genre` and list of strings `music`, compresses every entry in
 `music` (equivalent to applying the compress method earlier elementwise), and additionally
 checks if the files can be compressed, modifying `genre` to account for deleted files.
 This returns a list of compressed entries in `music`.
 
-`cleanData()`  
+**cleanData()**  
 this removes entries of `genres_dict` which are corrupted.

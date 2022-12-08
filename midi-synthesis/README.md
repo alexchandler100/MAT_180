@@ -111,6 +111,21 @@ obtain high-performing models, the `generate` algorithm will return a .mid file
 to the length of `CAPACITY`. You can specify what genre it should generate, and
 even give an incomplete .mid file for it to finish (as long as it is within `CAPACITY`).
 
+## Results
+Our model consists of three neural networks, each one responsible for fitting pitch, velocity and
+time deltas respectively.  
+
+Our neural network for pitch is 79% accurate on its training set with `CAPACITY = 256` and `removeZeroVelocities = False`, but in validation and
+test it is consistently 40%. We have provided the architecture, weights, biases and activations for this model in the "Pitch NN" folder, and
+can be loaded in the notebook with the `load("Pitch NN")` method.
+
+The other neural networks for fitting velocities and time deltas were less successful;
+accuracies on validation sets were less than 10% for both after days of tweaking parameters and selecting architectures, and this represents a need for
+further study and refinement on the compatibility of MIDI data to be used in feedforward neural networks.
+
+Notwithstanding the latter two results, we can proceed with generating melodic lines alone with 
+the generation algorithm. Output
+
 ## Methods
 This section documents all of the custom methods we defined in the project. Many of these
 will be highly useful for preprocessing.

@@ -1,7 +1,7 @@
 # Car Brand Classifier
 Created by Jaime Luna, Nicholas Stein
 
-Proposal
+#### Proposal
 
 Data Source:
 We have downloaded a file of photos of car logo emblems from Kaggle.

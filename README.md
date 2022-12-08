@@ -67,13 +67,11 @@ Finally, we are able to conclude that retrieval is indeed quite a understudied a
 ![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
 Figure 1: Results show method accuracy over epoch. 
 
-
 ![Alt text](/Screenshot_2022-12-07_at_8.13.32_PM.png)
 Figure 2: Performance impact by of k.
 
 ![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
 Figure 3: Cifar10 experiments.
-
 
 
 Note: The authors would like to apologize for the unkempt codebase. There may be portions that are redundant or not necessarily useful. Further, we were a bit sloppy with our experimentation.

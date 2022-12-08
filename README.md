@@ -6,7 +6,7 @@ This repository contains group projects for students enrolled in MAT 180: The Ma
 
 ```python
 
-$ python run.py -data ./datasets --dataset-name stl10 --log-every-n-steps 100 --epochs 100 
+$ run_perceiver_baseline.sh 
 
 ```
  

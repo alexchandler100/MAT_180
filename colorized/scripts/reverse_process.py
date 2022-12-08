@@ -43,11 +43,10 @@ def p_sample_loop(model, shape, device, timesteps, cond_x, constantDiffusionTerm
         noisy_image = p_sample(model, 
                                 noisy_image, cond_x,
                                 batch_sized_timestep, t,
-                                constantDiffusionTerms.sqrt_alphas_inverse, 
-                                constantDiffusionTerms.sqrt_one_minus_alphas_cumulative_prods, 
-                                constantDiffusionTerms.betas, 
-                                constantDiffusionTerms.sqrt_betas_tilde)
-        noisy_images.append(noisy_image.cpu().numpy())
+                                constantDiffusionTerms)
+        if(t%round(timesteps/8)):
+            print("saving!")
+            noisy_images.append(noisy_image.detach().cpu().numpy())
     
     # return all noisy images at every timestep
     return  noisy_images

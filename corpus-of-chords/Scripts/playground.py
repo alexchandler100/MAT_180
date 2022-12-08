@@ -29,7 +29,7 @@ def buildDataset(name, transpositions):
 #this function generates the set of the N closes neighbors to each point in the embedding This is later used to generate new sequences
 #by starting at some point, than drawing some path through the space. The neighborhood list is than saved to disk because it takes a 
 #long time to generate
-def generationModel(databaseName, modelName, neighbors):
+def generationModel(databaseName, modelName, neighbors= 10):
     embeddings = json.load(open("Data\\Corpi\\" + databaseName + "\\weights\\" + modelName))
     embeddings = [np.array(i) for i in embeddings]
     neighbors = generator.getNeighborhoods(embeddings,10)

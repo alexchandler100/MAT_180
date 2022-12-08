@@ -7,7 +7,7 @@ import wandb
 
 import matplotlib.pyplot as plt
 from utils_refactor import argparse_utils, util
-
+from models.models_perceiver import PerceiverRetriever
 logger = logging.getLogger(__name__)
 
 

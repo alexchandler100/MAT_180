@@ -35,6 +35,12 @@ When we tried training our model the first few times, we noticed that it would s
 ![loss](https://user-images.githubusercontent.com/118039163/206359690-e2936b17-afa6-4ae1-a6b2-f930f0e472da.jpeg)
 ![reward](https://user-images.githubusercontent.com/118039163/206359735-973a7476-1337-4d2d-b2f7-37db18259964.jpeg)
 
+## 
+A core challenge with DL is understanding or explaining how they make decisions. From the embedding, it can be seen that the features we capture are trajectories of ping pong balls under the stream mapping in two dimensions. Thus, we can analyze from the XAI perspective that deep learning models also capture the features that are important under our human rules and then analyze them to get the final analysis results. Deep learning may seem like a black box, but from a visualization point of view we can still understand the nature of its work to some extent. Of course, the interpretability of deep learning is still a popular research direction nowadays, and there are many related works in AAAI, CVPR and other top conferences in recent years.
+
+<img width="617" alt="Screen Shot 2022-12-07 at 10 34 18 PM" src="https://user-images.githubusercontent.com/42626213/206375275-d426a8f2-8565-41c8-b1b0-e771bb27d97c.png">
+
+<img width="574" alt="Screen Shot 2022-12-07 at 10 34 45 PM" src="https://user-images.githubusercontent.com/42626213/206375352-b6762370-0643-4faa-b8e2-a217eeed4709.png">
 
 ## Group Member
 
@@ -43,3 +49,5 @@ Ye Cui - cycui@ucdavis.edu
 Yuxin Chen - vyxchen@ucdavis.edu
 
 Yizhang Huang - yzhua@ucdavis.edu
+
+

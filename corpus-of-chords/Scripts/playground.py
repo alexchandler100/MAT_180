@@ -42,6 +42,6 @@ def generateSequence(databaseName,modelName,len,duration = 480,start = 0, name =
     vocab = json.load(open("Data\\Corpi\\" + databaseName + "\\"+ databaseName + "_vocab.json"))
     inv_vocab = vocab["inv_vocab"]
     neighbors = json.load(open("Data\\Corpi\\" + databaseName + "\\weights\\" + databaseName + "_neighbors"))
-    sequence = generator.generate(neighbors, 0, 100)
+    sequence = generator.generate(neighbors, start, len)
     sequence = dp.devectorizeSequence(sequence, inv_vocab)
-    mw.toMidi(sequence ,duration=480).save(name)
+    mw.toMidi(sequence ,duration=duration).save(name)

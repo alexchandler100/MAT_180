@@ -31,7 +31,7 @@ In order for the project to read and process the images, the user will need to e
 
 Next, the image_upload.ipynb notebook will be run in order to process each image.
 
-Following this, the predictor.ipynb notebook will be run to predict the car brand based on the logos in the images.
+Following this, the predictor.ipynb notebook will be run to classify the car brand based on the logos in the images.
 
 ##### Performance
-We were unable to accurately predict the car brands by their logos.
+While this project successfully renames images contained in a series of folders and processes the images, the project is unable to accurately classify the car brands by their logos.

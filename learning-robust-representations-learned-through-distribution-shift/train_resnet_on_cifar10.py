@@ -7,8 +7,6 @@ import wandb
 
 from torch import nn
 
-from compo_r.models.models_resnet import ResNet18, ResNet34, ResNetRetrieval18
-from compo_r.utils_refactor import argparse_utils, util
 
 logger = logging.getLogger(__name__)
 

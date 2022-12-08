@@ -18,6 +18,20 @@ So, the objective is to measure the training loss and the testing accuracy on a 
 # MAT 180 Machine Learning Group Projects
 
 This repository contains group projects for students enrolled in MAT 180: The Mathematics of Machine Learning, in the Fall 2022 quarter at UC Davis. 
+
+## Config file
+
+1. Create a new conda environment
+2. Install latest version of Pytorch
+
+```python
+
+$ pip install -r requirements.txt 
+$ chmod +x run_perceiver_baseline.sh 
+$ ./run_perceiver_baseline.sh 
+
+```
+ 
  
 ## Background
 ### ResNet
@@ -36,29 +50,53 @@ In a general Transformer, our first input data goes through a multi-headed atten
 The perceiver architecture generally tries to reduce this space complexity to a limit such that it should not be quadratic. To solve this issue, they have added a cross attention layer between the input sequence and multi-headed attention. In attention where we perform matrix multiplication between Query and Key where both were of size MxM where m is input sequence, in cross attention, our Query would be of size N where N< M. Using this our space complexity reduces to MxN this query of size N is called a latent array.
 
 
-### Retrieval
-
-### KNN
-
-
-####Regular Retrieval (I forgot the name Ayush add)
-
 ## Approach
 
+We integrate various forms of retrieval into the pre-discussed architectures. The motivation behind this idea is from the notion of Episodic Memory in Cognitive Science and Psychology. Imagine a scenario where a student first learned to solve probability problems in MAT135A. Now, after a year they take MAT135B, where they encounter the same types of problems but with a Markov Chain flavor. In this scenario, their brain is able to actively retrieve encoded information from the previous experience of MAT135A, while solving MAT135B problems.
+This exactly is the notion we are trying to integrate into our models. We use two styles of retrieval: 1. sampled 2. k-nearest neighbor.
+In the sampled strategy, we randomly sample tensors from a database of previous 'experiences'. Note that these tensors are the representations outputted by the second to last layer of a pre-trained ResNet backbone trained using BYOL self-supervision signal.
+However, in the k-nearest neighbor retrieval strategy we do something 'smarter'. We get the k-nearest tensors from the database of 'experiences'. This way, we can find the most similar 'experiences' from the store of experiences.
+
+We use simple Cross Attention using these 'retrieved' representations to augment the learning process.
 
 
 ## Experiments
+
+-- Perceiver noisy figure --
+
+In this experiment, we run the experiment for noisy test set using knn retrieval augmented Perceiver against a baseline Perciever with No Retrieval.
+
+-- ResNet Results --
+
+In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
 
 Pre-trained model: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing
 
 
 ## Results
 
+From the results, we can infer that, at minimum, retrieval augmented learners show greater sample efficiency than without. In case of the Perceiver, we see that retrieval augmentation not only implies sample efficient learning but also this solves the problem of the data-hungry nature of attention based models. Furthermore, on further stress-testing the model (adding randomly sampled gaussian noise to the test images) we still see robustness from the Retrieval-Augmented Perceiver. 
+
+The story for non attention based models (ResNet) is different though. We marginally underperform the baseline even though we see the same sample efficient learning curve as compared to vanilla ResNet. 
+Finally, we are able to conclude that retrieval is indeed quite a understudied and can be used to learn robust representations. However, the case against retrieval is that empiricism. We essentially use more data per model forward pass which can be interpreted as an 'unfair' comparison against the baselines. We also don't incorporate any novel inductive biases into the model to prompt stronger forms of generalization rather just use more data.
 
 
-Todo: Writeup about Perceiver and Resnet
-Baseline: on wandb
-Retrieval: Write about Sample Retrieval: 
+![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
+Figure 1: Results show method accuracy over epoch. 
+
+![Alt text](/Screenshot_2022-12-07_at_8.13.32_PM.png)
+Figure 2: Performance impact by of k.
+
+![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
+Figure 3: Cifar10 experiments.
+
+
+Note: The authors would like to apologize for the unkempt codebase. There may be portions that are redundant or not necessarily useful. Further, we were a bit sloppy with our experimentation.
+
+
+
+
+
 
 
 

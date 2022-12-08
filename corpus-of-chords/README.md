@@ -30,7 +30,7 @@ Team: Janice Adams, Keiran Hozven-Farley, Tori Tomlinson
       * SKlearn_ChordName_128_n_15_k_12
       * SKlearn_ChordName_d_128_n_15_k_48
       
- * Music Generator:
+ * Music Generator:  
    * 
     
 ## **How to use this machine learning project**  

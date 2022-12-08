@@ -71,6 +71,8 @@ In this experiment, we run the experiment for noisy test set using knn retrieval
 In the two above experiments, we don't apply the noise augmentation to the Test Set, but ablate over the size of the retrieval buffer with knn strategy vs sampled strategy.
 
 Pre-trained model: https://drive.google.com/drive/folders/1TsJTqHOQwuFZJdLr-ZAUQUwTh-fDPj1T?usp=sharing
+Download pretrained models from this link and place them in a folder named 'pretrained_models' in the local clone.
+
 
 
 ## Results

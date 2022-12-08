@@ -1,6 +1,15 @@
 # MAT 180 Machine Learning Group Projects
 
 This repository contains group projects for students enrolled in MAT 180: The Mathematics of Machine Learning, in the Fall 2022 quarter at UC Davis. 
+
+# Config file
+
+```python
+
+$ python run.py -data ./datasets --dataset-name stl10 --log-every-n-steps 100 --epochs 100 
+
+```
+ 
  
 ## Background
 ### ResNet
@@ -31,7 +40,14 @@ We use simple Cross Attention using these 'retrieved' representations to augment
 
 ## Experiments
 
+
+
 ## Results
+
+From the results, we can infer that, at minimum, retrieval augmented learners show greater sample efficiency than without. In case of the Perceiver, we see that retrieval augmentation not only implies sample efficient learning but also this solves the problem of the data-hungry nature of attention based models. Furthermore, on further stress-testing the model (adding randomly sampled gaussian noise to the test images) we still see robustness from the Retrieval-Augmented Perceiver. 
+
+The story for non attention based models (ResNet) is different though. We marginally underperform the baseline even though we see the same sample efficient learning curve as compared to vanilla ResNet. 
+Finally, we are able to conclude that retrieval is indeed quite a understudied and can be used to learn robust representations. However, the case against retrieval is that empiricism. We essentially use more data per model forward pass which can be interpreted as an 'unfair' comparison against the baselines. We also don't incorporate any novel inductive biases into the model to prompt stronger forms of generalization rather just use more data.
 
 
 ![Alt text](/Screenshot_2022-12-07_at_8.12.12_PM.png)
@@ -43,13 +59,6 @@ Figure 2: Performance impact by of k.
 
 ![Alt text](/Screenshot_2022-12-07_at_8.13.39_PM.png)
 Figure 3: Cifar10 experiments.
-
-
-
-
-Todo: Writeup about Perceiver and Resnet
-Baseline: on wandb
-Retrieval: Write about Sample Retrieval: 
 
 
 

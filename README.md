@@ -21,6 +21,11 @@ The perceiver architecture generally tries to reduce this space complexity to a 
 
 ### Retrieval
 
+###KNN
+
+
+####Regular Retrieval (I forgot the name Ayush add)
+
 ## Approach
 
 ## Experiments

@@ -41,3 +41,5 @@ def train(epochs,device,optimizer,train_loader,batch_size,timesteps,
             optimizer.step()
 
             #TODO: plt show sample imaages every X epochs
+    return costs
+

@@ -12,8 +12,9 @@ Vivek Shome
 <summary>Table of Contents</summary>
     <ul>
         <li> <a href="#Introduction">Introduction</a></li>
+        <li> <a href="#Project_Management"> Project Management </a> </li>
         <li> <a href="#Instructions"> Instructions </a></li>
-        <li> <a href="#Theory">Theory <a> </li>
+        <li> <a href="#Theory">Theory </a> </li>
         <details> 
             <summary> <a href="#Implementation"> Implementation </a> </summary>
             <ul> 
@@ -29,23 +30,23 @@ Vivek Shome
                         <li><a href="#Sample_Blocks">Up/Down Sampling Blocks</a></li>
                         <details> <summary> <a href="#Custom_Architecture">Our Custom UNet Architecture</a> </summary>
                             <ul>
-                                <li><a href="Encoder">Encoder</a></li>
-                                <li><a href="Bottleneck">Bottleneck</a></li>
-                                <li><a href="Decoder">Decoder</a></li>
+                                <li><a href="#Encoder">Encoder</a></li>
+                                <li><a href="#Bottleneck">Bottleneck</a></li>
+                                <li><a href="#Decoder">Decoder</a></li>
                             </ul>
                         </details>
                     </ul>
                 </details>
-                <li><a href="Reverse_Process">Reverse Process</a></li>
-                <li><a href="Training">Training</a></li>
+                <li><a href="#Reverse_Process">Reverse Process</a></li>
+                <li><a href="#Training">Training</a></li>
             </ul>
-        <details
-        <li><a href="Results">Results</a></li>
-        <li><a href="Discussions">Discussions</a></li>
-        <li><a href="Installation">Installation</a></li>
-        <li><a href="Mode_How_To">How to Use Our Model</a></li>
-        <li><a href="Conclusion">Conclusion</a></li>
-        <li><a href="References">References</a></li>
+            </details>
+        <li><a href="#Results">Results</a></li>
+        <li><a href="#Discussions">Discussions</a></li>
+        <li><a href="#Installation">Installation</a></li>
+        <li><a href="#Model_How_To">How to Use Our Model</a></li>
+        <li><a href="#Conclusion">Conclusion</a></li>
+        <li><a href="#References">References</a></li>
     </ul>
 </details>
 
@@ -68,7 +69,12 @@ In the following sections, we dissect why a conditional diffusion model works, t
 
 To measure the performance of the task, we will use the [Fréchet Inception Distance](<[https://en.wikipedia.org/wiki/Fr%C3%A9chet_inception_distance](https://en.wikipedia.org/wiki/Fr%C3%A9chet_inception_distance)>) (FID). The FID metric compares the distribution of generated images with the distribution of a set of real images (ground truth). The FID metric was introduced in 2017 and is the current standard metric for assessing the quality of generative models.
 
+<div id="Project_Management"></div>
+
+## Project Management
+
 <div id="Instructions"></div>
+
 
 ## Instructions
 
@@ -222,9 +228,10 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 |--------------------	|:---------------------:	|------------------------	|
 | ResNet block       	| 256                    	| 256                    	|
 | ResNet block       	| 256                   	| 256                    	|
+    
+The bottleneck is the part of the network with the lowest image dimension, which compress all the important information of the image.
 
 <div id="Decoder"></div>
-    The bottleneck is the part of the network with the lowest image dimension, which compress all the important information of the image.
 
 ##### Decoder
 
@@ -243,17 +250,37 @@ Now that we defined the main building blocks of our custom U-Net, let's expand i
 
 The decoder upsample the input features from the bottlenck, in order to output an image of the same size as the input in terms of spatial dimenions, and number of channels.
 
-
-<div id="Reverse_Process"></div>
-
 <div id="Reverse_Process"></div>
 
 ### Reverse process
+
+The reverse process (or 'inference' for our purposes) follows exactly from Algorithm 2 **LINK TO ABOVE ALGORITHM** of the Theory section above. We begin by sampling a completely noisy image $\mathbf{x_T}$ from a Gaussian distribution $\mathcal{N}(\mathbf{0},\mathbf{I})$. As our goal is to subtract noise from this image until we have the desired $\mathbf{x_0}$, at each timestep $0 \leq t \leq T$, we begin by sampling random noise $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$. Next, since each step can be seen as calculating $\mathbf{x_{t-1}}$ from $\mathbf{x_t}$ **LINK THIS TO COMMON TERMS SECTION**, we perform the reparameterization trick to achieve:
+
+$$\mathbf{x_{t-1}} = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x_t} - \frac{1 - \alpha_t}{\sqrt{1-\bar{\alpha}_t}} \mathbf{\epsilon}_\theta (\mathbf{x_t}, \mathbf{z},t) \Big) + \sqrt{\beta_t}\mathbf{\epsilon}$$
+
+Thanks to our ```ConstantDiffusionTerms``` class, many of these closed forms are already computed.
+
+Thus, we use our model $\mathbf{\epsilon}_{\theta}$ to predict the noise between steps, and feed this predicted noise into the reparameterization of the predicted mean **THIS CAN ALSO BE FOUND IN THEORY ABOVE**:
+
+$$\mu_{\theta}(\mathbf{x_t}, t) = \frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x_t} - \frac{1 - \alpha_t}{\sqrt{1-\bar{\alpha}_t}} \mathbf{\epsilon}_\theta (\mathbf{x_t}, \mathbf{z},t) \Big)$$
+
+This gives us $\mathbf{x_{t-1}}$. Repeating this process T times yields us $\mathbf{x_0}$, which is a colorized version of the greyscale input.
 
 <div id="Training"></div>
 
 ### Training
 
+To train this model, we look to Algorithm 1 **LINK TO ABOVE**. As diffusion models seek to produce images closely correlated with the data they are trained on, we sample a color-greyscale image pair $(\mathbf{x_0}, \mathbf{z})$ from our data distribution $p(\mathbf{x}, \mathbf{z})$. Then, we sample a random timestep t from a uniform distribution of timesteps $\{ 1, \dots, T \}$, and as discussed in the theory section above, we can use the Markov Property to produce a noisy image $\mathbf{x_{t}}$ at said timestep:
+
+$$\mathbf{x_t} = \sqrt{\bar{\alpha}_t}\mathbf{x_0}+\sqrt{1 - \bar{\alpha}_t}\epsilon$$
+
+As before, we need to sample $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0},\mathbf{I})$ to perform this. 
+
+Now, we take a gradient descent step using our loss function:
+
+$$\nabla_\theta \| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x_0}+\sqrt{1 - \bar{\alpha}_t}\epsilon, \mathbf{z} ,t) \|^2$$
+
+We repeat this until converged. Note, again, that our loss function is essentially the normed-difference between the theoretical noise, and our noise predicting model.
 
 <div id="Results"></div>
 

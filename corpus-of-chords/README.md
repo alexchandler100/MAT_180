@@ -18,7 +18,17 @@ Team: Janice Adams, Keiran Hozven-Farley, Tori Tomlinson
     * Then we find all the chords that are associated with each cluster. The similarity between chords are defined by the Euclidean distance between each point within a cluster.  
       
  * Table(Then talk about what the table represents. Music theory applications?) :  
-        
+   * Our table lists the partitions, and for each partition displays the top n most common chords given a feature (chord name, chord root, or chord quality). 
+   * See 'Analysis' 
+   * See the text files in the KMeansTables folder for the following tables (ran from a word2vec with dimension=128 and negative sampling=15):
+      * KmeansStudent_ChordName_d_128_n_15_k_24
+      * KmeansStudent_Root_d_128_n_15_k_24
+      * KmeansStudent_Quality_d_128_n_15_k_24
+      * SKlearn_ChordName_d_128_n_15_k_24
+      * SKlearn_Root_d_128_n_15_k_24
+      * SKlearn_Quality_d_128_n_15_k_24
+      * SKlearn_ChordName_128_n_15_k_12
+      * SKlearn_ChordName_d_128_n_15_k_48
     
 ## **How to use this machine learning project**  
 

@@ -374,17 +374,16 @@ _Technically_ we are completely inline with our objective, the colors are just n
 
 ## References
 
-[11] DDPM https://arxiv.org/pdf/2006.11239.pdf + associated github (https://github.com/lucidrains/denoising-diffusion-pytorch)
+[11] Ho, Jonathan, et al. (2020) "Denoising Diffusion Probabilistic Models" https://arxiv.org/pdf/2006.11239.pdf with associated github (https://github.com/lucidrains/denoising-diffusion-pytorch)
 
 
-[12] IDDPM (https://arxiv.org/pdf/2102.09672.pdf) + associated github (https://github.com/openai/improved-diffusion)
+[12] Alex Nichol and Prafulla Dhariwal (2021), Improved denoising diffusion probabilistic models https://arxiv.org/pdf/2102.09672.pdf) + associated github (https://github.com/openai/improved-diffusion)
+
+[13] Chitwan Saharia, et al. (2022) Palette: Image-to-Image Diffusion Models https://arxiv.org/pdf/2111.05826.pdf
 
 
-[13] Palette: Image-to-Image Diffusion Models (https://arxiv.org/pdf/2111.05826.pdf)
+[14] Chitwan Saharia, et al. (2021) Image Super-Resolution via Iterative Refinement https://arxiv.org/pdf/2104.07636.pdf
 
 
-[14] Image Super-Resolution via Iterative Refinement https://arxiv.org/pdf/2104.07636.pdf
-
-
-[15] Attention is all you need https://arxiv.org/abs/1706.03762
+[15] Vaswani, A., et al. (2017) Attention is all you need https://arxiv.org/abs/1706.03762
 <!-- #endregion -->

@@ -4,6 +4,8 @@ Project from UC Davis Fall 2022 MAT180 - Mathematics of Machine Learning
 
 By: Yihan (Cecilia) Guo, Keer (Nicole) Ni, and Wei Wu Lu
 
+
+
 # Part 1. Project Proposal
 This part is the proposal of the final project written initially. We refer to this proposal as a summarize the planning regularly to keep track of our progress.
 
@@ -41,6 +43,8 @@ The bigrading can be represented as plotting the correspoinding subgroup of the 
 1. Use the test set accuracy score and compare it with training-validation accuracy score to avoid overfitting/underfitting issues. **(done)**
 2. Apply outside model/functions from imported libraries (e.g. sklearn, pytorch, ...) and compare the result with our implemented gradient descent models in procedure step 2. **(done)**
 
+
+
 # Part 2. Final Report
 This is the report for our final project. We first review to see our achievements, failures, and consider improvment for each step in the proposal in the _review_ sections. The _Result_ section is to summarize the statistical significant finding for our project. The _Discussion_ section is to consider possible future steps for continue our research on Knot Theory, using what we have done as a basis. 
 
@@ -63,12 +67,19 @@ This is the report for our final project. We first review to see our achievement
 1. For predicting total number of torsion groups using total number of free parts:
 2. For predicting total number of torsion groups using total number of free parts per column:
 3. For predicting total number of torsion groups using total number of free parts per row:
-4. For predicting total number of torsion groups using coefficients of Jones Polynomials:
-5. For predicting total number of torsion groups using bigrading of freeparts:
+4. For predicting total number of torsion groups using coefficients of Jones Polynomials: using links with 1-component and Linear regression model gives accuracy around 8.60%; using links with 2-components and Linear regression model gives accuracy around 17.74%; using links with 3-components and Linear regression model gives accuracy around 19.20%; using links with multiple(1&2&3)-components and Linear regression model gives accuracy around 13.41%. For the multiple-components case specifically, we also train a Polynomial regression model with degree 2 and obtain accuracy around 34.20%. We think using Polynomial regression models with higher degrees wil increase the accuracy. We also tried to use the Polynomail regressino model from sklearn to train from degree 1 to degree 3 (this is becaues it takes too long to increase the degree as we have a decent number of features; however, sklearn model also took too long to train and predict so we stop it at degree 3). The accuracy results from sklearn Polynomial regression models does not show an observable increase. Here we are all reporting with the the testing accuracy. The training accuracy and validation accuracy are all within the range of (testing accuracy - 5, testing accuracy + 5). So we belief there is no sign for overfitting in the Linear Regression model. The weights for the parameters of the Linear Regression model is stored in (v) vectors in the jupyter notebooks.
+5. For predicting total number of torsion groups using bigrading of freeparts: using links with 1-component and Linear regression model gives accuracy around 97.29%; using links with 2-components and Linear regression model gives accuracy around 96.77%; using links with 3-components and Linear regression model gives accuracy around 92.41%; using links with multiple(1&2&3)-components and Linear regression model gives accuracy around 94.08%. Here we are all reporting with the the testing accuracy. The training accuracy and validation accuracy are all within the range of (testing accuracy - 5, testing accuracy + 5). So we belief there is no sign for overfitting in the Linear Regression model. The weights for the parameters of the Linear Regression model is stored in (v, v1, v2, and v3) vectors in the jupyter notebooks.
 
 ## Discussion
+1. 
+2. 
+3. 
+4. Using Linear regression to predict total number of torsion groups using coefficients of Jones Polynomials is not enough. The accuracy report is not ideal. This contradicts with our belief that "predicting total-number-of-torsion-groups using Jones-Polynomials" should be similar to "predicting total-number-of-torsion-groups using total-number-of-free-groups-per-column". Further explanation and actions could be taken, such as understanding the relationship between Jones-Polynomials and total-number-of-free-groups-per-column, or use Neural Net models to try and improve the prediction.
+5. The results for predicting total number of torsion groups with bigrading of free groups shows that there is a strong relationship for using free-groups-bigrading and predict total number of torsion groups. We can conclude that the Linear regression model is enough to be applied to make such prediction. There is a linear relation between bigrading of free groups and total number of torsion groups.
 
-# Part 3. Documents usages
+
+
+# Part 3. Documents Usages
 This part is to explain the work flow of the project. Users can use this as instruction for how to utlize the code and replicate similar results we have reported in Part 2.
 
 - **/data**: This folder contains all the unused and actively being used datasets. See **_dataset_usages.txt_** for detail descriptions about the datasets.
@@ -82,3 +93,15 @@ This part is to explain the work flow of the project. Users can use this as inst
     - **bigrading_Regression.ipynb**: In this notebook, we train Linear regression and Polynomial regression models to predict total number of torsion groups using bigrading of freeparts for links with different components (1. 1&2&3-components 2. 1-component 3. 2-components 4. 3-components).
     - **Predict_location_torsion.ipynb**: Intended to predcit bigrading of torsion groups using bigrading of free groups. (Future approach: apply CNN and NN models from Pytorch and Keras.)
 - **/scripts**: This folder contains all scripts for repetitively used functions in jupyter notebooks. Look at each script for specific usage of each function. Also refer to jupyter notebooks for function usages.
+
+
+
+# Special Thanks
+```
+Great thanks to Professor Alex Chandler for offering help in coding and understanding concepts in Knot Theory!
+Great thanks to the team for working hard and discussing passionately about the project!
+Looking forward to keep discovering exciting findings together in year 2023!
+Happy Winter Break && Merry Christmas 🎄🎁🎅
+
+It've been so nice to work with all of you this quarter!!!  -- KN wrote on 12/7/2022 6pm, MSB 3118 ;)
+```

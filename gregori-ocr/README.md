@@ -12,7 +12,7 @@ MAT 180 Group Project Proposal
 
 (d)	To measure performance, we’ll write a function to compare our algorithm’s output with the volunteer code from GregoBase.  The output consists of a sequence of plain text and a sequence of gabc code (intermingled).  So, our performance function will compare the sequence of output plain text with the GregoBase plain text.  It will then compare the output gabc and GregoBase gabc and calculate a percentage of accuracy.
 
-![]( gregori-ocr/Gregorio Read Me Images/Bad Raw Data.png )
+![](https://github.com/CennyBo/GregoriOCR/blob/1688abe11b3cc3c7dce6214f127187692b47190c/gregori-ocr/Gregorio%20Read%20Me%20Images/Bad%20Raw%20Data.png)
 
 Final Write-up:
 

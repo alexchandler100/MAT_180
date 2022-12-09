@@ -12,7 +12,7 @@ MAT 180 Group Project Proposal
 
 (d)	To measure performance, we’ll write a function to compare our algorithm’s output with the volunteer code from GregoBase.  The output consists of a sequence of plain text and a sequence of gabc code (intermingled).  So, our performance function will compare the sequence of output plain text with the GregoBase plain text.  It will then compare the output gabc and GregoBase gabc and calculate a percentage of accuracy.
 
-![](https://github.com/CennyBo/GregoriOCR/blob/1688abe11b3cc3c7dce6214f127187692b47190c/gregori-ocr/Gregorio%20Read%20Me%20Images/Bad%20Raw%20Data.png)
+![]( https://user-images.githubusercontent.com/91860903/204427530-4382e0b3-2f96-4358-a6ac-55709eda9449.png "Fig 2.1 Binary Classifier NN Summary" )
 
 Final Write-up:
 
@@ -52,8 +52,7 @@ Solution: with enough time and soul-sucking effort one could manually prepare bo
 The complexity of GABC and gregorian chants. The characters present within the chants are incredibly complex and vary by many factors. The GABC code is very straightforward and allows one to transcribe notes with knowledge of the chants. However,  this is an issue for our neural network as for single notes our network performs well in identification, but for longer and more complex strings, such as double notes, the order of the notes written affects the output and exponentially increases the outputs our CNN must possess. 
 
 Example of what our CNN would have to classify: 
-
-
+Image goes here: (Example notes.png)
 Solution: Have multiple CNN’s to identify three things: 
 
 1). Is this a double note or single note? Triple? Quadruple? 
@@ -63,11 +62,11 @@ Solution: Have multiple CNN’s to identify three things:
 3). These *blank* make up the multi-note! What order must the notes be in to create the correct note? Are there any non alphabetical characters needed?
 
 Here is an example of such (note there are alphabetical 13 characters including abc):
-
+Image goes here: (Three Note)
 (yes the smiley face is necessary as it is latin text).
 
 And so on.  As presented, this becomes incredibly more complex the more chants are added to the dataset.   Here is a complicated score for example:
-
+Image goes here: (Example Score)
 And the associated label: 
 
 (c3) THis(gxfe/gvFE) is(fd) the(fh) day(hhhvFEfef)
@@ -81,3 +80,7 @@ Solution: Hire someone else to stitch together pdfs, or build a separate project
 This issue is similar to issue one but stands on its own to get its own place, and the issue is normalizing the scores from the raw pages. There must be bounding boxes around the score as the note identifying algorithm only needs to see this part of the raw data. Most of the raw data (the breviaries themselves) are not scanned but instead are photographs and because of this some of the scores can be tilted, distorted, and in some cases illegible to most. 
 
 Solution: Write a CNN to give a 1 if it is a scanned, grayscale document where the scores are straight. And a 0 if it is a photograph. If a 0 is outputted it would need to be processed to intelligently undistort the images, put them into grayscale without losing too much information, and then fed back into to CNN to see whether it needs more processing or if it can be read by the bounding box algorithm
+Bad Data:
+Image goes here: (Bad Raw Data.png)
+Good Data:
+Image goes here: (Good Raw Data.png)

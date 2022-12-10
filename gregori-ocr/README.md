@@ -50,6 +50,7 @@ Solution: with enough time and soul-sucking effort one could manually prepare bo
 The complexity of GABC and gregorian chants. The characters present within the chants are incredibly complex and vary by many factors. The GABC code is very straightforward and allows one to transcribe notes with knowledge of the chants. However,  this is an issue for our neural network as for single notes our network performs well in identification, but for longer and more complex strings, such as double notes, the order of the notes written affects the output and exponentially increases the outputs our CNN must possess. 
 
 Example of what our CNN would have to classify: 
+
 ![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Example%20notes.png)
 
 Solution: Have multiple CNN’s to identify three things: 

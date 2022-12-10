@@ -62,11 +62,15 @@ Solution: Have multiple CNN’s to identify three things:
 3). These *blank* make up the multi-note! What order must the notes be in to create the correct note? Are there any non alphabetical characters needed?
 
 Here is an example of such (note there are alphabetical 13 characters including abc):
-Image goes here: (Three Note)
+
+![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Three%20Note.png)
+
 (yes the smiley face is necessary as it is latin text).
 
 And so on.  As presented, this becomes incredibly more complex the more chants are added to the dataset.   Here is a complicated score for example:
-Image goes here: (Example Score)
+
+![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Example%20Score.png)
+
 And the associated label: 
 
 (c3) THis(gxfe/gvFE) is(fd) the(fh) day(hhhvFEfef)
@@ -81,6 +85,9 @@ This issue is similar to issue one but stands on its own to get its own place, a
 
 Solution: Write a CNN to give a 1 if it is a scanned, grayscale document where the scores are straight. And a 0 if it is a photograph. If a 0 is outputted it would need to be processed to intelligently undistort the images, put them into grayscale without losing too much information, and then fed back into to CNN to see whether it needs more processing or if it can be read by the bounding box algorithm
 Bad Data:
-Image goes here: (Bad Raw Data.png)
+
+![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Bad%20Raw%20Data.png)
+
 Good Data:
-Image goes here: (Good Raw Data.png)
+
+![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Good%20Raw%20Data.png)

@@ -48,6 +48,16 @@ pitch_classifier.ipynb:
 
 5.	pitch_classifier.ipynb uses this data to predict the pitch of the notes in “Note Data”. 
 
+Gabc_to_label.ipynb
+
+1. Go to Gregobase and download a GABC type file
+
+2. Run each score pretaining to the chant through the CNN_count.ipynb script and recored how many notes are in each score. The start of a chant is labeled as a large letter before the score, and is over once another large letter is present. 
+
+3. Pass the name of the file and a list with how many notes are on each score to the GABC_to_Lable function. 
+
+4. You now have a list of labels to be used in the pitch_classifier.ipynb for classification. 
+
 Roadblocks and Solutions
 
 This is a very barebones project and more or less a proof of concept for a more complicated project that would be a serious undertaking, that would exceed the time limit and available information currently present. Some issues we have currently encountered that have hindered progress for this project have been:

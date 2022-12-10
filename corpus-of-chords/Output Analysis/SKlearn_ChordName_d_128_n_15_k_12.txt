@@ -1,0 +1,15 @@
+Partitions, ChordNames
+  Partition    part. size  #1 most common              #2 most common                  #3 most common                      #4 most common                         #5 most common
+-----------  ------------  --------------------------  ------------------------------  ----------------------------------  -------------------------------------  --------------------------------------------
+          0        0.0818  ['G-major triad', 0.026]    ['F-major triad', 0.0243]       ['A-minor triad', 0.0208]           ['Eb-major triad', 0.0191]             ['D-minor triad', 0.0191]
+          1        0.0576  ['Eb-major triad', 0.0616]  ['Bb-major triad', 0.0468]      ['C-minor triad', 0.0271]           ['Bb-dominant seventh chord', 0.0246]  ['Eb-major seventh chord', 0.0246]
+          2        0.0991  ['C-major triad', 0.0344]   ['C-quartal trichord', 0.0301]  ['C-minor triad', 0.0301]           ['G-major triad', 0.0258]              ['D-incomplete minor-seventh chord', 0.0215]
+          3        0.1242  ['Eb-major triad', 0.0229]  ['F-major triad', 0.0229]       ['C-major triad', 0.0217]           ['D-minor triad', 0.0206]              ['A-minor triad', 0.0183]
+          4        0.0847  ['C-major triad', 0.0402]   ['F-major triad', 0.0268]       ['G-major triad', 0.0251]           ['A-minor triad', 0.0235]              ['D-minor triad', 0.0218]
+          5        0.0652  ['G-major triad', 0.0305]   ['G-minor triad', 0.0283]       ['D-major triad', 0.0261]           ['F-major triad', 0.0196]              ['G-dominant seventh chord', 0.0196]
+          6        0.065   ['Eb-major triad', 0.0524]  ['Bb-major triad', 0.0393]      ['Eb-major seventh chord', 0.0284]  ['C-minor triad', 0.024]               ['D-diminished triad', 0.024]
+          7        0.0488  ['G-major triad', 0.0407]   ['A-minor triad', 0.0378]       ['C-major triad', 0.0378]           ['C-minor triad', 0.0262]              ['D-dominant seventh chord', 0.0262]
+          8        0.0619  ['C-major triad', 0.0482]   ['G-major triad', 0.0344]       ['F-major triad', 0.0298]           ['A-minor triad', 0.0275]              ['G-dominant seventh chord', 0.0252]
+          9        0.0663  ['C-major triad', 0.045]    ['C-minor triad', 0.0385]       ['G-major triad', 0.0343]           ['C-quartal trichord', 0.0257]         ['G-minor triad', 0.0257]
+         10        0.0676  ['C-minor triad', 0.0399]   ['Eb-major triad', 0.0315]      ['Bb-major triad', 0.0294]          ['C-major triad', 0.0294]              ['D-minor triad', 0.0252]
+         11        0.1779  ['C-major triad', 0.0359]   ['Eb-major triad', 0.0327]      ['F-major triad', 0.0295]           ['G-major triad', 0.0223]              ['Bb-major triad', 0.0223]

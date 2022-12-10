@@ -24,7 +24,7 @@ How well it performs:
 
 Correct note count: ?%
 
-Individual Note OMR Accuracy: ?%
+Individual Note OMR Accuracy: 20%
 
 Walk through how a new user can use your model on their own data after cloning the repository:
 
@@ -39,6 +39,8 @@ Note: The gabc code must be should be at least the length of a full staff
 The image is then used as input in our image in our encoding function?
 
 The program will output the number of notes in the staff
+
+From this, one can label the data by using the 'gabc to label' with a list of how many notes are in each staff and the name of the file. This then outputs a list of labels an OCR can use to classify future notes. 
 
 Future Problems and Solutions
 This is a very barebones project and more or less a proof of concept for a more complicated project that would be a serious undertaking, that would exceed the time limit and available information currently present. Some issues we have currently encountered that have hindered progress for this project have been:

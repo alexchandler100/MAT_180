@@ -58,6 +58,8 @@ Gabc_to_label.ipynb
 
 4. You now have a list of labels to be used in the pitch_classifier.ipynb for classification. 
 
+Note: This may not be of much use as bounding boxes are required to further analyze individual notes which have been labled. 
+
 Roadblocks and Solutions
 
 This is a very barebones project and more or less a proof of concept for a more complicated project that would be a serious undertaking, that would exceed the time limit and available information currently present. Some issues we have currently encountered that have hindered progress for this project have been:

@@ -1,0 +1,34 @@
+import os
+import re as r
+
+def Note_to_vector(total_notes):
+    vec_list = []
+    note_list = r.findall("\((.*?)\)", total_notes)
+    for i in range(len(note_list)):
+        vec_temp = np.zeros(5)
+        if note_list[i] == 'e':
+            vec_temp[0] = 1
+            vec_list.append(vec_temp)
+            
+        elif note_list[i] == 'f':
+            vec_temp[1] = 1
+            vec_list.append(vec_temp)
+            
+        elif note_list[i] == 'g':
+            vec_temp[2] = 1
+            vec_list.append(vec_temp)
+            
+        elif note_list[i] == 'h':
+            vec_temp[3] = 1
+            vec_list.append(vec_temp)
+            
+        else:
+            vec_temp[4] = 1
+            vec_list.append(vec_temp)
+
+    return vec_list
+    
+file = open("Note_label.txt", "r")
+example = file.read()
+file.close()
+Data = (Note_to_vector(example)) # here is data one hot encoded :)

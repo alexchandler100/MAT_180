@@ -12,37 +12,44 @@ MAT 180 Group Project Proposal
 
 (d)	To measure performance, we’ll write a function to compare our algorithm’s output with the volunteer code from GregoBase.  The output consists of a sequence of plain text and a sequence of gabc code (intermingled).  So, our performance function will compare the sequence of output plain text with the GregoBase plain text.  It will then compare the output gabc and GregoBase gabc and calculate a percentage of accuracy.
 
-Final Write-up:
-
-What it accomplishes:
-
-This project is the starting point for an Optical Music Recognition (OMR) application.  The ultimate goal would be to convert an entire page of Gregorian chant into a gabc file.  We did not do that.  That turned out to be a gargantuan task, which was impossible to finish in time.  (More details: What would that entail?)
-
-Our revised approach set out to accomplish the foundational requirements.  Our system takes a png of a single music staff as input, and then counts the number of notes in that image.  It also performs OMR on individual notes.
+We aimed high, but the target was very far.  What we ended up with is the starting point of an Optical Music Recognition (OMR) application.  As will be discussed later, we came upon many roadblocks in our journey.  We ended up creating two models.  Our first is a convolutional neural net that scans a music staff and counts the number of notes in the image.  Our second model takes an image of a single note and uses a CNN to classify the pitch of the note.  (WE ALSO HAVE LABEL IPYNB)
 
 How well it performs:
 
-Correct note count: ?%
+Correct note count: Image.  Our total data set is only 30 elements and our test set is 3, so our accuracy is usually 0%, but is sometimes 33% if we’re lucky.
 
-Individual Note OMR Accuracy: 20%
+Pitch Classifier: 20%
 
-Walk through how a new user can use your model on their own data after cloning the repository:
+Instructions: 
 
-By following instructions in your README.md file, I should easily be able to run your algorithm on a new example not in your dataset and see that the model performs up to your claimed performance measure.
+CNN_count.ipynb:
 
-Instructions: Go to Gregobase: https://gregobase.selapa.net/scores.php.
+1.	Go to Gregobase: https://gregobase.selapa.net/scores.php.
 
-Download a gabc file that is about one staff long as well as the corresponding png (image showing this)
+2.	Download a gabc file that is about one staff long as well as the corresponding png (image showing this)
 
-Note: The gabc code must be should be at least the length of a full staff
+Note: The gabc code cannot span more than one staff.
 
-The image is then used as input in our image in our encoding function?
+3.	The image is then added to the “Chant_Data” folder
 
-The program will output the number of notes in the staff
+4.	The number of notes in the gabc file must be manually counted.  The number is then appended to the “Chant data label.txt” file
 
-From this, one can label the data by using the 'gabc to label' with a list of how many notes are in each staff and the name of the file. This then outputs a list of labels an OCR can use to classify future notes. 
+5.	CNN_count.ipynb uses as the X dataset “Chant_Data” and “Chant data label.txt” as the y labels.  Theoretically, it would predict the number of notes in whichever images it uses as test data.
 
-Future Problems and Solutions
+pitch_classifier.ipynb:
+
+1.	Go to GregoBase and download an image of a Gregorian chant
+
+2.	Crop out a single note as a 138 by 34 png.
+
+3.	Add that image to the “Note Data” folder
+
+4.	Append the pitch of that note to “Note_label.txt”, e.g., if the pitch is g, append (g) to the file.
+
+5.	pitch_classifier.ipynb uses this data to predict the pitch of the notes in “Note Data”. 
+
+Roadblocks and Solutions
+
 This is a very barebones project and more or less a proof of concept for a more complicated project that would be a serious undertaking, that would exceed the time limit and available information currently present. Some issues we have currently encountered that have hindered progress for this project have been:
 
 Creating bounding boxes for the notes after identifying the amount of notes per score. This is currently unobtainable as there is no labeled dataset for identifying each note besides by hand. 

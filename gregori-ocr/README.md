@@ -6,7 +6,7 @@ MAT 180 Group Project Proposal
 
 (a)	GregoBase and Internet Archive will be the databases we use to collect image scans of old antiphonals (our data).
 
-(b)	Using OCR, we want to convert images of antiphonal music (text with neumes) into gabc code.  This code can then be read by Gregorio, which is a LaTeX-like text editor for neume music.  GregoBase is a database where volunteers manually digitize songs from old antiphonals.  Using OCR, we could automate this task.
+(b)	Using OCR, we want to convert images of antiphonal music (text with neumes) into gabc code.  This code can then be read by Gregorio, which is a LaTeX-like text editor for neume music.  GregoBase is a database where volunteers manually digitize songs from old antiphonals.  The goal of using OCR is to hopefully automate this task.
 
 (c)	Convolutional Neural Networks will be the base of our OCR.
 

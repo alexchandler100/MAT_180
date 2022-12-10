@@ -14,11 +14,24 @@ MAT 180 Group Project Proposal
 
 We aimed high, but the target was very far.  What we ended up with is the starting point of an Optical Music Recognition (OMR) application.  As will be discussed later, we came upon many roadblocks in our journey.  We ended up creating two models.  Our first is a convolutional neural net that scans a music staff and counts the number of notes in the image.  Our second model takes an image of a single note and uses a CNN to classify the pitch of the note.  (WE ALSO HAVE LABEL IPYNB)
 
-How well it performs:
+Model Overviews/Performance:
 
-Correct note count: Image.  Our total data set is only 30 elements and our test set is 3, so our accuracy is usually 0%, but is sometimes 33% if we’re lucky.
 
-Pitch Classifier: 20%
+Correct note count:
+In order to classify the number of notes in a given image, we built a CNN model. Image arrays are rescaled to have values between 0 and 1, and random vertical “flips” are applied when training in order to augment the dataset and prevent overfitting. There are two convolutional layers with 128 channels each, and then three with 64 each. For the fully-connected section of the neural network, we have layers with 128, 64, 32 and 22 neurons each respectively. The 22 layers in the final layer correspond to note counts of 1, 2, … and 22. ReLU activation functions are used throughout the network. Here is a diagram of the model:
+
+![Model Diagram](https://github.com/CennyBo/GregoriOCR/blob/6ddffc17fd4af3d2e2b4355d59ade8803088ab91/gregori-ocr/Screen%20Shot%202022-12-09%20at%2011.35.09%20PM.png)
+
+
+We used categorical cross-entropy as our loss function and the Adam optimizer. Our batch size was 20 and we trained for 100 epochs. Here are our loss and accuracy results:
+
+![Loss graph](https://github.com/CennyBo/GregoriOCR/blob/6ddffc17fd4af3d2e2b4355d59ade8803088ab91/gregori-ocr/loss_graph.png)
+
+![Accuracy graph](https://github.com/CennyBo/GregoriOCR/blob/2a8856a9146869bd2d9cdd79ac351332c5a22fe1/gregori-ocr/accuracy_graph.png)
+
+We see that due to our severly limited dataset (27 training and 3 test images), our accuracy is very low and our model is even underfitted.
+
+Pitch Classifier Performance: 20%
 
 Instructions: 
 
@@ -47,18 +60,6 @@ pitch_classifier.ipynb:
 4.	Append the pitch of that note to “Note_label.txt”, e.g., if the pitch is g, append (g) to the file.
 
 5.	pitch_classifier.ipynb uses this data to predict the pitch of the notes in “Note Data”. 
-
-Gabc_to_label.ipynb
-
-1. Go to Gregobase and download a GABC type file
-
-2. Run each score pretaining to the chant through the CNN_count.ipynb script and recored how many notes are in each score. The start of a chant is labeled as a large letter before the score, and is over once another large letter is present. 
-
-3. Pass the name of the file and a list with how many notes are on each score to the GABC_to_Lable function. 
-
-4. You now have a list of labels to be used in the pitch_classifier.ipynb for classification. 
-
-Note: This may not be of much use as bounding boxes are required to further analyze individual notes which have been labled. 
 
 Roadblocks and Solutions
 

@@ -12,8 +12,6 @@ MAT 180 Group Project Proposal
 
 (d)	To measure performance, we’ll write a function to compare our algorithm’s output with the volunteer code from GregoBase.  The output consists of a sequence of plain text and a sequence of gabc code (intermingled).  So, our performance function will compare the sequence of output plain text with the GregoBase plain text.  It will then compare the output gabc and GregoBase gabc and calculate a percentage of accuracy.
 
-![]( https://user-images.githubusercontent.com/91860903/204427530-4382e0b3-2f96-4358-a6ac-55709eda9449.png "Fig 2.1 Binary Classifier NN Summary" )
-
 Final Write-up:
 
 What it accomplishes:
@@ -53,6 +51,7 @@ The complexity of GABC and gregorian chants. The characters present within the c
 
 Example of what our CNN would have to classify: 
 ![](https://github.com/CennyBo/GregoriOCR/blob/74c5c454b0fe2f0b47335f722b38f34eb506b042/gregori-ocr/Gregorio%20Read%20Me%20Images/Example%20notes.png)
+
 Solution: Have multiple CNN’s to identify three things: 
 
 1). Is this a double note or single note? Triple? Quadruple? 

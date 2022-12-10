@@ -2,7 +2,7 @@
 MAT 180 Group Project Proposal
 1.	Group Members: Andrew Patton, Cenny Rangel, Kaleb Crans
 2.	Project Name: GregoriOCR
-3.	Goals:
+3.	Goals: Process Gregorian chants into GABC, type set code. 
 
 (a)	GregoBase and Internet Archive will be the databases we use to collect image scans of old antiphonals (our data).
 

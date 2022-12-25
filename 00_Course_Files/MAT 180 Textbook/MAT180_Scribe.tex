@@ -1,0 +1,144 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------------------------------
+%	CUSTOM COMMANDS
+
+% common symbols
+\newcommand{\FS}{\mathfrak{S}}
+\newcommand{\CP}{\mathcal{P}}
+\newcommand{\CB}{\mathcal{B}}
+\newcommand{\Lip}{\mathcal{L}}
+\newcommand{\Normal}{\mathcal{N}}
+% fields
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+% vectors
+\newcommand{\vb}{\mathbf{b}}
+\newcommand{\vc}{\mathbf{c}}
+\newcommand{\ve}{\mathbf{e}}
+\newcommand{\vpi}{\mathbf{\pi}}
+\newcommand{\vmu}{\mathbf{\mu}}
+\newcommand{\valpha}{\mathbf{\alpha}}
+\newcommand{\vu}{\mathbf{u}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\vw}{\mathbf{w}}
+\newcommand{\vx}{\mathbf{x}}
+\newcommand{\vy}{\mathbf{y}}
+\newcommand{\vz}{\mathbf{z}}
+\newcommand{\vzero}{\mathbf{0}}
+\newcommand{\vuhat}{\hat{\vu}}
+\newcommand{\vlambda}{\Vec{\lambda}}
+\newcommand{\thetahat}{\hat{\theta}}
+\newcommand{\vh}{\mathbf{h}}
+\newcommand{\vtheta}{\mathbf{\theta}}
+% matrices
+\newcommand{\MA}{\mathbf{A}}
+\newcommand{\MB}{\mathbf{B}}
+\newcommand{\MC}{\mathbf{C}}
+\newcommand{\ME}{\mathbf{E}}
+\newcommand{\MM}{\mathbf{M}}
+\newcommand{\MU}{\mathbf{U}}
+\newcommand{\MV}{\mathbf{V}}
+\newcommand{\MW}{\mathbf{W}}
+\newcommand{\MQ}{\mathbf{Q}}
+\newcommand{\MI}{\mathbf{I}}
+\newcommand{\MP}{\mathbf{P}}
+\newcommand{\MD}{\mathbf{D}}
+\newcommand{\ML}{\mathbf{L}}
+\newcommand{\MX}{\mathbf{X}}
+\newcommand{\bSigma}{\mathrm{\Sigma}}
+% operators
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\kernel}{\mathrm{ker}}
+\newcommand{\image}{\mathrm{im}}
+\newcommand{\spann}{\mathrm{span}}
+\newcommand{\inv}{\mathrm{inv}}
+\newcommand{\Fro}{\mathrm{Fro}}
+\newcommand{\trace}{\mathrm{Tr}}
+\newcommand{\argmin}{\mathrm{argmin}}
+\newcommand{\argmax}{\mathrm{argmax}}
+\newcommand{\softmax}{\mathrm{softmax}}
+\newcommand{\diag}{\mathrm{diag}}
+\newcommand{\define}[1]{\textit{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\Ev}{\mathbb{E}} % expected value
+% words
+\newcommand{\cvx}{convex}
+
+\newcommand{\twopartdef}[4]
+{
+	\left\{
+		\begin{array}{ll}
+			#1 & \mbox{if } #2 \\
+			#3 & \mbox{elif } #4
+		\end{array}
+	\right.
+}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+
+\documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
+
+\includeonly{
+    chapter9,
+}
+
+\usepackage{algorithm} % Package for displaying blocks of pseudocode
+\usepackage{algpseudocode} % Package for displaying blocks of pseudocode 
+
+\usepackage{float}
+\usepackage[tight,footnotesize]{subfigure}
+
+\usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,letterpaper]{geometry} % Page margins
+
+\usepackage{xcolor} % Required for specifying colors by name
+\definecolor{ocre}{RGB}{52,177,201} % Define the orange color used for highlighting throughout the book
+
+% Font Settings
+\usepackage{avant} % Use the Avantgarde font for headings
+%\usepackage{times} % Use the Times font for headings
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{amsthm}
+
+% To align math equations on a character
+\usepackage{amsmath}
+% To center math equations
+\usepackage[fleqn]{nccmath}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+% Bibliography
+\usepackage[style=alphabetic,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
+\addbibresource{bibliography.bib} % BibTeX bibliography file
+\defbibheading{bibempty}{}
+
+\input{structure} % Insert the commands.tex file which contains the majority of the structure behind the template
+
+%----------------------------------------------------------------------------------------
+%	Definitions of new commands
+%----------------------------------------------------------------------------------------
+
+\usetikzlibrary{positioning}
+\tikzstyle{inputNode}=[circle,draw=blue!50,fill=blue!10,minimum size=10pt,inner sep=0pt]
+\tikzstyle{stateTransition}=[-stealth, thick]
+\def\R{\mathbb{R}}
+
+
+
+\begin{document}
+
+

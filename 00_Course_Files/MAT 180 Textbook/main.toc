@@ -1,0 +1,247 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Linear Algebra Background}{5}{chapter.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Vector Spaces and Linear Maps}{5}{section.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1.1}Span, Linear Independence, Basis}{6}{subsection.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1.2}Vector Norms}{7}{subsection.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.2}Linear Mappings}{8}{section.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2.1}Matrices}{9}{subsection.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2.2}Some Common Matrix Operations}{10}{subsection.1.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2.3}Orthogonality and The Inner Product Space $\mathbb {R}^n$}{12}{subsection.1.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.3}Eigenvalue and Singular Value Decompositions}{13}{section.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3.1}Eigenvalues and Eigenvectors}{13}{subsection.1.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3.2}Symmetric and Positive Semi-definite Matrices}{14}{subsection.1.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3.3}Diagonalization and Spectral Theorem}{14}{subsection.1.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3.4}Singular Value Decomposition}{15}{subsection.1.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.4}Exercises}{17}{section.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.5}Solutions to Exercises}{18}{section.1.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Multivariable Optimization Theory}{19}{chapter.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Matrix Differentiation}{19}{section.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Optimization Theory}{19}{section.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.1}Optimization with No Constraints}{19}{subsection.2.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.2}Optimization with Constraints}{19}{subsection.2.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Convex Optimization}{19}{section.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.1}Convex Functions}{19}{subsection.2.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.2}Consequences of Convexity}{21}{subsection.2.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}Exercises}{21}{section.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.5}Solutions to Exercises}{22}{section.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Probability Background}{25}{chapter.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Probability Spaces and Distributions}{25}{section.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Probability of a Single Random Variable}{25}{section.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}Probability involving Multiple Random Variables}{25}{section.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}Conditional Probability and Independence}{25}{section.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Expectation and Variance}{25}{section.3.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.6}Covariance and Correlation}{25}{section.3.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.7}Common Distributions}{25}{section.3.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.8}Exercises}{25}{section.3.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Numerical Optimization}{27}{chapter.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.1}Floating Point Calculations}{27}{section.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.2}Newton's Method}{27}{section.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.3}Gradient Based Optimization}{27}{section.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.1}More on Gradient Descent}{27}{subsection.4.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.2}Gradient Descent Convergence}{29}{subsection.4.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.4}Stochastic Gradient Descent}{33}{section.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.5}Additional Topics}{33}{section.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.5.1}Constrained Optimization}{33}{subsection.4.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.6}Exercises}{35}{section.4.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.7}Solutions to Exercises}{35}{section.4.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Techniques of Dimensionality Reduction}{39}{chapter.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}Principal Component Analysis}{39}{section.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.2}Exercises}{44}{section.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.3}Solutions to Exercises}{44}{section.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Regression and Classification}{47}{chapter.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.1}Basics of Machine Learning}{47}{section.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.1}Learning Algorithms}{47}{subsection.6.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.2}Experience}{47}{subsection.6.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.3}Task}{48}{subsection.6.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.4}Performance Measure}{49}{subsection.6.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.2}Linear Regression}{49}{section.6.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.3}Logistic Regression}{52}{section.6.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3.1}Desiderata}{52}{subsection.6.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3.2}One Solution: Logistic Regression}{52}{subsection.6.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Observations about current setup}{52}{section*.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Desiderata for the Normalization function}{53}{section*.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{The Sigmoid Function}{53}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Designing the Cost Function}{54}{section*.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.4}Exercises}{55}{section.6.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.5}Solutions to Exercises}{55}{section.6.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Techniques for Improving Learning Models}{57}{chapter.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.1}Capacity, Overfitting, Underfitting}{57}{section.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.1}The Capacity}{58}{subsection.7.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.2}Bayes Error}{59}{subsection.7.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.3}Regularization}{59}{subsection.7.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.2}Hyperparameters and Validation}{60}{section.7.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.1}A Problem:}{60}{subsection.7.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.2}A Solution and new approach:}{60}{subsection.7.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.3}Tip:}{61}{subsection.7.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.3}Bias and Variance}{61}{section.7.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.4}Exercises}{63}{section.7.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.5}Solutions to Exercises}{64}{section.7.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Naive Bayes and the EM Algorithm}{65}{chapter.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.1}Maximum Likelihood Estimation}{65}{section.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.2}Exercises}{69}{section.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.3}Solutions to Exercises}{69}{section.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {9}Unsupervised Learning and Clustering}{71}{chapter.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.1}$k$-means Clustering}{71}{section.9.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.2}Exercises}{72}{section.9.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.3}Solution To Exercises}{73}{section.9.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {10}Feed Forward Neural Networks}{75}{chapter.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.1}Abstract Neurons}{75}{section.10.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.2}The Sigmoid Neuron}{77}{section.10.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.3}Neural Networks as Learning Algorithms}{82}{section.10.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.4}Neural Networks as a maximum likelihood estimator}{83}{section.10.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.5}Exercises}{84}{section.10.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.6}Solutions to Exercises}{85}{section.10.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.7}Output Neural}{86}{section.10.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.8}Optimization for Neural Networks}{88}{section.10.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.9}Backpropagation}{89}{section.10.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.10}Regularization}{91}{section.10.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.11}Common Loss Functions}{91}{section.10.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.12}Vanishing Gradient Problem}{92}{section.10.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {10.12.1}Momentum Method}{93}{subsection.10.12.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {10.12.2}Weight Initialization}{94}{subsection.10.12.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {10.12.3}Xavier Initialization}{94}{subsection.10.12.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {10.13}Exercises}{96}{section.10.13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {10.13.1}Solutions}{96}{subsection.10.13.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {11}Convolutional Neural Networks}{97}{chapter.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {11.1}Introduction}{97}{section.11.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.1.1}Idea}{97}{subsection.11.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {11.2}Convolutional Layers}{98}{section.11.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.2.1}Convolutional Layer with 1D Inputs}{98}{subsection.11.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.2.2}Convolutional Layer with 3D Inputs}{98}{subsection.11.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.2.3}Padding}{99}{subsection.11.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.2.4}Pooling}{100}{subsection.11.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {11.3}Exercises}{102}{section.11.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {11.4}Solutions to Exercises}{103}{section.11.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {12}Recurrent Neural Networks}{105}{chapter.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.1}Introduction}{105}{section.12.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {12.1.1}What is an RNN?}{105}{subsection.12.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {12.1.2}Representing a dynamic state system graphically}{106}{subsection.12.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.2}Recurrent Neural Networks (RNNs)}{106}{section.12.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {12.2.1}Loss Function}{107}{subsection.12.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.3}RNN backpropagation}{109}{section.12.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.4}Exercises}{111}{section.12.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.5}Solutions to Exercises}{111}{section.12.5}%
+\contentsfinish 

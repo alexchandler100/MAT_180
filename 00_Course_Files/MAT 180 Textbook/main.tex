@@ -145,7 +145,7 @@
 
 \begingroup
 \thispagestyle{empty}
-\AddToShipoutPicture*{\put(0,45){\includegraphics[width=1.45\textwidth,height=1.5\textheight,keepaspectratio]{Main/midjourney_cover}}} % Image background
+\AddToShipoutPicture*{\put(0,0){\includegraphics[width=1.45\textwidth,height=1.5\textheight,keepaspectratio]{Main/midjourney_cover}}} % Image background
 \centering
 \vspace*{9cm}
 \par\normalfont\fontsize{35}{35}\sffamily\selectfont
@@ -847,7 +847,84 @@ and determine the coefficients $\beta_{i,k}$.
 
 \subsection{Optimization with No Constraints} 
 
-\subsection{Optimization with Constraints} 
+\subsection{Constrained Optimization}
+
+In the previous sections, we discussed optimization problems looking for solutions in $\mathbb{R}$ to attain the maximum or minimum value of a function. Sometimes, we want to optimize f over some restriction of its domain. For example, we may want to satisfy a financial budget for a project. These problems are called $\define{constrained optimization}$ problems.
+
+\begin{definition}\label{def_constrained_optimization} 
+A \define{constrained optimization} problem is an optimization problem for which we want to find the maximal or minimal value of a function $f(\vx)$ over a subset of all possible values of $\vx$. An optimization problem that is not constrained is called an \define{unconstrained optimization} problem.
+\end{definition}
+
+Consider $f:\mathbb{R}^n\rightarrow\mathbb{R}$ and a set $S \subseteq \mathbb{R}^n$. We want to find:
+$$x^*=\underset{\vx \in S}{\argmin} f(\vx)$$
+or 
+$$f_{min} = \min_{\vx \in S} f(\vx)$$
+
+One approach is to modify the gradient descent algorithm. At each step, we check if $f(\vx)$ is in $S$. If it is not, then we project $\vx$ back into $S$ before taking the next step. Unsurprisingly, this is called \define{projected gradient descent}. One way to do the projection is to find the value $\vx\in S$ such that:
+
+$$ \underset{\vx \in S}{\argmin} \norm{\vx - \vx_{i-1}}$$
+where $\vx_{i-1}$ is the result of the previous gradient descent step and is not in $S$. \\
+
+Note that the projection step is another optimization problem. When our constraint is simple, projected gradient descent is a useful method. However, when our constraint set $S$ is complicated, determining the projection step may add significant overhead to our algorithm. Examples for which projected gradient fails will be explored in exercise JANICE (In solution, talk about convexity. If Q is a convex set, the optimization problem has a unique solution.
+I If Q is nonconvex, the solution to PQ(x0) may not be unique: it gives
+more than one solution.)!!!. In these cases, we'd hope to use a different constrained optimization method. 
+
+One such approach is to construct an unconstrained optimization problem whose solutions are able to be transformed into solutions of the original, constrained problem. This can be done in many ways. We will discuss the \define{Karush-Kuhn-Tucker} (KKT) method, which constructs a new problem with identical solutions to the original.
+
+In order to apply KKT, $S$ must be describable in the following way:
+$$S = \{\vx | g_i(\vx)=0 \textrm{ and } h_j(\vx) \leq 0 \textrm{ for  }1\leq i \leq n \textrm{, } 1\leq j\leq k\}$$
+
+Then, we may construct the following function:
+
+\begin{definition}
+Define the \define{Lagrangian} to be the function $L(\vx;\vlambda,\valpha)$ such that
+$$L(\vx;\vlambda,\valpha) = f(\vx) + \sum_{i} \lambda_{i} g_{i}(\vx) + \sum_{i} \alpha_{i} h_{i}(\vx)$$
+The parameters $\valpha$ and $\vlambda$ are called  \define{KKT multipliers}. The equalities involving $g_{i}$ are called the \define{equality constraints}, and the inequalities involving $h_{i}$ are called the \define{inequality constraints}.
+\end{definition}
+
+\begin{remark}
+In the case where $S$ can be described exclusively by the equality constraints, the Lagrangian reduces to $$L(\vx;\vlambda) = f(\vx) + \sum_{i} \lambda_{i} g_{i}(\vx)$$ In this case, $\vlambda$ is called the \define{Lagrangian multiplier}. 
+\end{remark}
+
+\begin{proposition}
+Let $S$, $L(\vx;\vlambda,\valpha)$ be defined as described in the KKT method. Then, 
+$$\min_{\vx \in \mathbb{R}^n} \max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha)$$
+has the same solutions as $\min_{\vx\in S} f(\vx)$.
+\end{proposition}
+
+The justification is as follows:
+
+If $\vx \notin S$, then $g_{i}\neq 0$. The parameter $\vlambda$ is unbounded by definition, resulting in 
+$$\max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha)=\infty$$
+So, any $\vx \notin S$ cannot be an optimal solution.
+
+If $\vx \in S$, then $\sum_{i}\lambda_{i} g_{i}(\vx) = 0$. Note that since $\valpha\geq0$ by definition, we also have $\max_{\valpha : \valpha \geq 0} \valpha_{i} h_{i}(\vx) = 0$. So,   
+$$\max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha) = f(\vx)$$ 
+Thus when $\vx \notin S$, $\vx$ cannot be an optimal solution for $\min_{\vx\in S} f(\vx)$, and when $\vx \in S$, the optimal solutions are equivalent. 
+
+\begin{remark}
+We can construct the Lagrangian to adjust the maximums and minimums involved:
+
+$$\min_{\vx} \max_{\vlambda} \max_{\valpha : \valpha \geq 0} -f(\vx) + \sum_{i} \vlambda_{i} g_{i}(\vx) + \sum_{i} \valpha_{i} h_{i}(\vx)$$
+
+$$\max_{\vx} \min_{\vlambda} \min_{\valpha : \valpha \geq 0} f(\vx) + \sum_{i} \vlambda_{i} g_{i}(\vx) - \sum_{i} \valpha_{i} h_{i}(\vx)$$
+\end{remark}
+
+Now, we have reduced our constrained optimization problem to an unconstrained optimization problem. However, not all Lagrangian optimization problems can be easily solved. Fortunately, the KKT method also provides us with a set of conditions that describe the optimal solutions. 
+
+\begin{theorem}[Karush-Kahn-Tucker Conditions]\label{Karush-Kahn-Tucker Conditions}\
+Let $f:\mathbb{R}^n \to \mathbb{R}$ and $S\in\mathbb{R}^n$. Let $L(\vx;\vlambda,\valpha)$ be a Lagrangian function for $f$, $S$. If $\vx$ is a solution for $\underset{\vx\in\mathbb{R}^n}{\argmin} f(\vx)$, then the following are true:
+    \begin{itemize}
+        \item $\nabla{x} L(\vx;\vlambda,\valpha) = 0$
+        \begin{itemize}
+            \item In the case where $f$ is not differentiable, the gradient is defined as a set of possible slopes, and this conditions states that $0$ is an element of the gradient.
+        \end{itemize}
+        \item $\vx \in S$ and the constraints on the KKT multipliers are satisfied.
+        \item $\sum_{i} \alpha_{i} h_{i}(\vx)=0$ (this is also known as the \define{complementary slackness} condition).
+        \end{itemize}
+\end{theorem}
+
+These conditions sometimes allow us to determine the solution analytically. If we are unable to analytically determine the solution, these conditions still give us useful information for computing the solution numerically. 
 
 \section{Convex Optimization} 
 
@@ -929,6 +1006,43 @@ This definition of convexity applies to functions that are not necessarily diffe
 
 
 \subsection{Consequences of Convexity}
+
+
+\begin{definition}
+A function $f: \R^n\rightarrow\R$ is $\mathcal{L}$-Lipschitz continuous if $\exists \mathcal{L}>0$, such that $\forall \vec{x}, \vec{y}\in \R^n$,$||f(\vec{x})-f(\vec{y})||\geq \mathcal{L}||\vec{x}-\vec{y}||_2$
+\end{definition}
+
+\begin{example}
+Suppose constant A $\in \R^n$ that is greater than 0.
+\begin{align}
+    f(\vec{x})&=A\vec{x}+\vec{b}\\
+||f(\vec{x})-f(\vec{y})||&=||A\vec{x}+\vec{b}-A\vec{y}-\vec{b}||\\
+&=||A(\vec{x}-\vec{y})+\vec{b}-\vec{b}||\\
+&=A||(\vec{x}-\vec{y})||
+\end{align}
+Since A is a constant, there must exist an $\mathcal{L}$ that is less than or equal to $A$, implying 
+\begin{equation}
+    A||(\vec{x}-\vec{y})||\geq A||(\vec{x}-\vec{y})||
+\end{equation}. Thus $f(\vec{x})$ must be $\mathcal{L}$-Lipschitz continuous.
+\end{example}
+
+\begin{definition}
+$f: \R^n\rightarrow\R$ is convex if $H(f)(\vec{x}))$ is a positive semidefinite for all $\vec{x}\in \R$
+\end{definition}
+
+\begin{example}
+Consider $f(\vec{x})=b^T\vec{x} +\vec{x}^T A\vec{x}+c$
+\begin{align*}
+\frac{df}{d\vec{x}}(\vec{x})&=b^T+\vec{x}(A+A^T)\\
+&=b^T+2\vec{x}^TA\\
+&=\frac{df}{d\vec{x}^2}(\vec{x})=2A^T=2A
+\end{align*}
+so f is convex iff A is positive semi-definite
+\end{example}
+
+\begin{example}
+$f(\vec{x})=x^T\vec{x}={||\vec{x}||^2}_2$ is convex $\vec{x}$
+\end{example}
 
 
 \section{Exercises}
@@ -1120,41 +1234,6 @@ The issue here is...
 \end{enumerate}
 So, when can we guarantee that gradient descent or some variation with converge? -> in deep learning this will never happen.
 
-\begin{definition}
-A function $f: \R^n\rightarrow\R$ is $\mathcal{L}$-Lipschitz continuous if $\exists \mathcal{L}>0$, such that $\forall \vec{x}, \vec{y}\in \R^n$,$||f(\vec{x})-f(\vec{y})||\geq \mathcal{L}||\vec{x}-\vec{y}||_2$
-\end{definition}
-
-\begin{example}
-Suppose constant A $\in \R^n$ that is greater than 0.
-\begin{align}
-    f(\vec{x})&=A\vec{x}+\vec{b}\\
-||f(\vec{x})-f(\vec{y})||&=||A\vec{x}+\vec{b}-A\vec{y}-\vec{b}||\\
-&=||A(\vec{x}-\vec{y})+\vec{b}-\vec{b}||\\
-&=A||(\vec{x}-\vec{y})||
-\end{align}
-Since A is a constant, there must exist an $\mathcal{L}$ that is less than or equal to $A$, implying 
-\begin{equation}
-    A||(\vec{x}-\vec{y})||\geq A||(\vec{x}-\vec{y})||
-\end{equation}. Thus $f(\vec{x})$ must be $\mathcal{L}$-Lipschitz continuous.
-\end{example}
-
-\begin{definition}
-$f: \R^n\rightarrow\R$ is convex if $H(f)(\vec{x}))$ is a positive semidefinite for all $\vec{x}\in \R$
-\end{definition}
-
-\begin{example}
-Consider $f(\vec{x})=b^T\vec{x} +\vec{x}^T A\vec{x}+c$
-\begin{align*}
-\frac{df}{d\vec{x}}(\vec{x})&=b^T+\vec{x}(A+A^T)\\
-&=b^T+2\vec{x}^TA\\
-&=\frac{df}{d\vec{x}^2}(\vec{x})=2A^T=2A
-\end{align*}
-so f is convex iff A is positive semi-definite
-\end{example}
-
-\begin{example}
-$f(\vec{x})=x^T\vec{x}={||\vec{x}||^2}_2$ is convex $\vec{x}$
-\end{example}
 
 \subsection{Gradient Descent Convergence}
 \label{GD-convergence}
@@ -1299,88 +1378,6 @@ How can we guarantee that gradient descent converges? It is impossible to guaran
     Which conclude the proof.
 \end{proof}
 
-\section{Stochastic Gradient Descent}
-
-\section{Additional Topics}
-
-\subsection{Constrained Optimization}
-
-In the previous sections, we discussed optimization problems looking for solutions in $\mathbb{R}$ to attain the maximum or minimum value of a function. Sometimes, we want to optimize f over some restriction of its domain. For example, we may want to satisfy a financial budget for a project. These problems are called $\define{constrained optimization}$ problems.
-
-\begin{definition}\label{def_constrained_optimization} 
-A \define{constrained optimization} problem is an optimization problem for which we want to find the maximal or minimal value of a function $f(\vx)$ over a subset of all possible values of $\vx$. An optimization problem that is not constrained is called an \define{unconstrained optimization} problem.
-\end{definition}
-
-Consider $f:\mathbb{R}^n\rightarrow\mathbb{R}$ and a set $S \subseteq \mathbb{R}^n$. We want to find:
-$$x^*=\underset{\vx \in S}{\argmin} f(\vx)$$
-or 
-$$f_{min} = \min_{\vx \in S} f(\vx)$$
-
-One approach is to modify the gradient descent algorithm. At each step, we check if $f(\vx)$ is in $S$. If it is not, then we project $\vx$ back into $S$ before taking the next step. Unsurprisingly, this is called \define{projected gradient descent}. One way to do the projection is to find the value $\vx\in S$ such that:
-
-$$ \underset{\vx \in S}{\argmin} \norm{\vx - \vx_{i-1}}$$
-where $\vx_{i-1}$ is the result of the previous gradient descent step and is not in $S$. \\
-
-Note that the projection step is another optimization problem. When our constraint is simple, projected gradient descent is a useful method. However, when our constraint set $S$ is complicated, determining the projection step may add significant overhead to our algorithm. Examples for which projected gradient fails will be explored in exercise JANICE (In solution, talk about convexity. If Q is a convex set, the optimization problem has a unique solution.
-I If Q is nonconvex, the solution to PQ(x0) may not be unique: it gives
-more than one solution.)!!!. In these cases, we'd hope to use a different constrained optimization method. 
-
-One such approach is to construct an unconstrained optimization problem whose solutions are able to be transformed into solutions of the original, constrained problem. This can be done in many ways. We will discuss the \define{Karush-Kuhn-Tucker} (KKT) method, which constructs a new problem with identical solutions to the original.
-
-In order to apply KKT, $S$ must be describable in the following way:
-$$S = \{\vx | g_i(\vx)=0 \textrm{ and } h_j(\vx) \leq 0 \textrm{ for  }1\leq i \leq n \textrm{, } 1\leq j\leq k\}$$
-
-Then, we may construct the following function:
-
-\begin{definition}
-Define the \define{Lagrangian} to be the function $L(\vx;\vlambda,\valpha)$ such that
-$$L(\vx;\vlambda,\valpha) = f(\vx) + \sum_{i} \lambda_{i} g_{i}(\vx) + \sum_{i} \alpha_{i} h_{i}(\vx)$$
-The parameters $\valpha$ and $\vlambda$ are called  \define{KKT multipliers}. The equalities involving $g_{i}$ are called the \define{equality constraints}, and the inequalities involving $h_{i}$ are called the \define{inequality constraints}.
-\end{definition}
-
-\begin{remark}
-In the case where $S$ can be described exclusively by the equality constraints, the Lagrangian reduces to $$L(\vx;\vlambda) = f(\vx) + \sum_{i} \lambda_{i} g_{i}(\vx)$$ In this case, $\vlambda$ is called the \define{Lagrangian multiplier}. 
-\end{remark}
-
-\begin{proposition}
-Let $S$, $L(\vx;\vlambda,\valpha)$ be defined as described in the KKT method. Then, 
-$$\min_{\vx \in \mathbb{R}^n} \max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha)$$
-has the same solutions as $\min_{\vx\in S} f(\vx)$.
-\end{proposition}
-
-The justification is as follows:
-
-If $\vx \notin S$, then $g_{i}\neq 0$. The parameter $\vlambda$ is unbounded by definition, resulting in 
-$$\max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha)=\infty$$
-So, any $\vx \notin S$ cannot be an optimal solution.
-
-If $\vx \in S$, then $\sum_{i}\lambda_{i} g_{i}(\vx) = 0$. Note that since $\valpha\geq0$ by definition, we also have $\max_{\valpha : \valpha \geq 0} \valpha_{i} h_{i}(\vx) = 0$. So,   
-$$\max_{\vlambda} \max_{\valpha : \valpha \geq 0} L(\vx;\vlambda,\valpha) = f(\vx)$$ 
-Thus when $\vx \notin S$, $\vx$ cannot be an optimal solution for $\min_{\vx\in S} f(\vx)$, and when $\vx \in S$, the optimal solutions are equivalent. 
-
-\begin{remark}
-We can construct the Lagrangian to adjust the maximums and minimums involved:
-
-$$\min_{\vx} \max_{\vlambda} \max_{\valpha : \valpha \geq 0} -f(\vx) + \sum_{i} \vlambda_{i} g_{i}(\vx) + \sum_{i} \valpha_{i} h_{i}(\vx)$$
-
-$$\max_{\vx} \min_{\vlambda} \min_{\valpha : \valpha \geq 0} f(\vx) + \sum_{i} \vlambda_{i} g_{i}(\vx) - \sum_{i} \valpha_{i} h_{i}(\vx)$$
-\end{remark}
-
-Now, we have reduced our constrained optimization problem to an unconstrained optimization problem. However, not all Lagrangian optimization problems can be easily solved. Fortunately, the KKT method also provides us with a set of conditions that describe the optimal solutions. 
-
-\begin{theorem}[Karush-Kahn-Tucker Conditions]\label{Karush-Kahn-Tucker Conditions}\
-Let $f:\mathbb{R}^n \to \mathbb{R}$ and $S\in\mathbb{R}^n$. Let $L(\vx;\vlambda,\valpha)$ be a Lagrangian function for $f$, $S$. If $\vx$ is a solution for $\underset{\vx\in\mathbb{R}^n}{\argmin} f(\vx)$, then the following are true:
-    \begin{itemize}
-        \item $\nabla{x} L(\vx;\vlambda,\valpha) = 0$
-        \begin{itemize}
-            \item In the case where $f$ is not differentiable, the gradient is defined as a set of possible slopes, and this conditions states that $0$ is an element of the gradient.
-        \end{itemize}
-        \item $\vx \in S$ and the constraints on the KKT multipliers are satisfied.
-        \item $\sum_{i} \alpha_{i} h_{i}(\vx)=0$ (this is also known as the \define{complementary slackness} condition).
-        \end{itemize}
-\end{theorem}
-
-These conditions sometimes allow us to determine the solution analytically. If we are unable to analytically determine the solution, these conditions still give us useful information for computing the solution numerically. 
 
 \section{Exercises}
 
@@ -1836,7 +1833,7 @@ $$ \MX = \begin{bmatrix} 1&2\\2&1\\3&4 \end{bmatrix} \to
 Doing this sets up a linear relationship between $y_i$ and the new $\MX_{i, \ast}$ because it now contains all of the possible polynomial terms up to degree $m$ of the columns. Then we can form $\hat{\MX}$ as before and solve as in the case of a linear relationship. There is, of course, the problem of picking the "best" maximum total degree $m$, but this problem will be covered in Section 7.2 when we discuss hyperparameters.
 
 \section{Logistic Regression}
-\subsection{Desiderata}
+
 Logistic Regression is an instantiation of a Classification Algorithm. The Learning Algorithm is setup as follows
 \begin{enumerate}
     \item Experience (E): The dataset $X$ is setup as a $m$ instances, each with $n$ features. More formally, $X \in \R^{m \times n}$. The goal of this algorithm is to predict a binary label for each instance. So, the ground-truth $\vy$ is a vector containing only ones and zeros. So, $\vy \in \{0, 1\}^{m}$. 
@@ -1887,8 +1884,7 @@ Now, let's proceed with an illustration of one solution to the desiderata presen
     This is left as an exercise to the reader.
     \end{proof}
     
-    \subsubsection{Designing the Cost Function}
-
+    \subsubsection{Designing the Cost Function $J(\overrightarrow{\vw}, \vb)$}
     For sake of notational brevity, we use the $\hat{\MX}$ notation from previous sections. This allows the inference function to be rewritten as $\hat{\MX}\vv$ instead of $\overrightarrow{\vw}^T \overrightarrow{\MX} + \vb$.
     
 
@@ -2166,8 +2162,9 @@ Introduce a new test set, which we call the validation set.
     \item Approximate the generalization error by computing $J(\vw_{\vlambda^{*}}^{*} ; E^{{(test)}})$.
 \end{enumerate}
 
-\subsection{Tip:}
-This all works if $E$ is large enough to be split into 3 categories. If not, one possible solution is k-fold cross validation. This allows you to perform validation with your training set. In the python package sklearn, this is done with 
+\textbf{Tip:} This all works if $E$ is large enough to be split into 3 categories. If not, one possible solution is k-fold cross validation. This allows you to perform validation with your training set. In the python package sklearn, this is done with 
+
+
 \begin{verbatim}
     cross_val_score()
 \end{verbatim}
@@ -2285,7 +2282,7 @@ Finally, it is worth pointing out that, for large data sets, it might take too m
     \item
 \end{enumerate}
 
-\chapter{Naive Bayes and the EM Algorithm}
+\chapter{Maximum Likelihood Estimation and Naive Bayes}
 \label{Maximum Likelihood estimation}
 
 \section{Maximum Likelihood Estimation}
@@ -2374,6 +2371,10 @@ So it seems most of our machine learning algorithms we have encountered so far h
     \end{align*}
     So again we see we recovered another cost function as we did in \textbf{Example 8.3}, so we conclude that logistic regression is a maximum likelihood estimator. 
 \end{example}
+
+
+\section{Bayes Estimators}
+
 Ending our discussion of MLE's we return to bias and variance. 
 \begin{definition}
     For any supervised model where $\MX, \vy$ are sampled from $P_{data}$ under \textbf{IID} assumptions, we define the \textit{Bayes prediction}: 
@@ -2388,11 +2389,11 @@ We define the noise this way such that the error is distributed everywhere and n
 \begin{align*}
     MSE(\hat{y}) &= \Ev_{P_{data}}\left[(y - \hat{y})^2\right] \\
     & = \Ev_{P_{data}}\left[(y - f^B(\vx) + f^B(\vx) - \hat{y})^2 \right] \\
-    & \vdot \text{Our goal here is to have control over our model and find a separate term of solely noise...} \\
+    & \text{Our goal is to have control over our model and find a separate term of solely noise...} \\
     & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B - \hat{y})^2 \right]+ 2\Ev_{P_{data}}\left[(y-f^B)(f^B-\hat{y}) \right] \\ 
-    & =\Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B) - \hat{y}^2 \right]+...\\
-    &+2(\Ev_{P_{data}}[yf^B(\vx)]- \Ev_{P_{data}}[f^B(\vx)^2]-\Ev_{P_{data}}[y\hat{y}]+\Ev_{P_{data}}[f^B(\vx)\hat{y}])\\
-    & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B(\vx) - \hat{y})^2 \right] + 0\text{    by our def. of noise} \\
+    & =\Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B) - \hat{y)}^2 \right]+...\\
+    ...&+2(\Ev_{P_{data}}[yf^B(\vx)]- \Ev_{P_{data}}[f^B(\vx)^2]-\Ev_{P_{data}}[y\hat{y}]+\Ev_{P_{data}}[f^B(\vx)\hat{y}])\\
+    & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B(\vx) - \hat{y)}^2 \right] + 0\text{    by our def. of noise} \\
     & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B(\vx) - \hat{y})^2 \right]
 \end{align*}
 
@@ -2782,11 +2783,10 @@ b < a < c < d < e\\
     A linear extension of a graded poset is determined by a choice of total ordering of each of its ranks. So there are $\prod_{i \in \mathbb{N}}$ |$P_{i}$|\\
 \end{lemma}
 
-Convention Drawing a Hasse diagram determines a linear extension by ordering downwards along ranks.\\
+Convention Drawing a Hasse diagram determines a linear extension by ordering downwards along ranks: $a < b < c < d < e < f$.\\
     \begin{center}
         \includegraphics[width=2in]{images/Chapter 10/convention.png}
     \end{center}
-    a < b < c < d < e < f\\
 So Hasse diagram contains all information.\\
 
 
@@ -2797,67 +2797,49 @@ So Hasse diagram contains all information.\\
 \end{definition}
 
 \begin{example}
-    $N$ = \\
-     \includegraphics[width=2in]{images/Chapter 10/P123.png}\\
-    \\
-     Here in this example , ${\vb}^{0} = \begin{pmatrix}
-        1\\
-        1\\
-        1\\
-        \end{pmatrix}$ and ${\vb}^{1} = 0$.\\
-    So our $N\begin{pmatrix}
-        1\\
-        1\\
-        1\\
-        \end{pmatrix} = G^{2}F^{1}G^{1}F^{0}\begin{pmatrix}
-        1\\
-        1\\
-        1\\
-        \end{pmatrix}$\\
-        So:\\
-        $F^{0}{\vx} = \begin{pmatrix}
-        1 & -1 & 0\\
-        2 & 0 & 3\\
-        0 & -2 & -3\\
-        \end{pmatrix}{\vx} + \begin{pmatrix}
-        1\\
-        1\\
-        1\\
-        \end{pmatrix}$\\
-        and:\\
-        $F^{1}{\vx} = \begin{pmatrix}
+    Consider $N$ to be the following:\\
+    \begin{center}
+    \includegraphics[width=2in]{images/Chapter 10/P123.png}
+    \end{center}
+    
+     In this example, $${\vb}^{0} = \begin{pmatrix}1\\1\\1\\
+        \end{pmatrix}$$ and ${\vb}^{1} = 0$
+    We have $$N\begin{pmatrix}1\\1\\1\\
+        \end{pmatrix} = G^{2}F^{1}G^{1}F^{0}\begin{pmatrix}1\\1\\1\\
+        \end{pmatrix}$$
+        So
+        $$F^{0}{\vx} = \begin{pmatrix}1 & -1 & 0\\2 & 0 & 3\\0 & -2 & -3\\
+        \end{pmatrix}{\vx}  + \begin{pmatrix}1\\1\\1\\
+        \end{pmatrix}$$
+        and
+        $$F^{1}{\vx} = \begin{pmatrix}
         1 & -2 & 1
-        \end{pmatrix}$
+        \end{pmatrix}$$
 
-    So now we get:\\
-    $N\begin{pmatrix}
-    1\\
-    1\\
-    1\\
-    \end{pmatrix} = \sigma F^{1}ReLUF^{0} \begin{pmatrix}
-        1\\
-        1\\
-        1\\
-    \end{pmatrix} = \sigma F^{1}ReLU \begin{pmatrix}
-    1\\
-    6\\
-    -4\\
-    \end{pmatrix} = \sigma  F^{1} \begin{pmatrix}
-    1\\
-    6\\
-    0\\
-    \end{pmatrix} = \sigma(-1\phi) = \frac{1}{1+e^{11}}$ which is approximately = 0.0001.
+    So now we get:
+    
+    $$N\begin{pmatrix}
+    1\\1\\1\\ 
+    \end{pmatrix} = 
+    \sigma F^{1}ReLU F^{0} 
+    \begin{pmatrix}1\\1\\1\\
+    \end{pmatrix} = 
+    \sigma F^{1}ReLU 
+    \begin{pmatrix}1\\6\\-4\\
+    \end{pmatrix} = 
+    \sigma  F^{1} \begin{pmatrix}1\\6\\0\\
+    \end{pmatrix} = 
+    \sigma(-1\phi) = \frac{1}{1+e^{11}}$$
+    
+    which is approximately equal to 0.0001.
            
         
 \end{example}
 
 \begin{example}
-Suppose that $N$ has some depth D and $G^{1},...,G^{D}$ are all linear activations ($G^{i}{\vx} = {\vx}$ $\forall i$).\\
-Then $N{\vx} = F^{D-1}F^{D-2}...F^{1}F^{0}{\vx}$.\\
-    \begin{remark}\\
-        The composition of affine maps is an affine map, so $\exists W, {\vb}$ such that\\
-            $N{\vx} = W{\vx} + {\vb}$.\\
-            (So this Neural network can only fit affine functions, in other words, this is essentially linear regression.)
+Suppose that $N$ has some depth D and $G^{1},...,G^{D}$ are all linear activations ($G^{i}{\vx} = {\vx}$ $\forall i$). Then $N{\vx} = F^{D-1}F^{D-2}...F^{1}F^{0}{\vx}$.
+    \begin{remark}
+        The composition of affine maps is an affine map, so $\exists W, {\vb}$ such that $N{\vx} = W{\vx} + {\vb}$. So this Neural network can only fit affine functions, in other words, this is essentially linear regression.
     \end{remark}
 \end{example}
 
@@ -2881,10 +2863,10 @@ $L(f_{model}({\vx};W,B),{\vy}) = \norm{f_{model}({\vx};W,B) - {\vy}}_{2}^{2}$\\
 \end{note}
 
 \section{Neural Networks as a maximum likelihood estimator}
-Lets assume X and Y are sampled from a distribution $p_{data}({\vx},{\vy})$ under I.I.D. assumptions.\\
-Now let $p_{model}({\vy}|{\vx};\theta)$ be a model for $p_{data}({\vy}|{\vx})$, which has been parameterized by $\theta \in \mathbb{R}^{N}$ for some N.\\
-Then $\theta_{ML} = \underset{\theta}{\mathrm{argmin}}(-\sum_{i=1}^{m}log(p_{model}({\vy}^{i}|{\vx}^{i};\theta))) $.\\
-\\
+Lets assume X and Y are sampled from a distribution $p_{data}({\vx},{\vy})$ under I.I.D. assumptions.
+Now let $p_{model}({\vy}|{\vx};\theta)$ be a model for $p_{data}({\vy}|{\vx})$, which has been parameterized by $\theta \in \mathbb{R}^{N}$ for some N.
+Then $\theta_{ML} = \underset{\theta}{\mathrm{argmin}}(-\sum_{i=1}^{m}log(p_{model}({\vy}^{i}|{\vx}^{i};\theta))) $.
+
 \begin{example}
 Suppose we choose $P_{model}$ to be Gaussian:\\
 $P_{model}({\vy}|{\vx};W,B) =$ N$({\vy};N{\vx},\sum)$ where N is the normal distribution and $N$ is the neural network.\\
@@ -3717,7 +3699,7 @@ As its name suggests, Binary Cross Entropy Loss is used for binary classifiers, 
 
 
 \section{Vanishing Gradient Problem}
-In practice, the function of a neural network N is non-convex, so there may be flat regions one may"get stuck" in during (stuck-stic) gradient descent.
+In practice, the function of a neural network N is non-convex, so there may be flat regions one may "get stuck" in during (stuck-stic) gradient descent.
 
 \begin{center}
 \includegraphics[width=4in]{images/Chapter 10/10.5(1).png}
@@ -3964,7 +3946,7 @@ This is our motivation for introducing a new type of layer to our neural network
 %---------------definition----------------------------------------------------------
 \begin{definition}
 %undefined control sequence?
-    A discrete 1-D signal is a sequence $y=(y_i)_{i\in\mathbb{Z}}$ of real numbers and is $L^1$-finite if $\sum|y_k| < \infty$ and compact if there exists N such that $|k| >$ N $\Rightarrow y_k=0$.
+    A discrete 1-D signal is a sequence $y=(y_i)_{i\in\mathbb{Z}}$ of real numbers and is $L^1$-finite if $\sum |y_k| < \infty$ and compact if there exists N such that $|k| > N$ implies $y_k=0$.
     A 1-D kernel is a compact support signal of weights, w. Where $w = (w_i)_{i\in\mathbb{Z}}$. Since usually we want w to be a probability distribution, then $\Sigma_{i}w_i = 1$.
 \end{definition}
 %----------------------------------------------------------------------------------
@@ -4259,18 +4241,21 @@ To illustrate the power of pooling in terms of computational efficiency, we retu
 - $\theta $ is a parameter of $f$ and is independent of $t$ \\ \\ \\ \\ \\
 
 \begin{example} 
-Let $f(x,\theta) = \sigma(\theta x),  \theta \in \R,  |\theta| < 1$\\
-Consider $h_0=2, \theta=0.5$\\
-$h_1 = \sigma(1) \approx 0.73$\\
-$h_2 = \sigma(0.73 \times 0.5 ) \approx 0.59$\\
-$\vdots$\\
-$h_{100} = 0.5708 \ldots$\\
-It converges to $0.5708$  (true for any value of $h_0$).
+Let $f(x,\theta) = \sigma(\theta x),  \theta \in \R,  |\theta| < 1$.
+Consider $\theta=0.5$:
+\begin{align*}
+    h_0&=2\\
+    h_1 &= \sigma(1) \approx 0.73\\
+    h_2 &= \sigma(0.73 \times 0.5 ) \approx 0.59\\
+    &\vdots\\
+    h_{100} &= 0.5708 \ldots
+\end{align*}
+The reader can check that this converges to approximately $0.5708$ and that this is surprisingly true for any value of $h_0$.
 \end{example} 
 % .i.e. $H^{(l)}$ and $K^{(l)}$ has size $\frac{H^{(l-1)}-h}{a}+1$ and $\frac{K^{(l-1)}-k}{a}+1$ respectively.
-\subsection{Representing a dynamic state system graphically} A dynamic system can be driven by an external signal $X_t$. The values of X could be the words in a sentence and can be represented by the following statement:
+\subsection{Representing a dynamical state system graphically} A dynamical system can be driven by an external signal $X_t$. The values of X could be the words in a sentence and can be represented by the following statement:
 $$\vh_t=f(\vh_{t-1}, X_t; \theta)$$
-There are two ways to "graph" a dynamic system, the unfolded diagram on the right and the circuit diagram on the left. The circuit diagram is essentially a compressed version of the unfolded diagram.
+There are two ways to "graph" a dynamical system, the unfolded diagram on the right and the circuit diagram on the left. The circuit diagram is essentially a compressed version of the unfolded diagram.
 
 \begin{figure}[H]
     \centering

@@ -4,7 +4,7 @@
 
 Suppose we have a data set $\MX\in\R^{m \times n}$, where as usual each data point corresponds to $\MX_{i,*}\in\R^n$, and that under reasonable conjecturing or experimentation we determine the data might be separated in groups. One such algorithm would be $k$-means clustering.
 
-First, we need to initialize some parameters. Pick $k$, the number of clusters in which we desire to separate the data points. Choose $M=\{\vmu_1, \vmu_2, \cdots, \vmu_k\} \subset\R^n$ to be arbitrary points in $n$-space. Define $\vpi\in\R^m$ such that $\pi_i = j$ if $\MX_{i,*}$ is the closest to $\vmu_j$. 
+First , we need to initialize some parameters. Pick $k$, the number of clusters in which we desire to separate the data points. Choose $M=\{\vmu_1, \vmu_2, \cdots, \vmu_k\} \subset\R^n$ to be arbitrary points in $n$-space. Define $\vpi\in\R^m$ such that $\pi_i = j$ if $\MX_{i,*}$ is the closest to $\vmu_j$. 
 
 The cost function that this learning algorithm will minimize is
 
@@ -146,7 +146,7 @@ Since the data selected exhibits very clear clustering, the algorithm terminates
         \end{axis}
     \end{tikzpicture}
     \caption{$\vmu$ and $\vpi$ after one iteration}
-    \label{fig:9.1Ex2p}
+    \label{fig:9.1Ex2}
 \end{figure}
 
 \end{example}

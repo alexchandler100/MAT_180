@@ -24,7 +24,7 @@ In a machine learning context, experience is a set of examples that we wish to l
 \end{definition}
 
 \begin{example}
-A classic example is the Iris dataset. Suppose we have the following measurements for 150 Iris plants.\\
+A classic example is the Iris dataset. Suppose we have the following measurements for 150 Iris plants: petal length, petal width, sepal length, sepal width (see Figure \ref{iris-fig}). Thus our experience consists of a matrix $\MX\in\R^{(150,4)}$.
 
 \begin{figure}
 \begin{tabular}{p{6cm}c}
@@ -42,18 +42,11 @@ A classic example is the Iris dataset. Suppose we have the following measurement
 &
 $\vcenter{\hbox{\includegraphics[width=2.5in]{images/Chapter6/iris_diagram_labeled.jpg} }}$
 \end{tabular} 
-\caption{(Left) Dataset of Iris feature measurements with columns petal length, petal with, sepal length, and sepal width in that order. (Right) Diagram of an Iris with features labeled.}
+\caption{(Left) Dataset of Iris feature measurements with columns petal length, petal width, sepal length, and sepal width in that order. (Right) Diagram of an Iris with features labeled.}
+\label{iris-fig}
 \end{figure} 
 
-This dataset is our experience. It may also include a vector $\vy$ that catagorizes the plants. For example, we could know that each flower is one of three species, and have the following vector $\vy$: 
-$$\MX = 
-\begin{bmatrix}
-    3 \\
-    1 \\
-    2 \\
-    \vdots \\
-    1
-    \end{bmatrix}$$
+It may also include a \textit{label} vector $\vy$ that categorizes the plants. For example, we could know that each flower is one of three species, and have the label vector $\vy = [3 1 2 \hdots 1]\in[3]^{150}$.
 
 \end{example}
 
@@ -63,21 +56,22 @@ A learning algorithm with both $\MX, \vy$ is called \define{supervised}. A learn
 When using an unsupervised algorithm, we determine a probability distribution $p(\vx)$ where $\vx \in \mathbb{R}^n$ corresponds to $x_{i,\ast}$. When using a supervised algorithm, we usually want to determine the probability $p(y|\vx)$. 
 
 \begin{definition}
-If $vy$ takes discrete values, we call this a \define{classification} problem. If $vy$ takes continuous values, we call this \define{regression} problem. 
+If $\vy$ takes discrete values, we call this a \define{classification} problem. If $\vy$ takes continuous values, we call this \define{regression} problem. 
 \end{definition}
 
 
 \subsection{Task}
 
-The next part to understand about learning algorithms is the task $T$. Again, we will improve our understanding through the examples of classification and regression.
-
-The task $T$ of (supervised) classification is generally the following: Given $(\MX, \vy)$ with $y_i \in \{ 1, 2, \ldots, k \}$, produce a function $f: \R^n \to \{ 1, 2, \ldots, k \}$ such that $f(\vx) = y$ performs well as a prediction.
+The task $T$ of a supervised learning algorithm is generally the following. Let $S$ be the set of possible labels. For classification problems, $S = [k]$ for some $k\in\N$ and for regression we can take $S = \R$. Given $(\MX, \vy)\in\R^{(m,n)}\times S^m$, produce a function $f: \R^n \to S$ such that $f(\MX)\in S^m$ is close to $\vy$ according to some measure of distance suited to our task. 
 
 \begin{example}
-Suppose $\MX_{i,\ast}$ contains the pixel data of a grayscale image, and $\vy$ has the labels for cats and dogs, say 1 for cats and 2 for dogs arbitrarily. Then one possible task $T$ for a learning algorithm could be to classify a given image $\vx$ as a 1 or 2, or a dog or a cat.
+Suppose the rows $\MX_{i,\ast}$ contain pixel data of 8-bit gray scale $100\times 100$ images, and $\vy$ has the labels $\{\text{cat},\text{dog}\}$ which we take to be $[2]$. In this case we have $\MX\in[256]^{(m,100^2)}$ and $\vy\in[2]^m$.
+\begin{center}
+    \includegraphics[width=2.5in]{images/Chapter6/grayscale_cat.png}
+    \includegraphics[width=2.5in]{images/Chapter6/grayscale_dog.png}
+\end{center}
+We will see in later chapters that a great way of coming up with a function $f:[256]^{100^2} \to [2]$ to accomplish this task is by acting on the rows of $\MX$ by a \textit{convolutional neural network (CNN)}.
 \end{example}
-
-The task $T$ of regression is similar to that of classification: Given $(\MX, \vy)$ with $y_i \in \R$, produce a function $f: \R^n \to \R$ such that $f(\vx) = y$ performs well as a prediction.
 
 \begin{example}
 Housing prices are notoriously difficult to predict, but you might want to use data about houses to determine a good price. One way to do this is to collect data on houses and their prices, such as square footage, number of bedrooms, number of bathrooms, and proximity to schools. Each house's data would be kept in $\MX_{i,\ast}$, with the corresponding price in $y_i$. The task $T$ of a learning algorithm with this information could be to predict the price of a house given the data.

@@ -3,20 +3,27 @@
 
 %\chapterimage{Main/head1.png} % chapter 1
 
-In this chapter we go through a quick overview of the mathematical foundations needed in order to properly understand the fine details of deep learning. In Section \ref{vec-spaces} we recall the basics of vector spaces, norms, and linear maps. This leads us to the important concepts of eigenvalue and singular value decompositions in Section \ref{eig-sing}. 
+In this chapter we go through a quick overview of the mathematical foundations needed for a thorough study of deep learning. In Section \ref{vec-spaces} we recall the basics of vector spaces, norms, and linear maps. This leads us to the important concepts of eigenvalue and singular value decomposition in Section \ref{eig-sing}. 
 
+% DID NOBODY DO THIS??
 %In Section \ref{prob-theory} we review the basics of probability theory: random variables, probability distributions, expectation values, variance, and so on. Finally we conclude with Section \ref{optim} where we discuss some numerical computation techniques useful in the field of optimization. 
 
-\section{Vector Spaces and Linear Maps}\label{vec-spaces}
+\section{Vector Spaces}\label{vec-spaces}
 
-We assume the reader has some familiarity with linear algebra so we simply review some of the major concepts needed to proceed, often without proof. The main object of study in linear algebra is the vector space. We begin our study with the definition of a vector space.
+We assume the reader has some familiarity with linear algebra so we simply review some of the major concepts needed to proceed, often without proof. The main object of study in linear algebra is the vector space.
 
 \begin{definition}
-A \define{vector space} over a field $\mathbb F$ is a set $V$ closed under addition and scalar multiplication satisfying the properties: For any $\vu, \vv, \vw \in V$ and $c, d \in \mathbb F$,
+A \define{real vector space} is a triple $(V,+,\cdot)$ where $V$ is a set and
+
+\begin{align*}
+    +:V\times V\to V & \ \  \text{(\textit{vector addition})} \\
+    \cdot\ :\R\times V\to V & \ \  \text{(\textit{scalar multiplication})}
+\end{align*}
+satisfy the following properties. For any $\vu, \vv, \vw \in V$ and $c, d \in \R$,
 \begin{enumerate}
 \item $\vu + \vv = \vv + \vu$ 
 \item $(\vu + \vv) + \vw = \vu + (\vv + \vw)$ 
-\item There exists a zero vector $\vzero$ such that $\vu + \vzero = \vu$
+\item There exists $\vzero\in V$ such that $\vu + \vzero = \vu$ for any $\vu\in V$
 \item For each $\vu \in V,$ there exists a vector $-\vu$ such that $\vu + (-\vu) = \vzero$
 \item  $c(\vu + \vv) = c\vu + c\vv$
 \item $(c+ d) \vu = c\vu + d\vu$
@@ -25,28 +32,18 @@ A \define{vector space} over a field $\mathbb F$ is a set $V$ closed under addit
 \end{enumerate}
 \end{definition}
 
-\begin{remark}
-    One often studies vector spaces over more general fields, but for our purposes we work only over $\mathbb{R}$ and $\mathbb C$.
-\end{remark}
-
-The most common vector space we will use is the space $\R^n$ of all $n$-tuples of real numbers. We always write the elements of $\R^n$ as column vectors between square brackets:
+The most common vector space we will use is the space $\R^n$ of all $n$-tuples of real numbers, with $+$ and $\cdot$ defined point-wise. We take the convention that elements of $\R^n$ are column vectors:
 $$\vx = \begin{bmatrix}x_1\\x_2\\\dots\\x_n\end{bmatrix}$$
-but sometimes we may wish to save space and write them as row vectors, in which case we may use the transpose notation (which we wait until Definition \ref{trans-def} to introduce formally)
-$$\vx = [x_1, x_2, \dots x_n]^\intercal.$$
-
-\begin{example}
-In $\mathbb R^2 $ we have
-$$[1,2]^\intercal + [-3,4]^\intercal = [-2,6]^\intercal$$
-$$10 \cdot [-1,1]^\intercal = [-10,10]^\intercal$$
-\end{example}
+but sometimes we may wish to save space and write them as row vectors:
+$\vx = [x_1, x_2, \dots x_n]$ when no confusion can arise from doing so. In this notation we have $[x_1,\dots,x_n] + [y_1,\dots,y_n] = [x_1+y_1,\dots,x_n+y_n]$ and $r[x_1,\dots,x_n] = [rx_1,\dots,rx_n]$ for $r, x_1,\dots,x_n,y_1,\dots,y_n\in\R$. In other words, by convention we identify $\R^n$ with the matrix space $\R^{(n,1)}$ but for convenience may choose to identify $\R^n$ with $\R^{(1,n)}$ when it suits us (see Section \ref{matrix-section}). 
 
 \subsection{Span, Linear Independence, Basis}
 
 There is no preferred coordinate system in an abstract vector space. In order to prescribe meaningful coordinate representations of vectors, we need the concept of a basis. For this, we first need to discuss the concepts of linear independence and span.
 
 \begin{definition}
-Suppose we are given a set of vectors $S = \{\vv_1, \ldots, \vv_n \} \subset V$. Then the \define{span} of $S$ is the set 
-$$\spann(S) := \{a_1\vv_1 + \ldots + a_k \vv_k : \vv_i \in S, a_i \in \mathbb R \ \forall i \ \}$$
+The \textit{span} of $S = \{\vv_1, \ldots, \vv_n \} \subset V$ is the set 
+$$\spann(S) := \{a_1\vv_1 + \ldots + a_k \vv_k : a_1,\dots,a_k \in \mathbb R \}$$
 \end{definition}
 
 \begin{example}
@@ -121,9 +118,9 @@ Two norms $\norm{\cdot}$ and $\norm{\cdot}'$ are said to be equivalent if there 
 $c_{\text{low}} \norm{\vx} \leq \norm{\vx}' \leq c_{\text{high}} \norm{\vx}$
 for all $\vx \in \mathbb R^n$. The equivalence theorem of norms in finite dimension tells us that all norms on $\mathbb R^n$ are equivalent. We leave it to the reader to seek a proof of this surprising fact, if desired.
 
-\section{Linear Mappings} 
+\section{Linear Maps}
 
-In mathematics, there is the common notion that to properly study objects (vector spaces in our case), one should study structure preserving maps between the objects. This leads us to the notion of linear maps.
+It is a pervasive concept in mathematics that in order to understand a given class of objects, one must study the maps between such objects which preserve the defining structure of the objects. In our case, this leads us to the study of linear maps.
 
 \begin{definition}\label{linear-def}
 Suppose $V$ and $V'$ are vector spaces. Then a mapping $T : V \rightarrow V'$ is \define{linear} if it satisfies the following for all $\vv_1, \vv_2 \in V$ and $c \in \mathbb C$:
@@ -160,7 +157,7 @@ $$T([x,y]^\intercal) = x T(\ve_1) + y T(\ve_2) = x [3,2,0]^\intercal
 + y [0,1,-1]^\intercal. $$
 \end{example}
 
-\subsection{Matrices}
+\subsection{Matrices}\label{matrix-section}
 
 Once we choose bases, linear maps between vector spaces can be represented by 2-dimensional arrays called matrices. Linear maps are often easier to study by thinking about the matrices which represent them. 
 
@@ -347,7 +344,7 @@ We state without proof that for any matrices $\MA,\MB$ of compatible dimensions,
 \end{equation} 
 We encourage the reader to seek out a proof of this fundamental result, along with the fact that a matrix has nonzero determinant if and only if that matrix is invertible.
 
-\subsection{Orthogonality and The Inner Product Space $\R^n$}
+\subsection{Orthogonality and The Inner Product Space \texorpdfstring{$\R^n$}{Rn}}
 
 One of the most important constructions we are leading towards is the singular value decomposition (SVD) of a matrix. In order to define the SVD, we need the concept of orthogonality.
 

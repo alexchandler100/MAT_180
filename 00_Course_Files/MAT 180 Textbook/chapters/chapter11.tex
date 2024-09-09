@@ -231,7 +231,7 @@ To illustrate the power of pooling in terms of computational efficiency, we retu
     \centering
     \includegraphics[scale=0.35]{images/Chapter 11/poolingNetwork.png}
     \caption{Neural network using convolutional layers and pooling to predict images of cat, dog, bear and pig. Note that the image size decreases at each step.}
-    \label{fig:11.1}
+    \label{pooling-fig}
 \end{figure}
 \noindent Now the fully connected layer at the last step involves only a single scalar output of magnitude $3f^{(1)}f^{(2)}$, instead of flattening a $H^{(2)} \times K^{(2)} \times 3 \times f^{(1)}f^{(2)}$ in the original architecture. It is good practice is to pool the data after each convolutional operation, as consecutive convolutional operations are computationally costly.
 \end{example}
@@ -267,7 +267,7 @@ To illustrate the power of pooling in terms of computational efficiency, we retu
             
     \item $$\textbf{I}_L = \begin{bmatrix}
         0 & 0 \\ 1 & 0 \\ 0 & 1 \\ 0 & 0
-    \end{bmatrix}, \textbf{I}_R = \textbf{I}_L^{\top}$$
+    \end{bmatrix}, \textbf{I}_R = \textbf{I}_L^{\intercal}$$
     
     \item Inputs are matrices $\textbf{X}$, and a natural number $p$. We will use Python-like pseudocode and Numpy methods, although their operations can be generalized to any language which support such features.
     \begin{algorithm}
@@ -277,7 +277,7 @@ To illustrate the power of pooling in terms of computational efficiency, we retu
         \State $\textbf{I}_L, \textbf{I}_R$ = \text{np.eye(m)},\;\text{np.eye(n)}
         \State rowZero = np.atleast\_2d(np.zeros($\textbf{I}_L$.shape[1]))
         \State colZero = np.atleast\_2d(np.zeros($\textbf{I}_R$.shape[1]))
-        \State colZero = colZero.$\top$
+        \State colZero = colZero.$\intercal$
         \State $\textbf{I}_L$ = np.concatenate(($\textbf{I}_L$,rowZero), axis=0)
         \State $\textbf{I}_L$ = np.concatenate((rowZero,$\textbf{I}_L$), axis=0)
         \State $\textbf{I}_R$ = np.concatenate(($\textbf{I}_R$,colZero), axis=1)
@@ -289,11 +289,3 @@ To illustrate the power of pooling in terms of computational efficiency, we retu
 	\end{algorithmic} 
 \end{algorithm}
 \end{enumerate}
-
-
-
-
-
-
-
-

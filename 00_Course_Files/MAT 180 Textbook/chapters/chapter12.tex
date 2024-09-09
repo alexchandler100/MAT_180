@@ -1,4 +1,8 @@
 
+
+
+
+
 \chapter{Recurrent Neural Networks}
 
 \section{Introduction}
@@ -44,6 +48,7 @@ There are two ways to "graph" a dynamical system, the unfolded diagram on the ri
     \caption{Circuit diagram (left) and Unfolded diagram (right) are two equivalent ways to represent a Recurrent Neural Network. At each time step ($\blacksquare$), input x is incorporated into state h such that the next state h is influenced by both the current x input and previous x inputs.}
     \label{fig:12.1}
 \end{figure}
+
 \section{Recurrent Neural Networks (RNNs)}
 
 An RNN is a state system $(h_{t-1}, X_t; \theta)$ together with a presented way to associate an output $Y_t$ at each time step $(t>0)$.
@@ -101,7 +106,7 @@ but one can also use Cross Entropy Loss, Binary Cross Entropy Loss, etc., depend
     \centering
     \includegraphics[scale=0.25]{images/Chapter12/RNN_with_loss.png}
     \caption{Loss is calculated between the true y values and the RNN predicted o values at each time step. If one wants a single output from the RNN, the loss can be calculated only between the last y and o values in the sequence.} 
-    \label{fig:12.2}
+    \label{fig-rnn-loss}
 \end{figure}
 
 \begin{example}
@@ -119,7 +124,7 @@ The RNN will take each of the words as input simultaneously and outputs a binary
     \centering
     \includegraphics[scale=0.25]{images/Chapter12/sentiment_analysis.png}
     \caption{Given the sequence of words, the RNN makes a binary prediction of positive or negative.}
-    \label{fig:12.2}
+    \label{fig-rnn}
 \end{figure}
 
 

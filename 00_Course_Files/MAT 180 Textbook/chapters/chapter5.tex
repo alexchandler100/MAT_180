@@ -111,6 +111,7 @@ $$\MC^\intercal\MX^\intercal\MX\MC = \sum^n_{i=1} a_ia_i\lambda_i = \sum^n_{i=1}
 Because $\lambda_1$ is defined to be the largest eigenvalue and $\sum^n_{i=1} a^2_i = 1$, $\MC^\intercal\MX^\intercal\MX\MC$ is maximized in the case where $a_1 = 1$ and $a_2 = a_3 = ... = a_n = 0$.  This gives us $\MC^\intercal\MX^\intercal\MX\MC = \lambda_1$, but more importantly, these conditions give us the maximizing $\MC$:
 $$\MC = \sum^n_{i=1} a_i\vv_i = \vv_1$$
 This resulting vector is known as our first principal component.  This leads to our final conclusion:
+% TODO this should be precise.. not using words like "optimal"
 \begin{theorem}
     For principal component analysis, the optimal encoding function is $g : \R^n \to \R^k$ with:
     $$g(\vx) = \MD^\intercal\vx,$$

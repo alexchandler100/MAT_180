@@ -1,0 +1,179 @@
+
+\chapter{Techniques of Dimensionality Reduction} \label{dim-reduction}
+
+\section{Principal Component Analysis}
+
+Principal component analysis (PCA) is closely related to singular value decomposition (SVD).  The goal is compression.  Often, we don't know which components of our data will be important, so for each data point, we record more information than necessary.  A single point might have thousands of components of information.  Principle Component Analysis ranks each component by importance; then we trim the unhelpful components.  This simplifies our data so that we can easily correlations.  In short, principal component analysis analyzes our data to highlight the important/principal components.
+
+We begin with a data set of $m$ elements.  Each element has $n$ components.  So our data set is $\MX \in \R^{m \times n}$, and we will trim this to a set of $k$ elements.  We also want the trimming to be reversible, so we need two functions, one that trims/encodes the data and one that rebuilds/decodes it.  $g: \R^n \to \R^k$ will be our encoding function, and $f: \R^k \to \R^n$ will be our decoding function.
+%Include picture similar to the visualization from lecture.  Should be easy with tikz.
+We cannot perfectly reverse the trimming, so when defining these functions, we want to minimize the loss.  We want:
+$$f(g(\vx)) \approx \vx$$
+To achieve this, we define $g(\vx)$ as the vector that minimizes the difference between $\vx$ and $f(g(\vx))$:
+$$g(\vx) = \underset{\vy}{\argmin} \|\vx - f(\vy)\|^2_2$$
+($\underset{\vy}{\argmin}$ means the argument $\vy$ that minimizes the expression $\|\vx - f(\vy)\|^2_2$.  Also, we do not need to square $\|\vx - f(\vy)\|_2$, but doing so simplifies computations and the minimum $\vy$ will still be the same.)
+
+Our decoding function $f$ will simply multiply $g$ with some matrix $\MD$:
+$$f(g(\vx)) = \MD g(\vx)$$
+(In general, $f(\vy) = \MD \vy.)$  $\MD$ is a matrix in $\R^{n \times k}$ with orthonormal columns.  (I.e., the columns of $\MD$ are all orthogonal with each other and are all unit vectors.)
+
+Now, we can evaluate (step-by-step) $g(\vx) = \underset{\vy}{\argmin} \|\vx - f(\vy)\|^2_2$ to find the minimum $\vy$:
+$$g(\vx) = \underset{\vy}{\argmin} \|\vx - f(\vy)\|^2_2$$
+$\underset{\vy}{\argmin} \|\vx - f(\vy)\|^2_2$ returns the largest eigenvalue of the matrix $(\vx - f(\vy))^\intercal(\vx - f(\vy))$, but in this case $(\vx - f(\vy))^\intercal(\vx - f(\vy))$ evaluates to a $1 \times 1$ matrix, so the matrix itself is also the eigenvalue.  Therefore, $\underset{\vy}{\argmin} \|\vx - f(\vy)\|^2_2 = (\vx - f(\vy))^\intercal(\vx - f(\vy))$, so:
+\begin{align*}
+    g(\vx) &= \underset{\vy}{\argmin} ((\vx - f(\vy))^\intercal(\vx - f(\vy))) \\
+&= \underset{\vy}{\argmin} (\vx^\intercal\vx - f(\vy)^\intercal\vx - \vx^\intercal f(\vy) + f(\vy)^\intercal f(\vy))
+\end{align*}
+Note: The actual value of this expression does not matter; we are just looking for the $\vy$ that minimizes it, so the constant terms like $\vx^\intercal\vx$ have no effect on the result, and we can safely eliminate them:
+$$g(\vx) = \underset{\vy}{\argmin} (-f(\vy)^\intercal\vx - \vx^\intercal f(\vy) + f(\vy)^\intercal f(\vy))$$
+We can add $f(\vy)^\intercal\vx$ and $\vx^\intercal f(\vy)$ since both are equivalent to $f(\vy) \cdot \vx$.
+\begin{align*}
+g(\vx) &= \underset{\vy}{\argmin} (-2\vx^\intercal f(\vy) + f(\vy)^\intercal f(\vy))\\
+&= \underset{\vy}{\argmin} (-2\vx^\intercal(\MD\vy) + (\MD\vy)^\intercal(\MD\vy))\\
+&= \underset{\vy}{\argmin} (-2\vx^\intercal\MD\vy + \vy^\intercal\MD^\intercal\MD\vy)
+\end{align*}
+Since $\MD$ is orthogonal $\MD^\intercal\MD = \MI$.
+$$g(\vx) = \underset{\vy}{\argmin} (-2\vx^\intercal\MD\vy + \vy^\intercal\vy)$$
+We can now find the minimum $\vy$ by taking the derivative with respect to $\vy$ and setting it equal to 0.
+$$0 = \frac{\partial}{\partial\vy}(-2\vx^\intercal\MD\vy + \vy^\intercal\vy) = -2\frac{\partial}{\partial\vy}(\vx^\intercal\MD\vy) + \frac{\partial}{\partial\vy}(\vy^\intercal\vy)$$
+We use two rules of matrix differentiation to evaluate this.  For $\frac{\partial}{\partial\vy}(\vy^\intercal\vy)$, we use:
+\begin{theorem}
+    Given a constant matrix $\MA$:
+    $$\frac{\partial}{\partial\vy}(\vy^\intercal\MA\vy) = \vy^\intercal(\MA + \MA^\intercal)$$
+\end{theorem}
+For $\MA$ we can substitute the identity matrix to get:
+$$0 = -2\frac{\partial}{\partial\vy}(\vx^\intercal\MD\vy) + \vy^\intercal(\MI + \MI^\intercal) = -2\frac{\partial}{\partial\vy}(\vx^\intercal\MD\vy) + 2\vy^\intercal$$
+We use a more complicated rule for the remaining derivative:
+\begin{theorem}
+    For functions $f$ and $g$ and matrix $\MA$ with compatible dimensions:
+    $$\frac{\partial}{\partial\vy}f(\vy)^\intercal\MA g(\vy) = g(\vy)^\intercal\MA^\intercal\frac{\partial}{\partial\vy}f(\vy) + f(\vy)^\intercal\MA\frac{\partial}{\partial\vy}g(\vy)$$
+\end{theorem}
+(In our case, $f(\vy) = \vx, \MA = \MD$, and $g(\vy) = \vy$.)
+We then get the following:
+\begin{align*}
+0 &= -2\frac{\partial}{\partial\vy}(\vx^\intercal\MD\vy) + 2\vy^\intercal \\
+&= -2\left(\vy^\intercal\MD^\intercal\frac{\partial}{\partial\vy}\vx + \vx^\intercal\MD\frac{\partial}{\partial\vy}\vy\right) + 2\vy^\intercal\\
+&= -2(0 + \vx^\intercal\MD\MI) + 2\vy^\intercal\\
+&= -2\vx^\intercal\MD + 2\vy^\intercal\\
+&= -\vx^\intercal\MD + \vy^\intercal
+\end{align*}
+This implies $\vx^\intercal\MD = \vy^\intercal$, and we can take the transpose of both sides and get $\vy = \MD^\intercal\vx$.  Therefore, our optimal encoding function is:
+$$g(\vx) = \MD^\intercal\vx$$
+Now we need to solve for $\MD$.
+Recall that our goal is to get $f(g(\vx))$ as close as possible to $\vx$, but we are trying to do this for every data point in our set.  So we want the matrix $\MD$ that accumulates the least error over all the our data points:
+\begin{align*}
+    \MD &= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \sum^m_{i=1} \|\vx^{(i)} - f(g(\vx^{(i)}))\|^2_2\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \sum^m_{i=1} \|\vx^{(i)} - f(\MC^\intercal\vx^{(i)})\|^2_2\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \sum^m_{i=1} \|\vx^{(i)} - \MC\MC^\intercal\vx^{(i)}\|^2_2\\
+\end{align*}
+($\MC$ is just another name for our matrix $\MD$, and $\vx^{(i)} \in \{\vx^{(1)}, \vx^{(2)}, ..., \vx^{(m)} \} \in \R^n$ is the $i$th data point of our data set.  We are squaring the expression for convenience, which does not affect the result.)
+
+We do not want to deal with the complications of a summation; we can rewrite the equation in terms of matrices.  We essentially replace $\vx^{(i)}$ with our entire data set $\MX \in \R^{m \times n}$:
+$$\MX = \begin{bmatrix} \ldots & \vx^{(1)} & \ldots\\ & \vdots &\\ \ldots & \vx^{(m)} & \ldots \end{bmatrix}$$
+%Give more clarification
+Which allows us to simplify our definition of $\MD$ to be: 
+\begin{align*}
+    \MD &= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \|\MX - \MX\MC\MC^\intercal\|^2_\Fro\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \trace((\MX - \MX\MC\MC^\intercal)^\intercal(\MX - \MX\MC\MC^\intercal))\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \trace((\MX^\intercal - \MC\MC^\intercal\MX^\intercal)(\MX - \MX\MC\MC^\intercal))\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \trace(\MX^\intercal\MX - \MX^\intercal\MX\MC\MC^\intercal - \MC\MC^\intercal\MX^\intercal\MX + \MC\MC^\intercal\MX^\intercal\MX\MC\MC^\intercal)
+\end{align*}
+As before, we can eliminate constant terms because this will not change how $\MC$ minimizes the expression:
+$$\MD = \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} \trace(-\MX^\intercal\MX\MC\MC^\intercal - \MC\MC^\intercal\MX^\intercal\MX + \MC\MC^\intercal\MX^\intercal\MX\MC\MC^\intercal)$$
+We can also distribute the trace function since it is linear:
+$$\MD = \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} (-\trace(\MX^\intercal\MX\MC\MC^\intercal) - \trace(\MC\MC^\intercal\MX^\intercal\MX) + \trace(\MC\MC^\intercal\MX^\intercal\MX\MC\MC^\intercal))$$
+Now, we use the property $\trace(\MA\MB) = \trace(\MB\MA)$ to move $\MC\MC^\intercal$ to the end of the second and third terms.  In the third term, this allows us to use the fact $\MC^\intercal\MC = \MI$:
+\begin{align*}
+    \MD &= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} (-\trace(\MX^\intercal\MX\MC\MC^\intercal) - \trace(\MX^\intercal\MX\MC\MC^\intercal) + \trace(\MX^\intercal\MX\MC\MC^\intercal\MC\MC^\intercal))\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} (-\trace(\MX^\intercal\MX\MC\MC^\intercal) - \trace(\MC\MC^\intercal\MX^\intercal\MX) + \trace(\MX^\intercal\MX\MC\MC^\intercal))\\
+&= \underset{\MC : \MC^\intercal\MC = \MI}{\argmin} (-\trace(\MX^\intercal\MX\MC\MC^\intercal))
+\end{align*}
+We remove the negative sign by changing $\argmin$ to $\argmax$:
+$$\MD = \underset{\MC : \MC^\intercal\MC = \MI}{\argmax} (\trace(\MC^\intercal\MX^\intercal\MX\MC))$$
+We have thus proven the following lemma:
+\begin{lemma}
+    The optimal encoding function is $g(\vx) = \MD^\intercal\vx$, where $\MD = \underset{\MC : \MC^\intercal\MC = \MI}{\argmax} (\trace(\MC^\intercal\MX^\intercal\MX\MC)$.
+\end{lemma}
+This is close to the final result, but we can do more to find $\MD$.  We want to show that the columns of $\MD$ are the largest $k$ eigenvalues of $\MX^\intercal\MX$.  The first step is to show that this is true for $k = 1$.  In this case, $\MC$ is simply a unit vector, so $\MC^\intercal\MX^\intercal\MX\MC$ is a $1 \times 1$ matrix.  This then implies that $\trace(\MC^\intercal\MX^\intercal\MX\MC) = \MC^\intercal\MX^\intercal\MX\MC$.  We observe that the matrix $\MX^\intercal\MX$ is symmetric, so by Spectral Theorem, $\MX^\intercal\MX$ has $n$ orthonormal eigenvectors with non-negative eigenvalues.  We denote the eigenvectors as $\vv_1, \vv_2, ..., \vv_n$, where $\lambda_1 \geq \lambda_2 \geq ... \geq \lambda_n \geq 0$.
+
+Because the eigenvectors are orthogonal, they form a basis of $\R^{n \times n}$.  This implies that $\MC \in \R^n$ is a linear combination of the eigenvectors:
+$$\MC = \sum^n_{i=1} a_i\vv_i$$
+(Since $\MC$ is a unit vector, $\sum^n_{i=1} a^2_i = 1$.)  We make the above substitution and continue with the goal of maximizing $\MC^\intercal\MX^\intercal\MX\MC$:
+$$\MC^\intercal\MX^\intercal\MX\MC = \left(\sum^n_{i=1} a_i\vv_i\right)^\intercal\MX^\intercal\MX\left(\sum^n_{j=1} a_j\vv_j\right)$$
+We can rewrite this as a single summation:
+$$\MC^\intercal\MX^\intercal\MX\MC = \sum^n_{i,j=1} a_i\vv^\intercal_i\MX^\intercal\MX a_j\vv_j$$
+$$= \sum^n_{i,j=1} a_i\vv^\intercal_i\MX^\intercal\MX a_j\vv_j$$
+$$= \sum^n_{i,j=1} a_ia_j\vv^\intercal_i\MX^\intercal\MX \vv_j$$
+Since $\vv_j$ is an eigenvector, $\MX^\intercal\MX \vv_j = \lambda_j\vv_j$:
+$$\MC^\intercal\MX^\intercal\MX\MC = \sum^n_{i,j=1} a_ia_j\vv^\intercal_i\lambda_j\vv_j = \sum^n_{i,j=1} a_ia_j\lambda_j\vv^\intercal_i\vv_j$$
+Because the eigenvectors are orthonormal, $\vv^\intercal_i\vv_j = 0$ except when $i = j$, in which case $\vv_i^\intercal\vv_i = 1$.
+$$\MC^\intercal\MX^\intercal\MX\MC = \sum^n_{i=1} a_ia_i\lambda_i = \sum^n_{i=1} a^2_i\lambda_i$$
+Because $\lambda_1$ is defined to be the largest eigenvalue and $\sum^n_{i=1} a^2_i = 1$, $\MC^\intercal\MX^\intercal\MX\MC$ is maximized in the case where $a_1 = 1$ and $a_2 = a_3 = ... = a_n = 0$.  This gives us $\MC^\intercal\MX^\intercal\MX\MC = \lambda_1$, but more importantly, these conditions give us the maximizing $\MC$:
+$$\MC = \sum^n_{i=1} a_i\vv_i = \vv_1$$
+This resulting vector is known as our first principal component.  This leads to our final conclusion:
+\begin{theorem}
+    For principal component analysis, the optimal encoding function is $g : \R^n \to \R^k$ with:
+    $$g(\vx) = \MD^\intercal\vx,$$
+    and the optimal decoding function is $f : \R^k \to \R^n$ with:
+    $$f(\vy) = \MD\vy,$$
+    where $\MD = \begin{bmatrix} \vv_1 & \vv_2 & \cdots & \vv_k \end{bmatrix}$ and $\vv_1, \vv_2, \ldots, \vv_k$ correspond to the largest $k$ eigenvalues of $\MX^\intercal\MX$ in descending order.  ($\vv_1, \vv_2, \ldots, \vv_k$ are the first $k$ principal components of $\MX$.)
+\end{theorem}
+The principal components are the important features of our data points, which we want to keep; we can trim the rest using our encoding function.
+
+(Note: We have only proven this theorem for the case $k = 1$.  A full proof is left to the reader.)
+%Encoding/decoding picture
+%Give more clarification for the summation to matrix change.
+
+\section{Exercises}
+\begin{enumerate}
+    \item Given is the data set below, find the first two principal components; then use the optimal encoding function $g$ to fit the data into $\R^{4 \times 2}$.  (Ignore the "Player Name" column for your calculations.)
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ |p{2cm}||p{2cm}|p{2cm}||p{2cm}|  }
+    \hline
+    \multicolumn{4}{|c|}{Sport Wins} \\
+    \hline
+    Player Name & Golf & 100 yd Sprint & Hide $\&$ Seek\\
+    \hline
+    Peter       & 0 & 0 & 4\\
+    Max         & 0 & 2 & 0\\
+    Sebastian   & 0 & 2 & 0\\
+    Timmy       & 1 & 0 & 0\\
+    Matt        & 3 & 0 & 0\\
+    \hline
+\end{tabular}
+\end{table}
+    \item Use $f$ to decode the your encoded data set from Exercise 1.
+    \item The functions $g$ and $f$ encode/decode one data point at a time.  Define functions $G$ and $F$ that encode/decode the entire data set at once.
+\end{enumerate}
+
+\section{Solutions to Exercises}
+\begin{enumerate}
+    \item The data set we are using is:
+    $$\MX = \begin{bmatrix} 0 & 0 & 4\\ 0 & 2 & 0\\ 0 & 2 & 0\\ 1 & 0 & 0\\ 3 & 0 & 0 \end{bmatrix} \in \R^{5 \times 3}$$
+    We first calculate $\MX^\intercal\MX$:
+    $$\MX^\intercal\MX = \begin{bmatrix} 0 & 0 & 0 & 1 & 3\\ 0 & 2 & 2 & 0 & 0\\ 4 & 0 & 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} 0 & 0 & 4\\ 0 & 2 & 0\\ 0 & 2 & 0\\ 1 & 0 & 0\\ 3 & 0 & 0 \end{bmatrix} = \begin{bmatrix} 10 & 0 & 0\\ 0 & 8 & 0\\ 0 & 0 & 16 \end{bmatrix}$$
+    Now, we want the eigenvectors and eigenvalues.  In this case, the matrix is diagonal, so the eigenvalues are simply the diagonal entries (10 , 8, and 16), and the eigenvectors are $\begin{bmatrix} 1 & 0 & 0 \end{bmatrix}^\intercal$, $\begin{bmatrix} 0 & 1 & 0 \end{bmatrix}^\intercal$, and $\begin{bmatrix} 0 & 0 & 1 \end{bmatrix}^\intercal$.  We arrange the eigenvalues in descending order, so we have $\lambda_1 = 16, \lambda_2 = 10$, and $\lambda_3 = 8$ with corresponding eigenvectors $\vv_1 = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}^\intercal$, $\vv_2 = \begin{bmatrix} 1 & 0 & 0 \end{bmatrix}^\intercal$, and $\vv_3 = \begin{bmatrix} 0 & 1 & 0 \end{bmatrix}^\intercal$.  Therefore, the first two principal components are $\vv_1$ and $\vv_2$, and our encoding function is:
+    $$g(\vx) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix}^\intercal \vx = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \vx$$
+    We now encode each data point.
+    $$g\left(\begin{bmatrix} 0\\ 0\\ 4 \end{bmatrix}\right) = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 0\\ 4 \end{bmatrix} = \begin{bmatrix} 4\\ 0 \end{bmatrix}$$
+    $$g\left(\begin{bmatrix} 0\\ 2\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 2\\ 0 \end{bmatrix} = \begin{bmatrix} 0\\ 0 \end{bmatrix}$$
+    $$g\left(\begin{bmatrix} 0\\ 2\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 2\\ 0 \end{bmatrix} = \begin{bmatrix} 0\\ 0 \end{bmatrix}$$
+    $$g\left(\begin{bmatrix} 1\\ 0\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} 1\\ 0\\ 0 \end{bmatrix} = \begin{bmatrix} 0\\ 1 \end{bmatrix}$$
+    $$g\left(\begin{bmatrix} 3\\ 0\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 0 & 1\\ 1 & 0 & 0 \end{bmatrix} \begin{bmatrix} 3\\ 0\\ 0 \end{bmatrix} = \begin{bmatrix} 0\\ 3 \end{bmatrix}$$
+    Thus, our encoded data set is:
+    $$\begin{bmatrix} 4 & 0\\ 0 & 0\\ 0 & 0\\ 0 & 1\\ 0 & 3 \end{bmatrix}$$
+    
+    \item We apply $f$ to every data point in our new set.
+$$f\left(\begin{bmatrix} 4\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix} \begin{bmatrix} 4\\ 0 \end{bmatrix} \approx x^{(1)}$$
+$$f\left(\begin{bmatrix} 0\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 0 \end{bmatrix} \approx x^{(2)}$$
+$$f\left(\begin{bmatrix} 0\\ 0 \end{bmatrix}\right) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 0 \end{bmatrix} \approx x^{(3)}$$
+$$f\left(\begin{bmatrix} 0\\ 1 \end{bmatrix}\right) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 1 \end{bmatrix} \approx x^{(4)}$$
+$$f\left(\begin{bmatrix} 0\\ 3 \end{bmatrix}\right) = \begin{bmatrix} 0 & 1\\ 0 & 0\\ 1 & 0 \end{bmatrix} \begin{bmatrix} 0\\ 3 \end{bmatrix} \approx x^{(5)}$$
+Thus, our decoded data set is:
+$$\begin{bmatrix} 0 & 0 & 4\\ 0 & 0 & 0\\ 0 & 0 & 0\\ 1 & 0 & 0\\ 3 & 0 & 0 \end{bmatrix}$$
+    \item $G(\MX) = \MX\MD = \MX_{encoded}$
+
+$F(\MX_g) = \MX_g\MD^\intercal = \MX_{decoded}$
+\end{enumerate}

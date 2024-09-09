@@ -1,0 +1,148 @@
+
+
+\chapter{Maximum Likelihood Estimation and Naive Bayes}
+\label{Maximum Likelihood estimation}
+
+\section{Maximum Likelihood Estimation}
+
+Suppose we have a data-set under \textbf{IID} assumptions, $\MX$, and we wish to approximate $P_{data}(\vx)$ to make reasonable predictions with an associated probability. A method for such a process is called Maximum likelihood estimation. \\
+
+\begin{definition}
+    The \underline{Estimator} for $P_{data}$ is defined as: $P_{model}(\vx,\vtheta)$ for a parameter, $\vtheta$. 
+\end{definition}
+
+This definition however is not useful enough to use as we do not know how to find our parameter $\vtheta$, nor what we are looking for to even optimize. \\
+
+\begin{example}
+    If were expectation $P_{data}$ to be of a certain distribution, for example gaussian, then our parameter, $\vtheta$, could be: 
+    $$\vtheta = \begin{bmatrix} \mu_0 \\ \Sigma_0 \end{bmatrix}$$
+    and our associated $P_{model}$:
+    $$P_{model}(\vx,\vtheta) = \Normal(\vx\ ;\mu_0, \Sigma_0)$$
+\end{example}
+
+\begin{definition}
+    The \textit{Maximum Likelihood Estimation} for a distribution $P_data(\vx)$ and parameter $\vtheta$ is given by:
+    $$\vtheta_{ML} = \underset{\vtheta}{\argmax}\ P_{model}(\vx^{(1)},...,\vx^{(m)};\vtheta)$$
+\end{definition}
+\newpage
+This definition is essentially maximizing all the probabilities for possible points in our data with an associated $\vtheta$. Note: every $\vtheta_{ML}$ is always defined with a data-set. 
+\begin{example}
+    
+    Definition 9.4.2 can be re-written to better reflect this using the properties of independence IID assumptions give us, $P(A,B) = P(A\bigcap B) = P(A)\cdot P(B)$: 
+
+    \begin{align*}
+       \vtheta_{ML} &= \underset{\vtheta}{\argmax}\ P_{model}(\vx^{(1)},...,\vx^{(m)};\vtheta) \\
+      & = \underset{\vtheta}{\argmax}\ \prod_{i=1}^m P_{model}(\vx^{(i)};\vtheta) \\
+      & = \underset{\vtheta}{\argmax}\ \sum_{i=1}^m \log\left(P_{model}(\vx^{(i)};\vtheta)\right)
+    \end{align*}
+\end{example}
+
+And the specific reason we choose $\log$ here is that products are prone to underflow with $p_i\in [0,1]$, so the $\log$ eliminates this issue and does not affect $\vtheta_{ML}$ as it is one-to-one for positive real numbers.This $P_{model}$ is from an unsupervised model, but can be extended to supervised models with a joint distribution. \\
+
+\begin{definition}
+    Given a labeled data-set under \textbf{IID} assumptions with corresponding $\MX, \vy$, sampled from a joint distribution $P_{data}(\vx,\vy)$ then $P_{model}(\vx,\vy;\vtheta)$ is an approximation for this data-set assuming $P_{data}\in\{P_{model}(\vtheta)|\vtheta \in \R^n \}$. Then the maximum likelihood estimation is:
+    \begin{align*}
+        \vtheta_{ML} &= \underset{\vtheta}{\argmax}\ P_{model}(\vy|\MX; \vtheta) \\
+        & = \underset{\vtheta}{\argmax}\ \prod_{i=1}^m P_{model}(y_i |\vx^{(i)};\vtheta) \\
+        & = \underset{\vtheta}{\argmax}\ \sum_{i=1}^m\log\left( P_{model}(y_i |\vx^{(i)};\vtheta) \right)
+    \end{align*}
+\end{definition}
+This is a very useful definition as it enables us to give a prediction given a new example $(\vx, y)$ we can estimate $y$ by defining: 
+$$\hat{y} = \underset{y}{\argmax}\ P_{model}(y|\vx;\vtheta_{ML})$$
+and this becomes very useful when looking at some practical examples of this. 
+\begin{example}
+    \textbf{Linear Regression} (idea $\hat{y} = \begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta$) \\
+    Assume $P_{model}(y|\vx ; \vtheta)$ is Gaussian with mean: $\mu = \begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta$).
+    So, 
+    \begin{align*}
+        P_{model}(y|\vx;\theta) &= \Normal(\vy;\begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta,\sigma^2)\\
+        &=\frac{1}{\sqrt{2\pi\sigma^2}}\exp{\left(-\frac{1}{2\sigma^2}\left(\vy - \begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta \right) \right)^2} \\
+    \end{align*}
+    and given a data-set $\MX,\vy$ sampled from $P_{data}$, 
+    \begin{align*}
+        \vtheta_{ML} & = \underset{\vtheta}{\argmax}\ P_{model}(y|\vx;\theta) \\
+        &= \underset{\vtheta}{\argmax}\sum_{i=1}^m\log\left[\frac{1}{\sqrt{2\pi\sigma^2}}\exp{\left(-\frac{1}{2\sigma^2}\left(\vy_i - \begin{bmatrix} 1 \\ \vx^{(i)} \end{bmatrix}^\intercal\vtheta \right) \right)^2} \right]\\
+        &= \underset{\vtheta}{\argmax}\sum_{i=1}^m -\frac{1}{2}\log\left(2\pi\sigma^2\right) - \frac{1}{2\sigma^2}\left(\vy_i - \begin{bmatrix} 1 \\ \vx^{(i)} \end{bmatrix}^\intercal\vtheta \right)^2\\
+        &= -\underset{\vtheta}{\argmax}\sum_{i=1}^m\left(\vy_i - \begin{bmatrix} 1 \\ \vx^{(i)} \end{bmatrix}^\intercal\vtheta \right)^2\\
+        &= \underset{\vtheta}{\argmin}\sum_{i=1}^m\left(\vy_i - \begin{bmatrix} 1 \\ \vx^{(i)} \end{bmatrix}^\intercal\vtheta \right)^2\\
+        &= \underset{\vtheta}{\argmin}\ \ J\left(\MX,\vy;\vtheta \right)
+    \end{align*}
+    From this we see that finding the optimal least squares cost is equivalent to finding $\theta_{ML}$. Our prediction for $\hat{y}$ can be found: 
+    \begin{align*}
+        \hat{y} &= \underset{y}{\argmax}\ P_{model}(y|\vx;\vtheta_{ML})\\
+        &= \underset{y}{\argmax} \ \ \Normal(\vy;\begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta_{ML},\sigma^2) \\
+        &= \begin{bmatrix} 1 \\ \vx \end{bmatrix}^\intercal\vtheta_{ML}
+    \end{align*}
+    As for a Gaussian distribution the maximum probability is at the mean, so our prediction $\hat{y}$ given $\vtheta_{ML}$ is the same prediction that the argmin over v of the cost function gives us, so we can then conclude that Linear Regression is a maximum likelihood estimator. 
+\end{example}
+So it seems most of our machine learning algorithms we have encountered so far have been maximum likelihood estimators. To see this further, we return to discrete classification. \\
+\begin{example}
+    \textbf{Binary Classification}\\
+     \indent Given a labeled data-set, $\MX, \vy$, where $\MX, \vy$ are sampled from $P_{data}(\vx,y)$ and $y$ is $0$ or $1$ always. This gives us the very useful property that: 
+    $$P_{data}(y=1|\vx) = 1-P_{data}(y=0|\vx)$$
+    Consider a model, $P_{model}(y=1|\vx;\vtheta) = \sigma\left( \begin{bmatrix}1 \\ \vx \end{bmatrix}^\intercal \vtheta\right)$ and $P_{model}(y=0|\vx;\vtheta) = 1-\sigma\left( \begin{bmatrix}1 \\ \vx \end{bmatrix}^\intercal \vtheta\right)$  where $\sigma(\vx) = \frac{1}{1+\exp(-\vx)}$.
+    Computing the maximum likelihood, 
+    \begin{align*}
+        \vtheta_{ML} &= \underset{\vtheta}{\argmax}\sum_{i=1}^m\log\left(P_{model}(y = y_i|\vx^{(i)};\vtheta) \right)\\
+        &=\underset{\vtheta}{\argmax}\sum_{i=1}^my_i\log\left[\sigma\left( \begin{bmatrix}1 \\ \vx^{(i)} \end{bmatrix}^\intercal \vtheta\right) \right]+(1-y_i)\log\left[1-\sigma\left( \begin{bmatrix}1 \\ \vx^{(i)} \end{bmatrix}^\intercal \vtheta\right) \right] \\
+        &= \underset{\vtheta}{\argmin} \ \ J(\MX, \vy; \theta)
+    \end{align*}
+    So again we see we recovered another cost function as we did in \textbf{Example 8.3}, so we conclude that logistic regression is a maximum likelihood estimator. 
+\end{example}
+
+
+\section{Bayes Estimators}
+
+Ending our discussion of MLE's we return to bias and variance. 
+\begin{definition}
+    For any supervised model where $\MX, \vy$ are sampled from $P_{data}$ under \textbf{IID} assumptions, we define the \textit{Bayes prediction}: 
+    $$f^B(\vx) = \underset{y}{\argmax}\ P_{data}(y|\vx)$$
+\end{definition}
+Here $f^B$ is the theoretical best model as stated before in \textbf{7.1.2}. 
+\begin{definition}
+    Define a random variable, $\epsilon$, under the assumption that $\epsilon$ is normally distributed with $\mu=0$ so $\Ev_{P_{data}}[\epsilon] = 0$, and $\epsilon$ is independent of $\vx,\vy$. We define the \textit{Noise} as:
+    $$\epsilon = y - f^B(\vx)$$
+\end{definition}
+We define the noise this way such that the error is distributed everywhere and not clustered randomly. Suppose we have a model, $\hat{y}$ to predict $y$. We can then compute the $MSE(\hat{y})$ to find the error in predicting $y$:
+\begin{align*}
+    MSE(\hat{y}) &= \Ev_{P_{data}}\left[(y - \hat{y})^2\right] \\
+    & = \Ev_{P_{data}}\left[(y - f^B(\vx) + f^B(\vx) - \hat{y})^2 \right] \\
+    & \text{Our goal is to have control over our model and find a separate term of solely noise...} \\
+    & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B - \hat{y})^2 \right]+ 2\Ev_{P_{data}}\left[(y-f^B)(f^B-\hat{y}) \right] \\ 
+    & =\Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B) - \hat{y)}^2 \right]+...\\
+    ...&+2(\Ev_{P_{data}}[yf^B(\vx)]- \Ev_{P_{data}}[f^B(\vx)^2]-\Ev_{P_{data}}[y\hat{y}]+\Ev_{P_{data}}[f^B(\vx)\hat{y}])\\
+    & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B(\vx) - \hat{y)}^2 \right] + 0\text{    by our def. of noise} \\
+    & = \Ev_{P_{data}}\left[(y - f^B(\vx))^2\right] + \Ev_{P_{data}}\left[(f^B(\vx) - \hat{y})^2 \right]
+\end{align*}
+
+We can then observe that the first term is simply Bayes error as defined in chapter 7. However, we have control over the second term, $\Ev_{P_{data}}\left[(f^B(\vx) - \hat{y})^2 \right]$ so we will proceed with this term: 
+$$\Ev_{P_{data}}\left[(f^B(\vx) - \hat{y})^2 \right]  = \dots = (f^B(\vx)- \Ev_{P_{data}}[\hat{y}])^2 + \Ev_{P_{data}}[(\hat{y}-\Ev_{P_{data}}[\hat{y}])^2]$$
+from which we can see the first term is the bias in predicting $f^B(\vx)$ and the second term is the variance in $\hat{y}$. Thus the $MSE(\hat{y})$ in predicting $y$ is: 
+$$MSE(\hat{y}) = \Ev_{P_{data}}[\epsilon^2] + (f^B(\vx)- \Ev_{P_{data}}[\hat{y}])^2 +  \Ev_{P_{data}}[(\hat{y}-\Ev_{P_{data}}[\hat{y}])^2] $$
+or more specifically the expectation of the squared noise, the bias in predicting $f^B(\vx)$, and the variance in $\hat{y}$.
+\section{Exercises}
+\begin{enumerate}
+    \item Find the maximum likelihood probability of a coin flip with 5 trials and 3 successes. Recall: A coin flip is modeled by a Bernoulli distribution is given by: $P(n\text{ heads}| \theta) = \frac{k!}{n!(k-n)!}\theta^n(1-\theta)^{k-n}$, where $k$ is trials. Here, $k = 5,\ n=3$\\
+
+    \item From the previous example, does this result reflect the data or the event? Is there a way to prevent this? Explain. \\
+
+    \item Can an MLE do this for any probability distribution? Why or why not? Give an example of a limitation and how this can be used in machine learning. 
+\end{enumerate}
+
+\section{Solutions to Exercises}
+\begin{enumerate}
+    \item Answer: Since we are trying to find the argmax, we take the derivative with respect to our parameter, $\theta$ and set it equal to 0 to find an extremum,
+    \begin{align*}
+        0 & = \frac{d}{d\theta}P(3| \theta)\\
+         &= \frac{d}{d\theta}\alpha\theta^3(1-\theta)^2, \alpha = \frac{5!}{3!(2)!}\\
+         &=3\alpha \theta^2(1-\theta)^2 - 2\alpha(1-\theta)\theta^3 \\
+        2\alpha(1-\theta)\theta^3 & = 3\alpha \theta^2(1-\theta)^2 \\
+        2\theta(1-\theta) &= 3(1-\theta)^2 \\
+        2\theta &= 3(1-\theta) \\
+        2\theta &= 3 - 3\theta \\
+        \implies \theta &= \frac{3}{5}
+    \end{align*}
+    So our $\theta_{ML}$ is $3/5$.  (The actual probability is $\frac{1}{2}$ \\
+    \item Answer: Possible example, The maximum likelihood estimation assumes that our data is randomly sampled. Because it is random, at a low to medium sample size it may over-fit and provide a value that is not accurate to the event, such as $\theta_{ML}$ giving a result that is $10\%$ off from the event. So for the best results, we must have a large $\MX$ to get a good result. \\
+    \item Answer: Possible answer, Yes. With enough data(arbitrarily large amount of samples) as stated in the previous problem , one can perfectly find any distribution. However, a large amount will suffice. A limitation of this is wide spread out data for which you don't know which kind of distribution it might fit, which is a greatly helped by IID assumptions. It can be used in machine learning as it can be used to generate new data points from some well defined $P_{data}$ to grow a data-set with new examples. 
+\end{enumerate}

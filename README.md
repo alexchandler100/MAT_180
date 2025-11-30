@@ -2,7 +2,7 @@
 
 This repository contains group projects for students enrolled in MAT 180: The Mathematics of Machine Learning, in the Fall 2022 quarter at UC Davis. 
 
-Also included are course files including:
+Also included are the following course files:
 
 - Computational homework problems (Jupyter notebooks) with solutions
 - Theoretical homework problems 
